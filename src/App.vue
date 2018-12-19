@@ -23,6 +23,22 @@
                 <el-menu-item index="2-2">车型管理</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
+            <el-submenu index="3">
+              <template slot="title">司机管理</template>
+              <el-menu-item-group>
+                <el-menu-item index="3-1">司机列表</el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
+            <el-submenu index="4">
+              <template slot="title">合同管理</template>
+              <el-menu-item-group>
+                <el-menu-item index="4-1">签约管理</el-menu-item>
+                <el-menu-item index="4-2">交车管理</el-menu-item>
+                <el-menu-item index="4-3">合同结算</el-menu-item>
+                <el-menu-item index="4-4">合同收款</el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
+            <
           </el-menu>
         </el-aside>
         <el-main>
