@@ -15,6 +15,7 @@
 </template>
 
 <script>
+  import axios from 'axios'
     export default {
         name: "login",
       data(){
@@ -30,7 +31,16 @@
       },
       methods:{
           jump(){
-            this.$router.push("home")
+            var url="http://localhost:3000";
+            let data=this.loginForm;
+            axios.get(url+'/users/addUser?user_id='+data.username+'&user_password='+data.password)
+              .then(function (response) {
+                console.log(response);
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
+
           }
       }
     }
