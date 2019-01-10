@@ -1,5 +1,5 @@
 <template>
-    
+    <h1>车型管理</h1>
 </template>
 
 <script>

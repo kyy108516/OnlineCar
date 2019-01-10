@@ -13,4 +13,7 @@ export default {
 <style>
 #app {
 }
+  body{
+    margin: 0;
+  }
 </style>

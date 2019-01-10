@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import login from '../page/login/login'
 import home from "@/page/home/home"
 import carlist from "@/page/car/carlist"
-import layout from "@/page/Layout/index"
+import layout from "@/page/Layout"
 import cartype from "@/page/car/cartype"
 
 
@@ -20,7 +20,7 @@ export default new Router({
       component: login
     },
     {
-      path:"/home",
+      path:'/home',
       component:layout,
       children:[{
         path:'',
