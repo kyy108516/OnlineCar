@@ -1,9 +1,9 @@
 <template>
   <div class="body">
     <div class="logo1">
-      <img src="../assets/login/分组3.png">
+      <img src="../../assets/login/分组3.png">
       <div class="logo">
-        <img src="../assets/login/Group.png">
+        <img src="../../assets/login/Group.png">
       </div>
       <h1 class="biaoti">车管360车队管理系统</h1>
       <p>打破传统模式 解决核心难题 让工作更高效 让管理更有效</p>
@@ -19,7 +19,7 @@
           <el-form-item class="login_item" style="margin-top: 30px" prop="password">
             <el-input v-model="loginForm.password" placeholder="请输入您的密码"></el-input>
           </el-form-item>
-          <el-button type="primary" @click="login" class="form_login">登录</el-button>
+          <el-button type="primary" @click="jump" class="form_login">登录</el-button>
         </div>
       </div>
     </el-form>
@@ -67,8 +67,8 @@
           })
 
       },
-      jump(index) {
-        this.$router.push('index')
+      jump() {
+        this.$router.push('home')
       }
     }
   }
@@ -76,7 +76,7 @@
 
 <style scoped>
   .body {
-    background-image: url("../assets/login/底图.png");
+    background-image: url("../../assets/login/底图.png");
     background-repeat: no-repeat;
     background-position: center;
     background-attachment: fixed;
