@@ -46,3 +46,48 @@ a{
   text-decoration: none;
   cursor: pointer;
 }
+.list-tit{
+  background-color: white;
+  padding: 0 14px;
+}
+.el-tabs__header{
+  margin: 0;
+}
+.el-tabs__item.is-active{
+  color: #2bac84;
+}
+.el-tabs__active-bar{
+  background-color: #2bac84;
+}
+.el-tabs__item:hover{
+  color:#2bac84;
+}
+.query-bar{
+  background-color: white;
+  padding: 0 20px 20px;
+  margin-top: 14px;
+}
+.query-list{
+  line-height: 30px;
+  position: relative;margin-left: -20px;
+}
+.query-bar .el-form-item{
+  margin: 20px 0 0 0;
+}
+.query-bar .el-button{
+  margin-left: 20px;
+}
+.view_table{
+  padding: 20px;
+  margin-top: 20px;
+  background-color: white;
+}
+.view_table .el-pagination{
+  margin-top: 20px;
+}
+.view_table .el-pagination.is-background .el-pager li:not(.disabled).active{
+  background-color: #2bac84;
+}
+.view_table .el-pagination.is-background .el-pager li:hover{
+  color: #2bac84;
+}

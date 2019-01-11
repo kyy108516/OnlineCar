@@ -13,5 +13,21 @@
 </script>
 
 <style scoped>
-
+  .el-submenu .el-menu-item{
+    min-width: 158px;
+  }
+  .el-menu-item.is-active{
+    color: white;
+    background-color: #2bac84;
+  }
+  .el-menu-item{
+    background-color: #35435b;
+  color: white;
+  }
+  .el-submenu__title{
+    color: white;
+  }
+  .el-submenu__title:hover{
+    background-color: #2bac84;
+  }
 </style>

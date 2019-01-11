@@ -24,10 +24,10 @@
   border-right: 1px solid #ccc;
   overflow: auto;
   box-sizing: border-box;
-  background-color: #f4f4f4;
+  background-color: #35435b;
 }
   .el-menu{
-    background-color: #f4f4f4;
+    background-color: #35435b;
   }
 
 </style>

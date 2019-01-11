@@ -44,9 +44,9 @@ p{
   box-sizing: border-box;
   background-color: #f5f5f5;
 }
-  a{
+a{
     text-decoration: none;
     color: white;
     font-size: 20px;
-  }
+}
 </style>
