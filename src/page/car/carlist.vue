@@ -1,5 +1,17 @@
 <template>
-  <h1>车辆列表</h1>
+  <div>
+  <div class="topbar">
+    <div class="topbar-cell">
+      <b class="topbar-tit">车辆列表</b>
+    </div>
+    <div class="topbar-cell">
+      <span class="fr">
+        <a class="actions"><i class="el-icon-plus"></i>新增车辆</a>
+      </span>
+    </div>
+  </div>
+
+  </div>
 </template>
 
 <script>
@@ -9,17 +21,4 @@
 </script>
 
 <style scoped>
-  .sys-content{
-    left: 160px;
-    top: 60px;
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-    padding: 10px;
-    overflow-x: hidden;
-    overflow-y: auto;
-    box-sizing: border-box;
-  }
 </style>

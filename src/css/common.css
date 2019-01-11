@@ -1,0 +1,48 @@
+.topbar{
+  height: 69px;
+  width: 100%;
+  display: table;
+  background-color: white;
+  padding: 0 14px;
+  box-sizing: border-box;
+}
+.topbar-cell{
+  display: table-cell;
+  vertical-align: middle;
+}
+.topbar-tit{
+  border-left: 3px solid #2bac84;
+  padding-left: 8px;
+  font-size: 14px;
+  color: black;
+  float: left;
+}
+.fr{
+   float: right;
+}
+.actions{
+  float: left;
+  display: block;
+  width: 80px;
+  height: 30px;
+  box-sizing: border-box;
+  text-decoration: none;
+  color: white;
+  line-height: 30px;
+  border: 1px solid #2bac84;
+  background-color: #2bac84;
+  margin-left: 10px;
+  text-align: center;
+  border-radius: 3px;
+  font-size: 13px;
+}
+ul{
+  list-style: none;
+  margin: 0;
+}
+a{
+  outline: 0;
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}

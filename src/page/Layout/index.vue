@@ -37,12 +37,12 @@ p{
   position: absolute;
   right: 0;
   bottom: 0;
-  width: 100%;
   height: 100%;
   padding: 10px;
   overflow-x: hidden;
   overflow-y: auto;
   box-sizing: border-box;
+  background-color: #f5f5f5;
 }
   a{
     text-decoration: none;
