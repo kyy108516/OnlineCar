@@ -91,3 +91,9 @@ a{
 .view_table .el-pagination.is-background .el-pager li:hover{
   color: #2bac84;
 }
+.el-submenu .el-submenu__title{
+  color:white;
+}
+.el-submenu__title:hover{
+  background-color: #35435b;
+}
