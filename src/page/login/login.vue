@@ -19,22 +19,22 @@
           <el-form-item class="login_item" style="margin-top: 30px" prop="password">
             <el-input type="password" auto-complete="off" v-model="loginForm.password" placeholder="请输入您的密码"></el-input>
           </el-form-item>
-          <el-button type="primary" @click="login" class="form_login">登录</el-button>
+          <el-button type="primary" @click="jump" class="form_login">登录</el-button>
         </div>
       </div>
     </el-form>
-    <el-dialog :visible.sync="centerDialogVisible" width="30%" center>
+    <el-dialog :visible.sync="centerDialogVisible" width="30%" center title="提示">
       <span>用户不存在</span>
       <span slot="footer" class="dialog-footer">
     <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
   </span>
     </el-dialog>
-    <el-dialog :visible.sync="centerDialogVisible" width="30%" center>
-      <span>密码错误</span>
-      <span slot="footer" class="dialog-footer">
-    <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
-  </span>
-    </el-dialog>
+    <!--<el-dialog :visible.sync="centerDialogVisible" width="30%" center>-->
+      <!--<span>密码错误</span>-->
+      <!--<span slot="footer" class="dialog-footer">-->
+    <!--<el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>-->
+  <!--</span>-->
+    <!--</el-dialog>-->
   </div>
 </template>
 
@@ -60,15 +60,16 @@
         }
       }
     },
+
     methods: {
-      login() {
+     /* login() {
         var url = "http://localhost:3000";
         let data = this.loginForm;
         axios.get(url + '/users/getUser?username=' + data.username + '&password=' + data.password)
           .then(function (response) {
             console.log(response);
             if (response.data.msg === '用户不存在') {
-              centerDialogVisible=true
+              this.centerDialogVisible=true
             } else if (response.data.msg === '密码错误') {
               window.alert("密码错误")
             } else if (response.data.msg === '登录成功') {
@@ -79,7 +80,7 @@
             console.log(error)
           })
 
-      },
+      },*/
       jump() {
         this.$router.push('home')
       }

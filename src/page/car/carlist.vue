@@ -39,24 +39,85 @@
       </el-form>
     </div>
     <div class="view_table">
-      <el-table ref="multipleTable" :data="tableData3" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
+      <el-table ref="multipleTable" :data="tableData.data.slice((currpage - 1) * pagesize, currpage * pagesize)" tooltip-effect="dark" style="width: 100%"
+                @selection-change="handleSelectionChange" highlight-current-row>
         <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column label="日期" width="120">
-          <template slot-scope="scope">{{ scope.row.date }}</template>
+        <el-table-column prop="id" label="编号">
+          <template slot-scope="scope">
+            <span>{{scope.row.id}}</span>
+          </template>
         </el-table-column>
-        <el-table-column prop="name" label="姓名" width="120"></el-table-column>
-        <el-table-column prop="address" label="地址" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="license" label="车牌号" ></el-table-column>
+        <el-table-column prop="vin" label="车架号" show-overflow-tooltip></el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button type="text" size="small">查看</el-button>
+            <el-button type="text" size="small" @click="deleteCar(scope.row.id)">删除</el-button>
+          </template>
+        </el-table-column>
       </el-table>
-      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[10, 20, 30, 40]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400"></el-pagination>
+      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                     :page-sizes="[10, 20, 30, 40]" :page-size="pagesize"
+                     layout="total, sizes, prev, pager, next, jumper"
+                     :total="this.tableData.data.length"></el-pagination>
     </div>
   </div>
 
 </template>
 
 <script>
-    export default {
-        name: "carlist"
+  import axios from 'axios'
+
+  export default {
+    inject:['reload'],
+    name: "carlist",
+    data() {
+      return {
+        tableData: {
+          loading: true,
+          data: []
+        },
+        currpage:1,
+        pagesize:10
+      }
+    },
+    mounted() {
+      this.getData();
+    },
+    methods: {
+      getData() {
+        var url = "http://localhost:3000";
+        axios.get(url + '/car/queryAll')
+          .then(response => {
+            this.tableData.loading = false
+            this.tableData.data = response.data.data
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+      },
+      handleSelectionChange(val) {
+        this.multipleSelection = val;
+      },
+      handleCurrentChange(cpage) {
+        this.currpage = cpage;
+      },
+      handleSizeChange(psize) {
+        this.pagesize = psize;
+      },
+      deleteCar(id){
+        var url = "http://localhost:3000";
+        axios.get(url+"/car/deleteCar?id="+id)
+          .then(response=>{
+            console.log(response)
+            this.reload()
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+      }
     }
+  }
 </script>
 
 <style scoped>
