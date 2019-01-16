@@ -7,6 +7,7 @@ import layout from "@/page/Layout"
 import cartype from "@/page/car/cartype"
 import addcar from "@/page/car/addcar"
 import cardetail from "@/page/car/cardetail"
+import addcartype from "@/page/car/addcartype"
 
 
 Vue.use(Router)
@@ -47,7 +48,12 @@ export default new Router({
         {
           path:'cardetail',
           component:cardetail
-        }]
+        },
+        {
+          path:'addcartype',
+          component:addcartype
+        },
+      ]
     }
   ]
 })
