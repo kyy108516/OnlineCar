@@ -97,3 +97,135 @@ a{
 .el-submenu__title:hover{
   background-color: #35435b;
 }
+.back-last{
+  padding: 5px 10px 5px 5px;
+  border: 1px solid #d9d9d9;
+  margin-left: 10px;
+  border-radius: 3px;
+}
+.icon{
+  font-size: 13px;
+}
+.edit{
+  background-color: white;
+  margin-top: 14px;
+  padding-bottom: 20px;
+  position: relative;
+}
+.dataAllHead{
+  height: 50px;
+  line-height: 50px;
+  border-bottom: 1px solid darkgray;
+  padding-left: 20px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #333;
+}
+.dataRevise{
+  padding-left: calc(10% - 20px);
+  margin-top: 10px;
+}
+.dataReviseTd{
+  width: 33.3%;
+  float: left;
+}
+.dataReviseLabel{
+  width: 100%;
+  min-height: 30px;
+  line-height: 30px;
+  margin-top: 10px;
+}
+.dataReviseLabel em{
+  color: red;
+  margin-right: 5px;
+}
+.dataReviseText{
+  min-height: 30px;
+  width: 100%;
+}
+.dataReviseText .el-input__inner{
+  width: 260px;
+}
+.dataBot{
+  padding-top: 20px;
+  margin-top: 20px;
+  border-top: 1px solid darkgray;
+}
+.detail-tab{
+  padding: 20px;
+}
+.dataDetail{
+  padding-left: 8%;
+  margin-top: 10px;
+}
+.dataDetailTd{
+  width: 25%;
+  font-size: 13px;
+  float: left;
+  margin-top: 10px;
+  color: #333;
+}
+.dataDetailLabel{
+  display: table-cell;
+  line-height: 18px;
+  min-height: 18px;
+  white-space: nowrap;
+  text-align: right;
+  vertical-align: top;
+}
+.dataDetailText{
+  display: table-cell;
+  line-height: 18px;
+  min-height: 18px;
+}
+.tab-button{
+  margin-left: 20px;
+}
+.content1{
+  padding: 0 10px;
+}
+.cont_wid_l{
+  width:34%;
+  float: left;
+}
+.content-main{
+  height: 180px;
+  box-sizing: border-box;
+  background-color: white;
+  box-shadow: 0 0 6px #ddd;
+  border-radius: 4px;
+  padding: 20px;
+}
+.welInfo{
+  font-size: 16px;
+  line-height: 16px;
+  color: #333333;
+}
+.baseInfo{
+  padding-top: 30px;
+  padding-bottom: 10px;
+}
+.baseImg{
+  width: 82px;
+  height: 82px;
+  margin-top: -10px;
+  float: left;
+}
+.baseImg img{
+  width: 100%;
+  height: 100%;
+}
+.myInfo{
+  margin-left: 100px;
+  margin-top: -10px;
+}
+.myInfo-sec span{
+  font-size: 14px;
+}
+.content_wid_r{
+  width:66%;
+  float: right;
+  padding-left: 20px;
+  box-sizing: border-box;
+}
+

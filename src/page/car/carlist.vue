@@ -6,7 +6,7 @@
       </div>
       <div class="topbar-cell">
         <span class="fr">
-          <a class="actions"><i class="el-icon-plus"></i>新增车辆</a>
+          <router-link to="/car/addcar" class="actions"><i class="el-icon-plus"></i>新增车辆</router-link>
         </span>
       </div>
     </div>
@@ -62,7 +62,6 @@
                      :total="this.tableData.data.length"></el-pagination>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -78,7 +77,8 @@
           data: []
         },
         currpage:1,
-        pagesize:10
+        pagesize:10,
+        dialogFormVisible:false
       }
     },
     mounted() {
@@ -115,6 +115,9 @@
           .catch(function (error) {
             console.log(error)
           })
+      },
+      add(){
+        this.dialogFormVisible=true
       }
     }
   }

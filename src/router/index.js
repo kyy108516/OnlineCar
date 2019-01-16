@@ -5,6 +5,8 @@ import home from "@/page/home/home"
 import carlist from "@/page/car/carlist"
 import layout from "@/page/Layout"
 import cartype from "@/page/car/cartype"
+import addcar from "@/page/car/addcar"
+import cardetail from "@/page/car/cardetail"
 
 
 Vue.use(Router)
@@ -37,6 +39,14 @@ export default new Router({
         {
           path:'cartype',
           component:cartype
+        },
+        {
+          path:'addcar',
+          component:addcar
+        },
+        {
+          path:'cardetail',
+          component:cardetail
         }]
     }
   ]

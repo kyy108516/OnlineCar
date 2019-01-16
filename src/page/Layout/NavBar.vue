@@ -25,6 +25,7 @@
   overflow: auto;
   box-sizing: border-box;
   background-color: #35435b;
+  height:100%;
 }
   .el-menu{
     background-color: #35435b;
