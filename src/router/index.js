@@ -50,7 +50,7 @@ export default new Router({
           component:cardetail
         },
         {
-          path:'addcartype',
+          path:'addcartype/:id',
           component:addcartype
         },
       ]

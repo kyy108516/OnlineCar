@@ -10,6 +10,9 @@ const state = {
 const mutations = {
   update(state,currpage){
     state.currpage_cartype=currpage
+  },
+  reset(state){
+    state.currpage_cartype=1
   }
 };
 
