@@ -22,7 +22,14 @@
           <el-input></el-input>
         </el-form-item>
         <el-form-item label="车型">
-          <el-input></el-input>
+          <el-select v-model="data" filterable placeholder="活动区域">
+            <el-option
+              v-for="item in cartypeData"
+              :key="item.id"
+              :label="item.brand"
+              :value="item.id">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="车型">
           <el-input></el-input>
@@ -39,7 +46,7 @@
       </el-form>
     </div>
     <div class="view_table">
-      <el-table ref="multipleTable" :data="tableData.data.slice((currpage - 1) * pagesize, currpage * pagesize)" tooltip-effect="dark" style="width: 100%"
+      <el-table ref="multipleTable" :data="carData.slice((currpage - 1) * pagesize, currpage * pagesize)" tooltip-effect="dark" style="width: 100%"
                 @selection-change="handleSelectionChange" highlight-current-row>
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="id" label="编号">
@@ -59,7 +66,7 @@
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
                      :page-sizes="[10, 20, 30, 40]" :page-size="pagesize"
                      layout="total, sizes, prev, pager, next, jumper"
-                     :total="this.tableData.data.length"></el-pagination>
+                     :total="this.carData.length"></el-pagination>
     </div>
   </div>
 </template>
@@ -72,13 +79,12 @@
     name: "carlist",
     data() {
       return {
-        tableData: {
-          loading: true,
-          data: []
-        },
+        carData: [],
+        cartypeData:[],
         currpage:1,
         pagesize:10,
-        dialogFormVisible:false
+        dialogFormVisible:false,
+        data:''
       }
     },
     mounted() {
@@ -87,14 +93,18 @@
     methods: {
       getData() {
         var url = "http://localhost:3000";
-        axios.get(url + '/car/queryAll')
-          .then(response => {
-            this.tableData.loading = false
-            this.tableData.data = response.data.data
-          })
-          .catch(function (error) {
-            console.log(error)
-          })
+        function getcarData(){
+          return axios.get(url+'/car/queryAll')
+        }
+        function getcartypeData(){
+          return axios.get(url + '/cartype/queryAll')
+        }
+        axios.all([getcarData(),getcartypeData()])
+          .then(axios.spread((getcarData,getcartypeData) =>{
+            this.carData=getcarData.data.data
+            this.cartypeData=getcartypeData.data.data
+          }
+          ))
       },
       handleSelectionChange(val) {
         this.multipleSelection = val;

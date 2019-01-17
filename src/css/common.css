@@ -67,6 +67,9 @@ a{
   padding: 0 20px 20px;
   margin-top: 14px;
 }
+.query-bar .el-input--suffix .el-input__inner{
+  padding-right: 15px;
+}
 .query-list{
   line-height: 30px;
   position: relative;margin-left: -20px;
