@@ -83,7 +83,6 @@
         cartypeData:[],
         currpage:1,
         pagesize:10,
-        dialogFormVisible:false,
         data:''
       }
     },
@@ -126,9 +125,6 @@
             console.log(error)
           })
       },
-      add(){
-        this.dialogFormVisible=true
-      }
     }
   }
 </script>
