@@ -29,7 +29,7 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="info" plain="">查询</el-button>
+          <el-button type="info" plain="" @click="getData">查询</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -93,14 +93,29 @@
         //   'update',
         //   'reset'
         // ]),
-        getData() {
+        // getData() {
+        //   var url = "http://localhost:3000";
+        //   axios.get(url + '/cartype/queryAll')
+        //     .then(response => {
+        //       this.tableData = response.data.data
+        //     })
+        //     .catch(function (error) {
+        //       console.log(error)
+        //     })
+        // },
+        getData(){
           var url = "http://localhost:3000";
-          axios.get(url + '/cartype/queryAll')
-            .then(response => {
-              this.tableData = response.data.data
+          axios.post(url+'/cartype/query',this.queryData)
+            .then(response=>{
+              if (response.data.code=='200') {
+                this.tableData = response.data.data
+              }
+              if (response.data.code=='1'){
+                this.tableData=[]
+              }
             })
-            .catch(function (error) {
-              console.log(error)
+            .catch(error=>{
+              console.log(error);
             })
         },
         handleSelectionChange(val) {
