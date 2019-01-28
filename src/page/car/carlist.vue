@@ -17,21 +17,21 @@
       </el-tabs>
     </div>
     <div class="query-bar">
-      <el-form :inline="true" :label-position="right" label-width="60px">
+      <el-form :inline="true" :label-position="right" label-width="80px">
         <el-form-item label="车牌号">
           <el-input></el-input>
         </el-form-item>
         <el-form-item label="车型">
-          <el-select v-model="data" filterable placeholder="活动区域">
+          <el-select v-model="data" filterable placeholder="车型">
             <el-option
               v-for="item in cartypeData"
               :key="item.id"
-              :label="item.brand"
+              :label="item.model"
               :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="车型">
+        <el-form-item label="车架号">
           <el-input></el-input>
         </el-form-item>
         <el-form-item label="车型">
@@ -56,6 +56,7 @@
         </el-table-column>
         <el-table-column prop="license" label="车牌号" ></el-table-column>
         <el-table-column prop="vin" label="车架号" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="model" label="车型" show-overflow-tooltip></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="small">查看</el-button>
@@ -93,7 +94,7 @@
       getData() {
         var url = "http://localhost:3000";
         function getcarData(){
-          return axios.get(url+'/car/queryAll')
+          return axios.get(url+'/car/query')
         }
         function getcartypeData(){
           return axios.get(url + '/cartype/queryAll')
