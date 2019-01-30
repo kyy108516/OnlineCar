@@ -2,8 +2,8 @@
   <div>
     <div class="topbar">
       <div class="topbar-cell">
-        <b class="topbar-tit" v-if="this.$route.params.id!=0">编辑车辆</b>
-        <b class="topbar-tit" v-else>新增车辆</b>
+        <b class="topbar-tit" v-if="this.$route.params.id!=0">编辑车型</b>
+        <b class="topbar-tit" v-else>新增车型</b>
         <el-button class="back-last" @click="$router.go(-1)">
           <span class="icon"><i class="el-icon-back"></i> 返回上一级</span>
         </el-button>

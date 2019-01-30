@@ -42,7 +42,7 @@ export default new Router({
           component:cartype
         },
         {
-          path:'addcar',
+          path:'addcar/:id',
           component:addcar
         },
         {
