@@ -47,7 +47,7 @@
         <el-table-column prop="type" label="类型" ></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="exitCar(scope.row.id)">编辑</el-button>
+            <el-button type="text" size="small" @click="editCar(scope.row.id)">编辑</el-button>
             <el-button type="text" size="small" @click="deleteCar(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
@@ -138,7 +138,7 @@
               console.log(error)
             })
         },
-        exitCar(id){
+        editCar(id){
           this.$router.push('addcartype/'+id)
         }
       }

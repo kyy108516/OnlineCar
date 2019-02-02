@@ -6,6 +6,10 @@
     <el-menu-item index="/car/carlist">车辆列表</el-menu-item>
     <el-menu-item index="/car/cartype">车型管理</el-menu-item>
   </el-submenu>
+    <el-submenu index="2">
+      <template slot="title">司机管理</template>
+      <el-menu-item index="/car/carlist">司机列表</el-menu-item>
+    </el-submenu>
   </div>
 </template>
 

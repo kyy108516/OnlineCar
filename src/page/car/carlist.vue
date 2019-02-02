@@ -45,7 +45,7 @@
       <el-table ref="multipleTable" :data="carData.slice((currpage - 1) * pagesize, currpage * pagesize)" tooltip-effect="dark" style="width: 100%"
                 @selection-change="handleSelectionChange" highlight-current-row>
         <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column prop="id" label="编号">
+        <el-table-column prop="id1" label="编号">
           <template slot-scope="scope">
             <span>{{scope.row.id}}</span>
           </template>
@@ -56,7 +56,8 @@
         <el-table-column prop="state" label="状态" show-overflow-tooltip></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="small">查看</el-button>
+            <el-button type="text" size="small" @click="detailCar(scope.row.id)">查看</el-button>
+            <el-button type="text" size="small" @click="editCar(scope.row.id)">编辑</el-button>
             <el-button type="text" size="small" @click="deleteCar(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
@@ -78,6 +79,7 @@
     data() {
       return {
         queryData:{
+          id:'',
           license:'',
           vin:'',
           model:'',
@@ -160,6 +162,12 @@
             console.log(error)
           })
       },
+      editCar(id){
+        this.$router.push('addcar/'+id)
+      },
+      detailCar(id){
+        this.$router.push('cardetail/'+id)
+      }
     },
   }
 </script>

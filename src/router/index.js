@@ -30,7 +30,7 @@ export default new Router({
         component:home
       }]
     },
-    {
+    { //车辆列表路由
       path:"/car",
       component:layout,
       children: [{
@@ -46,7 +46,7 @@ export default new Router({
           component:addcar
         },
         {
-          path:'cardetail',
+          path:'cardetail/:id',
           component:cardetail
         },
         {
@@ -54,6 +54,14 @@ export default new Router({
           component:addcartype
         },
       ]
+    },
+    { //司机列表路由
+      path:"/driver",
+      component:layout,
+      children: [{
+        path:'driverlist',
+        component:carlist
+      }],
     }
   ]
 })

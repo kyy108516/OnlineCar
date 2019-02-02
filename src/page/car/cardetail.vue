@@ -3,9 +3,9 @@
     <div class="topbar">
       <div class="topbar-cell">
         <b class="topbar-tit">车辆详情</b>
-        <a class="back-last">
+        <el-button class="back-last" @click="$router.go(-1)">
           <span class="icon"><i class="el-icon-back"></i> 返回上一级</span>
-        </a>
+        </el-button>
       </div>
     </div>
     <div class="edit">
@@ -16,37 +16,37 @@
             <div class="dataDetailTd">
               <div class="dataDetailLabel">车牌号:</div>
               <div class="dataDetailText">
-                <span>浙AG6G58</span>
+                <span>{{cardata.car.license}}</span>
               </div>
             </div>
             <div class="dataDetailTd">
-              <div class="dataDetailLabel">车牌号:</div>
+              <div class="dataDetailLabel">车架号:</div>
               <div class="dataDetailText">
-                <span>浙AG6G58</span>
+                <span>{{cardata.car.vin}}</span>
               </div>
             </div>
             <div class="dataDetailTd">
-              <div class="dataDetailLabel">车牌号:</div>
+              <div class="dataDetailLabel">运营状态:</div>
               <div class="dataDetailText">
-                <span>浙AG6G58</span>
+                <span>{{cardata.car.state}}</span>
               </div>
             </div>
             <div class="dataDetailTd">
-              <div class="dataDetailLabel">车牌号:</div>
+              <div class="dataDetailLabel">品牌:</div>
               <div class="dataDetailText">
-                <span>浙AG6G58</span>
+                <span>{{cardata.car.brand}}</span>
               </div>
             </div>
             <div class="dataDetailTd">
-              <div class="dataDetailLabel">车牌号:</div>
+              <div class="dataDetailLabel">车型:</div>
               <div class="dataDetailText">
-                <span>浙AG6G58</span>
+                <span>{{cardata.car.model}}</span>
               </div>
             </div>
             <div class="dataDetailTd">
-              <div class="dataDetailLabel">车牌号:</div>
+              <div class="dataDetailLabel">类型:</div>
               <div class="dataDetailText">
-                <span>浙AG6G58</span>
+                <span>{{cardata.car.type}}</span>
               </div>
             </div>
           </div>
@@ -56,7 +56,7 @@
         <el-tab-pane label="维保">角色管理</el-tab-pane>
         <el-tab-pane label="事故">
           <el-button type="primary" class="tab-button">新增事故</el-button>
-          <div class="view_table"style="margin-top: 0">
+          <div class="view_table" style="margin-top: 0">
             <el-table
               :data="tableData"
               style="width: 100%">
@@ -87,11 +87,15 @@
 </template>
 
 <script>
+  import axios from 'axios'
   export default {
     name: "cardetail",
-    data(){
-      return{
-        tabPosition:'left',
+    data() {
+      return {
+        cardata: {
+          car:[]
+        },
+        tabPosition: 'left',
         tableData: [{
           date: '2016-05-02',
           name: '王小虎',
@@ -110,7 +114,29 @@
           address: '上海市普陀区金沙江路 1516 弄'
         }]
       }
-    }
+    },
+    created(){
+      this.getData()
+    },
+    methods: {
+      getData() {
+        var url="http://localhost:3000";
+        var id = this.$route.params.id
+        axios.post(url + '/car/query', {
+          id: id,
+          license: '',
+          vin: '',
+          model: '',
+          state: ''
+        })
+          .then(response => {
+            this.cardata.car = response.data.data[0]
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+      },
+    },
   }
 </script>
 
