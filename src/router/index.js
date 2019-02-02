@@ -11,7 +11,7 @@ import addcartype from "@/page/car/addcartype"
 import driverlist from "@/page/driver/driverlist"
 import adddriver from "@/page/driver/adddriver"
 import driverdetail from "@/page/driver/driverdetail"
-
+import contractlist from "@/page/contract/contractlist"
 
 Vue.use(Router)
 
@@ -74,6 +74,23 @@ export default new Router({
           component: driverdetail
         }
         ],
+    },
+    { //司机列表路由
+      path: "/contract",
+      component: layout,
+      children: [{
+        path: 'contractlist',
+        component: contractlist
+      },
+        // {
+        //   path: 'adddriver/:id',
+        //   component: adddriver
+        // },
+        // {
+        //   path: 'driverdetail/:id',
+        //   component: driverdetail
+        // }
+      ],
     }
   ]
 })
