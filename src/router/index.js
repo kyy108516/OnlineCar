@@ -12,6 +12,7 @@ import driverlist from "@/page/driver/driverlist"
 import adddriver from "@/page/driver/adddriver"
 import driverdetail from "@/page/driver/driverdetail"
 import contractlist from "@/page/contract/contractlist"
+import addcontract from "@/page/contract/addcontract"
 
 Vue.use(Router)
 
@@ -82,10 +83,10 @@ export default new Router({
         path: 'contractlist',
         component: contractlist
       },
-        // {
-        //   path: 'adddriver/:id',
-        //   component: adddriver
-        // },
+        {
+          path: 'addcontract/:id',
+          component: addcontract
+        },
         // {
         //   path: 'driverdetail/:id',
         //   component: driverdetail

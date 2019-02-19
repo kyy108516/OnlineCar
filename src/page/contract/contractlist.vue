@@ -6,7 +6,7 @@
       </div>
       <div class="topbar-cell">
         <span class="fr">
-          <router-link to="/driver/adddriver/0" class="actions"><i class="el-icon-plus"></i>新增合同</router-link>
+          <router-link to="/contract/addcontract/0" class="actions"><i class="el-icon-plus"></i>新增合同</router-link>
         </span>
       </div>
     </div>
