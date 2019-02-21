@@ -232,4 +232,9 @@ a{
   padding-left: 20px;
   box-sizing: border-box;
 }
+.button-caiwu{
+  border: 1px solid #d9d9d9;
+  margin-left: 10px;
+  border-radius: 3px;
+}
 

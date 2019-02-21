@@ -12,41 +12,141 @@
     <div class="edit">
       <div class="dataAllHead">合同信息</div>
       <el-form class="dataRevise" :model="tabledata" :rules="rules" ref="tabledata">
-        <el-form-item class="dataReviseTd" prop="name">
+        <el-form-item class="dataReviseTd" prop="type">
           <div class="dataReviseLabel">
-            <em>*</em> 姓名
+            <em>*</em> 合同类型
           </div>
           <div class="dataReviseText">
-            <el-input placeholder="姓名" v-model="tabledata.name"></el-input>
-          </div>
-        </el-form-item>
-        <el-form-item class="dataReviseTd" prop="sex">
-          <div class="dataReviseLabel">
-            <em>*</em> 性别
-          </div>
-          <div class="dataReviseText">
-            <el-select v-model="tabledata.sex" filterable placeholder="请选择">
+            <el-select v-model="tabledata.type" filterable placeholder="请选择">
               <el-option
-                :label="'男'"
-                :value="'男'">
+                :label="'以租代购'"
+                :value="'以租代购'">
               </el-option>
               <el-option
-                :label="'女'"
-                :value="'女'">
+                :label="'长租'"
+                :value="'长租'">
               </el-option>
             </el-select>
           </div>
         </el-form-item>
-        <el-form-item class="dataReviseTd" prop="phone">
+        <el-form-item class="dataReviseTd" prop="car_id">
           <div class="dataReviseLabel">
-            <em>*</em> 联系方式
+            <em>*</em> 车牌号
           </div>
           <div class="dataReviseText">
-            <el-input placeholder="联系方式" v-model="tabledata.phone"></el-input>
+            <el-select v-model="tabledata.car_id" filterable placeholder="请选择">
+              <el-option
+                v-for="item in carData"
+                :key="item.id"
+                :label="item.license"
+                :value="item.id">
+              </el-option>
+            </el-select>
+          </div>
+        </el-form-item>
+        <el-form-item class="dataReviseTd" prop="id">
+          <div class="dataReviseLabel">
+            <em>*</em> 合同编号
+          </div>
+          <div class="dataReviseText">
+            <el-input placeholder="合同编号" v-model="tabledata.id"></el-input>
+          </div>
+        </el-form-item>
+        <el-form-item class="dataReviseTd" prop="startTime">
+          <div class="dataReviseLabel">
+            <em>*</em> 合同起始日
+          </div>
+          <div class="dataReviseText">
+            <el-date-picker
+              v-model="tabledata.startTime"
+              align="right"
+              type="date"
+              placeholder="选择日期"
+              :picker-options="pickerOptions1">
+            </el-date-picker>
+          </div>
+        </el-form-item>
+        <el-form-item class="dataReviseTd" prop="endTime">
+          <div class="dataReviseLabel">
+            <em>*</em> 合同到期日
+          </div>
+          <div class="dataReviseText">
+            <el-date-picker
+              v-model="tabledata.endTime"
+              align="right"
+              type="date"
+              placeholder="选择日期"
+              :picker-options="pickerOptions1">
+            </el-date-picker>
+          </div>
+        </el-form-item>
+        <el-form-item class="dataReviseTd" prop="driver_id">
+          <div class="dataReviseLabel">
+            <em>*</em> 承租人
+          </div>
+          <div class="dataReviseText">
+            <el-select v-model="tabledata.driver_id" filterable placeholder="请选择">
+              <el-option
+                v-for="item in driverData"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+              </el-option>
+            </el-select>
           </div>
         </el-form-item>
       </el-form>
       <div style="clear:both"></div>
+      <div class="dataAllHead">财务约定
+      <el-button type="primary" class="button-caiwu">添加</el-button>
+      </div>
+      <el-table
+        :data="itemdata"
+        style="width: 100%">
+        <el-table-column prop="type" label="财务类型">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.type" placeholder="请选择"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="bookvolume" label="册数">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.bookvolume" placeholder="册数"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="bookbuyer" label="购买者">
+          <template slot-scope="scope">
+
+            <el-input v-model="scope.row.bookbuyer" placeholder="购买者"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="bookborrower" label="借阅者">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.bookborrower" placeholder="借阅者"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="bookbuytime" label="购买日期">
+          <template slot-scope="scope">
+            <el-date-picker
+              v-model="scope.row.bookbuytime"
+              type="date"
+              format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd"
+              placeholder="购买日期">
+            </el-date-picker>
+          </template>
+        </el-table-column>
+        <el-table-column prop="bookbuytime" label="购买日期">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="danger"
+              v-if="!scope.row.editing"
+              icon="el-icon-delete"
+              @click="handleDelete(scope.$index, scope.row)">删除
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
       <div class="dataBot">
         <el-button type="success" style="min-width: 120px;margin:0 auto;display: block"
                    @click="edit('tabledata')" v-if="this.$route.params.id!=0">编辑</el-button>
@@ -65,16 +165,49 @@
       return{
         tabledata:{
           type:'',
-          license:'',
+          car_id:'',
           id:'',
           startTime:'',
           endTime:'',
-          name:''
+          driver_id:''
         },
+        itemdata:{
+          type:'',//财务类型
+          period:'',//期数
+          money:'',
+          time:''
+        },
+        carData:[],
+        driverData:[],
         rules:{
-          name:[{required:true,message:'请输入车牌',trigger:'blur'}],
-          sex:[{required:true,message:'请选择性别',trigger:'change'}],
-          phone:[{required:true,message:'请输入联系方式',trigger:'blur'}]
+          type:[{required:true,message:'请选择合同类型',trigger:'change'}],
+          car_id:[{required:true,message:'请选择车牌',trigger:'change'}],
+          id:[{required:true,message:'请输入合同编号',trigger:'blur'}],
+          startTime:[{required:true,message:'请选择时间',trigger:'change'}],
+          endTime:[{required:true,message:'请选择时间',trigger:'change'}],
+          driver_id:[{required:true,message:'请选择承租人',trigger:'change'}],
+        },
+        pickerOptions1: { //日期选择器
+          shortcuts: [{
+            text: '今天',
+            onClick(picker) {
+              picker.$emit('pick', new Date());
+            }
+          }, {
+            text: '昨天',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24);
+              picker.$emit('pick', date);
+            }
+          }, {
+            text: '一周前',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', date);
+            }
+          }]
         },
       }
     },
@@ -85,18 +218,41 @@
       getData(){
         var url="http://localhost:3000";
         var id=this.$route.params.id
-        axios.post(url + '/driver/query',{
-          id:id,
-          name:'',
-          sex:'',
-          phone:'',
+        axios.post(url + '/car/query', {
+          id: '',
+          license: '',
+          vin: '',
+          model: '',
+          state: '库存'
         })
-          .then(response=>{
-            this.tabledata=response.data.data[0]
+          .then(response => {
+            if (response.data.code == '200') {
+              this.carData = response.data.data
+            }
+            if (response.data.code == '1') {
+              this.carData = []
+            }
           })
-          .catch(function (error) {
-            console.log(error)
+          .catch(error => {
+            console.log(error);
+          });
+        axios.post(url + '/driver/query', {
+          id: '',
+          name: '',
+          sex: '',
+          phone: '',
+        })
+          .then(response => {
+            if (response.data.code == '200') {
+              this.driverData = response.data.data
+            }
+            if (response.data.code == '1') {
+              this.driverData = []
+            }
           })
+          .catch(error => {
+            console.log(error);
+          });
       },
       submit(formName) {
         this.$refs[formName].validate((valid) => {
