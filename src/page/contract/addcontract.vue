@@ -98,48 +98,51 @@
       </el-form>
       <div style="clear:both"></div>
       <div class="dataAllHead">财务约定
-      <el-button type="primary" class="button-caiwu">添加</el-button>
+        <el-button type="primary" class="button-caiwu" @click="addLine">添加</el-button>
       </div>
       <el-table
         :data="itemdata"
-        style="width: 100%">
+        style="width: 100%;padding: 0 10px">
         <el-table-column prop="type" label="财务类型">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.type" placeholder="请选择"></el-input>
+            <el-select v-model="scope.row.type" filterable placeholder="请选择">
+              <el-option
+                :label="'押金'"
+                :value="'押金'">
+              </el-option>
+              <el-option
+                :label="'租金'"
+                :value="'租金'">
+              </el-option>
+            </el-select>
           </template>
         </el-table-column>
-        <el-table-column prop="bookvolume" label="册数">
+        <el-table-column prop="period" label="期数">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.bookvolume" placeholder="册数"></el-input>
+            <el-input v-model="scope.row.period" placeholder="期数"></el-input>
           </template>
         </el-table-column>
-        <el-table-column prop="bookbuyer" label="购买者">
+        <el-table-column prop="money" label="金额">
           <template slot-scope="scope">
-
-            <el-input v-model="scope.row.bookbuyer" placeholder="购买者"></el-input>
+            <el-input v-model="scope.row.money" placeholder="金额"></el-input>
           </template>
         </el-table-column>
-        <el-table-column prop="bookborrower" label="借阅者">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.bookborrower" placeholder="借阅者"></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column prop="bookbuytime" label="购买日期">
+        <el-table-column prop="time" label="付款时间">
           <template slot-scope="scope">
             <el-date-picker
-              v-model="scope.row.bookbuytime"
+              v-model="scope.row.time"
+              align="right"
               type="date"
-              format="yyyy-MM-dd"
-              value-format="yyyy-MM-dd"
-              placeholder="购买日期">
+              placeholder="选择日期"
+              :picker-options="pickerOptions1">
             </el-date-picker>
           </template>
         </el-table-column>
-        <el-table-column prop="bookbuytime" label="购买日期">
+        <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
               size="mini"
-              type="danger"
+              type="primary"
               v-if="!scope.row.editing"
               icon="el-icon-delete"
               @click="handleDelete(scope.$index, scope.row)">删除
@@ -149,9 +152,11 @@
       </el-table>
       <div class="dataBot">
         <el-button type="success" style="min-width: 120px;margin:0 auto;display: block"
-                   @click="edit('tabledata')" v-if="this.$route.params.id!=0">编辑</el-button>
+                   @click="edit('tabledata')" v-if="this.$route.params.id!=0">编辑
+        </el-button>
         <el-button type="success" style="min-width: 120px;margin:0 auto;display: block"
-                   @click="submit('tabledata')" v-else>提交</el-button>
+                   @click="submit('tabledata')" v-else>提交
+        </el-button>
       </div>
     </div>
   </div>
@@ -159,33 +164,34 @@
 
 <script>
   import axios from 'axios'
+
   export default {
     name: "addcontract",
-    data(){
-      return{
-        tabledata:{
-          type:'',
-          car_id:'',
-          id:'',
-          startTime:'',
-          endTime:'',
-          driver_id:''
+    data() {
+      return {
+        tabledata: {
+          type: '',
+          car_id: '',
+          id: '',
+          startTime: '',
+          endTime: '',
+          driver_id: ''
         },
-        itemdata:{
-          type:'',//财务类型
-          period:'',//期数
-          money:'',
-          time:''
-        },
-        carData:[],
-        driverData:[],
-        rules:{
-          type:[{required:true,message:'请选择合同类型',trigger:'change'}],
-          car_id:[{required:true,message:'请选择车牌',trigger:'change'}],
-          id:[{required:true,message:'请输入合同编号',trigger:'blur'}],
-          startTime:[{required:true,message:'请选择时间',trigger:'change'}],
-          endTime:[{required:true,message:'请选择时间',trigger:'change'}],
-          driver_id:[{required:true,message:'请选择承租人',trigger:'change'}],
+        itemdata: [{
+          type: '',//财务类型
+          period: '',//期数
+          money: '',
+          time: ''
+        }],
+        carData: [],
+        driverData: [],
+        rules: {
+          type: [{required: true, message: '请选择合同类型', trigger: 'change'}],
+          car_id: [{required: true, message: '请选择车牌', trigger: 'change'}],
+          id: [{required: true, message: '请输入合同编号', trigger: 'blur'}],
+          startTime: [{required: true, message: '请选择时间', trigger: 'change'}],
+          endTime: [{required: true, message: '请选择时间', trigger: 'change'}],
+          driver_id: [{required: true, message: '请选择承租人', trigger: 'change'}],
         },
         pickerOptions1: { //日期选择器
           shortcuts: [{
@@ -211,13 +217,13 @@
         },
       }
     },
-    created(){
+    created() {
       this.getData()
     },
-    methods:{
-      getData(){
-        var url="http://localhost:3000";
-        var id=this.$route.params.id
+    methods: {
+      getData() {
+        var url = "http://localhost:3000";
+        var id = this.$route.params.id
         axios.post(url + '/car/query', {
           id: '',
           license: '',
@@ -258,7 +264,33 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             var url = "http://localhost:3000";
-            axios.get(url + '/driver/addDriver?name='+this.tabledata.name+'&sex='+this.tabledata.sex+'&phone='+this.tabledata.phone)
+            axios.get(url + '/contract/addContract?id=' + this.tabledata.id + '&type=' + this.tabledata.type + '&car_id=' + this.tabledata.car_id+ '&driver_id=' + this.tabledata.driver_id+ '&start_time=' + this.tabledata.startTime+ '&end_time=' + this.tabledata.endTime)
+              .then(response => {
+                this.$router.push('/contract/contractlist')
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
+            for (let item in this.itemdata){
+              axios.get(url + '/contract/addContractItem?id=' + this.tabledata.id + '&type=' + this.item.type + '&period=' + this.item.period+ '&money=' + this.item.money+ '&time=' + this.item.time)
+                .then(response => {
+                  this.$router.push('/contract/contractlist')
+                })
+                .catch(function (error) {
+                  console.log(error)
+                })
+            }
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
+      edit(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            var url = "http://localhost:3000";
+            axios.get(url + '/driver/updateDriver?name=' + this.tabledata.name + '&sex=' + this.tabledata.sex + '&phone=' + this.tabledata.phone + '&id=' + this.$route.params.id)
               .then(response => {
                 this.$router.push('/driver/driverlist')
               })
@@ -271,22 +303,18 @@
           }
         });
       },
-      edit(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            var url = "http://localhost:3000";
-            axios.get(url + '/driver/updateDriver?name='+this.tabledata.name+'&sex='+this.tabledata.sex+'&phone='+this.tabledata.phone+'&id='+this.$route.params.id)
-              .then(response => {
-                this.$router.push('/driver/driverlist')
-              })
-              .catch(function (error) {
-                console.log(error)
-              })
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
+      addLine() { //添加行数
+        var newValue = {
+          type: '',//财务类型
+          period: '',//期数
+          money: '',
+          time: ''
+        };
+        //添加新的行数
+        this.itemdata.push(newValue);
+      },
+      handleDelete(index) { //删除行数
+        this.itemdata.splice(index, 1)
       },
     }
   }
