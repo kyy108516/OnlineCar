@@ -13,6 +13,7 @@ import adddriver from "@/page/driver/adddriver"
 import driverdetail from "@/page/driver/driverdetail"
 import contractlist from "@/page/contract/contractlist"
 import addcontract from "@/page/contract/addcontract"
+import contractdetail from "@/page/contract/contractdetail"
 
 Vue.use(Router)
 
@@ -76,7 +77,7 @@ export default new Router({
         }
         ],
     },
-    { //司机列表路由
+    { //合同列表路由
       path: "/contract",
       component: layout,
       children: [{
@@ -87,10 +88,10 @@ export default new Router({
           path: 'addcontract/:id',
           component: addcontract
         },
-        // {
-        //   path: 'driverdetail/:id',
-        //   component: driverdetail
-        // }
+        {
+          path: 'contractdetail/:id',
+          component: contractdetail
+        }
       ],
     }
   ]

@@ -48,6 +48,7 @@
         <el-table-column prop="name" label="姓名" ></el-table-column>
         <el-table-column prop="sex" label="性别" show-overflow-tooltip></el-table-column>
         <el-table-column prop="phone" label="联系方式" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="state" label="是否签约" show-overflow-tooltip></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="detailDriver(scope.row.id)">查看</el-button>
@@ -76,6 +77,7 @@
           name:'',
           sex:'',
           phone:'',
+          state:'',
         },
         driverData: [],
         currpage:1,

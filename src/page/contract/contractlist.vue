@@ -75,8 +75,6 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="detailContract(scope.row.id)">查看</el-button>
-            <el-button type="text" size="small" @click="editContract(scope.row.id)">编辑</el-button>
-            <el-button type="text" size="small" @click="deleteContract(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -90,6 +88,7 @@
 
 <script>
   import axios from 'axios'
+
   var url = "http://localhost:3000";
   export default {
     inject: ['reload'],
@@ -163,7 +162,7 @@
             console.log(error);
           });
       },
-      query(){
+      query() {
         axios.post(url + '/contract/query', this.queryData)
           .then(response => {
             if (response.data.code == '200') {
@@ -200,9 +199,9 @@
       // editDriver(id){
       //   this.$router.push('adddriver/'+id)
       // },
-      // detailDriver(id){
-      //   this.$router.push('driverdetail/'+id)
-      // }
+      detailContract(id){
+        this.$router.push('contractdetail/'+id)
+      }
     },
   }
 </script>

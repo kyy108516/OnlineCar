@@ -87,6 +87,7 @@
           name:'',
           sex:'',
           phone:'',
+          state:''
         })
           .then(response=>{
             this.tabledata=response.data.data[0]

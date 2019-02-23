@@ -143,7 +143,6 @@
             <el-button
               size="mini"
               type="primary"
-              v-if="!scope.row.editing"
               icon="el-icon-delete"
               @click="handleDelete(scope.$index, scope.row)">删除
             </el-button>
@@ -152,10 +151,7 @@
       </el-table>
       <div class="dataBot">
         <el-button type="success" style="min-width: 120px;margin:0 auto;display: block"
-                   @click="edit('tabledata')" v-if="this.$route.params.id!=0">编辑
-        </el-button>
-        <el-button type="success" style="min-width: 120px;margin:0 auto;display: block"
-                   @click="submit('tabledata')" v-else>提交
+                   @click="submit('tabledata')">提交
         </el-button>
       </div>
     </div>
@@ -247,6 +243,7 @@
           name: '',
           sex: '',
           phone: '',
+          state:'否',
         })
           .then(response => {
             if (response.data.code == '200') {
@@ -263,23 +260,40 @@
       submit(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
+            this.changetime()
+            console.log(this.tabledata.startTime)
             var url = "http://localhost:3000";
             axios.get(url + '/contract/addContract?id=' + this.tabledata.id + '&type=' + this.tabledata.type + '&car_id=' + this.tabledata.car_id+ '&driver_id=' + this.tabledata.driver_id+ '&start_time=' + this.tabledata.startTime+ '&end_time=' + this.tabledata.endTime)
               .then(response => {
-                this.$router.push('/contract/contractlist')
+                // this.$router.push('/contract/contractlist')
               })
               .catch(function (error) {
                 console.log(error)
               })
-            for (let item in this.itemdata){
-              axios.get(url + '/contract/addContractItem?id=' + this.tabledata.id + '&type=' + this.item.type + '&period=' + this.item.period+ '&money=' + this.item.money+ '&time=' + this.item.time)
+            for (let i=0;i<this.itemdata.length;i++) {
+              var d = new Date(this.itemdata[i].time)
+              this.itemdata[i].time = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+              axios.get(url + '/contract/addContractItem?id=' + this.tabledata.id + '&type=' + this.itemdata[i].type + '&period=' + this.itemdata[i].period + '&money=' + this.itemdata[i].money + '&time=' + this.itemdata[i].time)
                 .then(response => {
-                  this.$router.push('/contract/contractlist')
+                  // this.$router.push('/contract/contractlist')
                 })
                 .catch(function (error) {
                   console.log(error)
                 })
             }
+            axios.get(url + '/car/updateState?state=运营中&id=' +this.tabledata.car_id)
+              .then(response => {
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
+            axios.get(url + '/driver/updateState?state=是&id=' +this.tabledata.driver_id)
+              .then(response => {
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
+            this.$router.push('/contract/contractlist')
           } else {
             console.log('error submit!!');
             return false;
@@ -316,6 +330,14 @@
       handleDelete(index) { //删除行数
         this.itemdata.splice(index, 1)
       },
+      changetime() {
+        var d1 = new Date(this.tabledata.startTime)
+        var d2 = new Date(this.tabledata.endTime)
+        var datetime1 = d1.getFullYear() + '-' + (d1.getMonth() + 1) + '-' + d1.getDate();
+        var datetime2 = d2.getFullYear() + '-' + (d2.getMonth() + 1) + '-' + d2.getDate();
+        this.tabledata.startTime = datetime1
+        this.tabledata.endTime = datetime2
+      }
     }
   }
 </script>
