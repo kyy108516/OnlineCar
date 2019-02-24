@@ -13,6 +13,7 @@
     <el-submenu index="3">
       <template slot="title">合同管理</template>
       <el-menu-item index="/contract/contractlist">合同列表</el-menu-item>
+      <el-menu-item index="/contract/carchecklist">交车管理</el-menu-item>
     </el-submenu>
   </div>
 </template>

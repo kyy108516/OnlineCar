@@ -293,24 +293,13 @@
               .catch(function (error) {
                 console.log(error)
               })
-            this.$router.push('/contract/contractlist')
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
-      },
-      edit(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            var url = "http://localhost:3000";
-            axios.get(url + '/driver/updateDriver?name=' + this.tabledata.name + '&sex=' + this.tabledata.sex + '&phone=' + this.tabledata.phone + '&id=' + this.$route.params.id)
+            axios.get(url + '/validate/addValidate?contract_id=' +this.tabledata.id + '&time='+this.tabledata.startTime)
               .then(response => {
-                this.$router.push('/driver/driverlist')
               })
               .catch(function (error) {
                 console.log(error)
               })
+            this.$router.push('/contract/contractlist')
           } else {
             console.log('error submit!!');
             return false;

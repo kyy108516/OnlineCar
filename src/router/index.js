@@ -14,6 +14,7 @@ import driverdetail from "@/page/driver/driverdetail"
 import contractlist from "@/page/contract/contractlist"
 import addcontract from "@/page/contract/addcontract"
 import contractdetail from "@/page/contract/contractdetail"
+import carchecklist from "@/page/contract/carchecklist"
 
 Vue.use(Router)
 
@@ -91,7 +92,11 @@ export default new Router({
         {
           path: 'contractdetail/:id',
           component: contractdetail
-        }
+        },
+        {
+          path: 'carchecklist',
+          component: carchecklist
+        },
       ],
     }
   ]
