@@ -7,7 +7,7 @@
     </div>
     <div class="query-bar">
       <el-form :inline="true" :label-position="right" label-width="80px">
-        <el-form-item label="合同编号">
+        <el-form-item label="验车号">
           <el-input v-model="queryData.id"></el-input>
         </el-form-item>
         <el-form-item>
@@ -20,21 +20,20 @@
                 tooltip-effect="dark" style="width: 100%"
                 @selection-change="handleSelectionChange" highlight-current-row>
         <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column prop="id" label="合同编号">
+        <el-table-column prop="id" label="验车号">
           <template slot-scope="scope">
             <span>{{scope.row.id}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="type" label="合同类型"></el-table-column>
-        <el-table-column prop="license" label="车牌号"></el-table-column>
+        <el-table-column prop="type" label="车牌号"></el-table-column>
+        <el-table-column prop="license" label="车架号"></el-table-column>
         <el-table-column prop="model" label="车型"></el-table-column>
-        <el-table-column prop="name" label="承租人" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="phone" label="联系方式" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="start_time" label="合同起始日" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="end_time" label="合同到期日" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="name" label="验车时间" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="phone" label="处理状态" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="start_time" label="合同编号" show-overflow-tooltip></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="detailContract(scope.row.id)">查看</el-button>
+            <el-button type="text" size="small" @click="validate(scope.row.id)">验车</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -52,7 +51,7 @@
   var url = "http://localhost:3000";
   export default {
     inject: ['reload'],
-    name: "carchecklist",
+    name: "carchecklist",//交车管理
     data() {
       return {
         queryData: {
@@ -159,8 +158,8 @@
       // editDriver(id){
       //   this.$router.push('adddriver/'+id)
       // },
-      detailContract(id){
-        this.$router.push('contractdetail/'+id)
+      validate(id){
+        this.$router.push('carvalidate/'+id)
       }
     },
   }

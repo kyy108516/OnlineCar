@@ -15,6 +15,7 @@ import contractlist from "@/page/contract/contractlist"
 import addcontract from "@/page/contract/addcontract"
 import contractdetail from "@/page/contract/contractdetail"
 import carchecklist from "@/page/contract/carchecklist"
+import carvalidate from "@/page/contract/carvalidate"
 
 Vue.use(Router)
 
@@ -96,6 +97,10 @@ export default new Router({
         {
           path: 'carchecklist',
           component: carchecklist
+        },
+        {
+          path: 'carvalidate/:id',
+          component: carvalidate
         },
       ],
     }
