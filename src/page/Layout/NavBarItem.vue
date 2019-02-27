@@ -14,6 +14,30 @@
       <template slot="title">合同管理</template>
       <el-menu-item index="/contract/contractlist">合同列表</el-menu-item>
       <el-menu-item index="/contract/carchecklist">交车管理</el-menu-item>
+      <el-menu-item index="/contract/settlementlist">合同结算</el-menu-item>
+    </el-submenu>
+    <el-submenu index="4">
+      <template slot="title">运营管理</template>
+      <el-menu-item index="/operate/maintainancelist">维保管理</el-menu-item>
+      <el-menu-item index="/operate/accidentlist">事故管理</el-menu-item>
+      <el-menu-item index="/operate/remindlist">到期提醒</el-menu-item>
+      <el-menu-item index="/operate/violationlist">违章管理</el-menu-item>
+      <el-menu-item index="/operate/detainlist">扣车管理</el-menu-item>
+    </el-submenu>
+    <el-submenu index="5">
+      <template slot="title">财务管理</template>
+      <el-menu-item index="/account/billlist">应收账款</el-menu-item>
+      <el-menu-item index="/account/practicallist">实收账款</el-menu-item>
+      <el-menu-item index="/account/receivablelist">应付账款</el-menu-item>
+      <el-menu-item index="/account/detaillist">财务明细</el-menu-item>
+    </el-submenu>
+    <el-submenu index="6">
+      <template slot="title">用户中心</template>
+      <el-menu-item index="/system/info">用户信息</el-menu-item>
+      <el-menu-item index="/system/rolelist">角色管理</el-menu-item>
+      <el-menu-item index="/system/userlist">账户管理</el-menu-item>
+      <el-menu-item index="/system/functionset">功能设置</el-menu-item>
+      <el-menu-item index="/system/partnerlist">合作伙伴</el-menu-item>
     </el-submenu>
   </div>
 </template>

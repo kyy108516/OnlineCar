@@ -16,6 +16,21 @@ import addcontract from "@/page/contract/addcontract"
 import contractdetail from "@/page/contract/contractdetail"
 import carchecklist from "@/page/contract/carchecklist"
 import carvalidate from "@/page/contract/carvalidate"
+import settlementlist from "@/page/contract/settlementlist"
+import accidentlist from "@/page/operate/accidentlist"
+import detainlist from "@/page/operate/detainlist"
+import maintainancelist from "@/page/operate/maintainancelist"
+import remindlist from "@/page/operate/remindlist"
+import violationlist from "@/page/operate/violationlist"
+import billlist from "@/page/account/billlist"
+import detaillist from "@/page/account/detaillist"
+import practicallist from "@/page/account/practicallist"
+import receivablelist from "@/page/account/receivablelist"
+import functionset from "@/page/system/functionset"
+import info from "@/page/system/info"
+import partnerlist from "@/page/system/partnerlist"
+import rolelist from "@/page/system/rolelist"
+import userlist from "@/page/system/userlist"
 
 Vue.use(Router)
 
@@ -101,6 +116,81 @@ export default new Router({
         {
           path: 'carvalidate/:id',
           component: carvalidate
+        },
+        {
+          path: 'settlementlist',
+          component: settlementlist
+        },
+      ],
+    },
+    { //运营管理路由
+      path: "/operate",
+      component: layout,
+      children: [{
+        path: 'accidentlist',
+        component: accidentlist
+      },
+        {
+          path: 'detainlist',
+          component: detainlist
+        },
+        {
+          path: 'maintainancelist',
+          component: maintainancelist
+        },
+        {
+          path: 'remindlist',
+          component: remindlist
+        },
+        {
+          path: 'violationlist',
+          component: violationlist
+        },
+      ],
+    },
+    { //财务管理路由
+      path: "/account",
+      component: layout,
+      children: [{
+        path: 'billlist',
+        component: billlist
+      },
+        {
+          path: 'detaillist',
+          component: detainlist
+        },
+        {
+          path: 'practicallist',
+          component: practicallist
+        },
+        {
+          path: 'receivablelist',
+          component: receivablelist
+        },
+      ],
+    },
+    { //用户中心路由
+      path: "/system",
+      component: layout,
+      children: [{
+        path: 'functionset',
+        component: functionset
+      },
+        {
+          path: 'info',
+          component: info
+        },
+        {
+          path: 'partnerlist',
+          component: partnerlist
+        },
+        {
+          path: 'rolelist',
+          component: rolelist
+        },
+        {
+          path: 'userlist',
+          component: userlist
         },
       ],
     }

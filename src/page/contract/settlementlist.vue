@@ -2,7 +2,7 @@
   <div>
     <div class="topbar">
       <div class="topbar-cell">
-        <b class="topbar-tit">合同列表</b>
+        <b class="topbar-tit">合同结算</b>
       </div>
       <div class="topbar-cell">
         <span class="fr">
@@ -91,7 +91,7 @@
   var url = "http://localhost:3000";
   export default {
     inject: ['reload'],
-    name: "contractlist",
+    name: "settlementlist",//合同结算
     data() {
       return {
         queryData: {

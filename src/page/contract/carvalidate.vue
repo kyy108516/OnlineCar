@@ -15,25 +15,10 @@
             <em>*</em> 车辆信息
           </div>
           <div class="dataReviseText">
-            <el-input placeholder="合同编号" v-model="tabledata.id"></el-input>
+            <el-input placeholder="车辆信息" v-model="tabledata.id"></el-input>
           </div>
         </el-form-item>
         <el-form-item class="dataReviseTd" prop="car_id">
-          <div class="dataReviseLabel">
-            <em>*</em> 车牌号
-          </div>
-          <div class="dataReviseText">
-            <el-select v-model="tabledata.car_id" filterable placeholder="请选择">
-              <el-option
-                v-for="item in carData"
-                :key="item.id"
-                :label="item.license"
-                :value="item.id">
-              </el-option>
-            </el-select>
-          </div>
-        </el-form-item>
-        <el-form-item class="dataReviseTd" prop="id">
           <div class="dataReviseLabel">
             <em>*</em> 合同编号
           </div>
@@ -41,90 +26,30 @@
             <el-input placeholder="合同编号" v-model="tabledata.id"></el-input>
           </div>
         </el-form-item>
-        <el-form-item class="dataReviseTd" prop="startTime">
+        <el-form-item class="dataReviseTd" prop="id">
           <div class="dataReviseLabel">
-            <em>*</em> 合同起始日
+            <em>*</em> 验车类型
           </div>
           <div class="dataReviseText">
-            <el-date-picker
-              v-model="tabledata.startTime"
-              align="right"
-              type="date"
-              placeholder="选择日期"
-              :picker-options="pickerOptions1">
-            </el-date-picker>
-          </div>
-        </el-form-item>
-        <el-form-item class="dataReviseTd" prop="endTime">
-          <div class="dataReviseLabel">
-            <em>*</em> 合同到期日
-          </div>
-          <div class="dataReviseText">
-            <el-date-picker
-              v-model="tabledata.endTime"
-              align="right"
-              type="date"
-              placeholder="选择日期"
-              :picker-options="pickerOptions1">
-            </el-date-picker>
-          </div>
-        </el-form-item>
-        <el-form-item class="dataReviseTd" prop="driver_id">
-          <div class="dataReviseLabel">
-            <em>*</em> 承租人
-          </div>
-          <div class="dataReviseText">
-            <el-select v-model="tabledata.driver_id" filterable placeholder="请选择">
-              <el-option
-                v-for="item in driverData"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id">
-              </el-option>
-            </el-select>
+            <el-input placeholder="验车类型" v-model="tabledata.id"></el-input>
           </div>
         </el-form-item>
       </el-form>
       <div style="clear:both"></div>
-      <div class="dataAllHead">财务约定
+      <div class="dataAllHead">验车事项
         <el-button type="primary" class="button-caiwu" @click="addLine">添加</el-button>
       </div>
       <el-table
         :data="itemdata"
         style="width: 100%;padding: 0 10px">
-        <el-table-column prop="type" label="财务类型">
+        <el-table-column prop="type" label="描述">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.type" filterable placeholder="请选择">
-              <el-option
-                :label="'押金'"
-                :value="'押金'">
-              </el-option>
-              <el-option
-                :label="'租金'"
-                :value="'租金'">
-              </el-option>
-            </el-select>
+            <el-input v-model="scope.row.period" placeholder="请输入描述"></el-input>
           </template>
         </el-table-column>
-        <el-table-column prop="period" label="期数">
+        <el-table-column prop="period" label="金额">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.period" placeholder="期数"></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column prop="money" label="金额">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.money" placeholder="金额"></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column prop="time" label="付款时间">
-          <template slot-scope="scope">
-            <el-date-picker
-              v-model="scope.row.time"
-              align="right"
-              type="date"
-              placeholder="选择日期"
-              :picker-options="pickerOptions1">
-            </el-date-picker>
+            <el-input v-model="scope.row.period" placeholder="请输入金额"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="操作">
