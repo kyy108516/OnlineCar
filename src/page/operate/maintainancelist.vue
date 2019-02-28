@@ -21,21 +21,22 @@
       </el-form>
     </div>
     <div class="view_table">
-      <el-table ref="multipleTable" :data="contractData.slice((currpage - 1) * pagesize, currpage * pagesize)"
+      <el-table ref="multipleTable" :data="tableData.slice((currpage - 1) * pagesize, currpage * pagesize)"
                 tooltip-effect="dark" style="width: 100%"
                 @selection-change="handleSelectionChange" highlight-current-row>
         <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column prop="id" label="车牌号">
+        <el-table-column prop="id" label="维修单号">
           <template slot-scope="scope">
             <span>{{scope.row.id}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="license" label="司机"></el-table-column>
-        <el-table-column prop="model" label="维保类型"></el-table-column>
-        <el-table-column prop="name" label="送修时间" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="phone" label="维保金额" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="start_time" label="维修厂" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="end_time" label="送修原因" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="license" label="车牌号"></el-table-column>
+        <el-table-column prop="name" label="司机"></el-table-column>
+        <el-table-column prop="type" label="维保类型"></el-table-column>
+        <el-table-column prop="send_time" label="送修时间" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="money" label="维保金额" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="company_name" label="维修厂" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="season" label="送修原因" show-overflow-tooltip></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="detailSettlement(scope.row.id)">查看</el-button>
@@ -45,7 +46,7 @@
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
                      :page-sizes="[10, 20, 30, 40]" :page-size="pagesize"
                      layout="total, sizes, prev, pager, next, jumper"
-                     :total="this.contractData.length"></el-pagination>
+                     :total="this.tableData.length"></el-pagination>
     </div>
   </div>
 </template>
@@ -64,6 +65,7 @@
           license: '',
           name: '',
         },
+        tableData:[],
         carData: [],
         driverData: [],
         contractData: [],
@@ -77,48 +79,13 @@
     },
     methods: {
       getData() {
-        axios.post(url + '/car/query', {
-          id: '',
-          license: '',
-          vin: '',
-          model: '',
-          state: '运营中'
-        })
+        axios.post(url + '/maintainance/query')
           .then(response => {
             if (response.data.code == '200') {
-              this.carData = response.data.data
+              this.tableData = response.data.data
             }
             if (response.data.code == '1') {
-              this.carData = []
-            }
-          })
-          .catch(error => {
-            console.log(error);
-          });
-        axios.post(url + '/driver/query', {
-          id: '',
-          name: '',
-          sex: '',
-          phone: '',
-        })
-          .then(response => {
-            if (response.data.code == '200') {
-              this.driverData = response.data.data
-            }
-            if (response.data.code == '1') {
-              this.driverData = []
-            }
-          })
-          .catch(error => {
-            console.log(error);
-          });
-        axios.post(url + '/contract/query', this.queryData)
-          .then(response => {
-            if (response.data.code == '200') {
-              this.contractData = response.data.data
-            }
-            if (response.data.code == '1') {
-              this.contractData = []
+              this.tableData = []
             }
           })
           .catch(error => {

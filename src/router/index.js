@@ -34,6 +34,7 @@ import rolelist from "@/page/system/rolelist"
 import userlist from "@/page/system/userlist"
 import settlementdetail from "@/page/contract/settlementdetail"
 import addinsurance from  "@/page/car/addinsurance"
+import addpartner from "@/page/system/addpartner"
 
 Vue.use(Router)
 
@@ -198,6 +199,10 @@ export default new Router({
         {
           path: 'partnerlist',
           component: partnerlist
+        },
+        {
+          path: 'addpartner/:id',
+          component: addpartner
         },
         {
           path: 'rolelist',
