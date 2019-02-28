@@ -161,7 +161,7 @@
 <script>
   import axios from 'axios'
   export default {
-    name: "addcontract",
+    name: "addmiantainance",
     data() {
       return {
         tabledata: {

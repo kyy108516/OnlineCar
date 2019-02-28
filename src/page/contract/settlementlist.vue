@@ -4,51 +4,11 @@
       <div class="topbar-cell">
         <b class="topbar-tit">合同结算</b>
       </div>
-      <div class="topbar-cell">
-        <span class="fr">
-          <router-link to="/contract/addcontract/0" class="actions"><i class="el-icon-plus"></i>新增合同</router-link>
-        </span>
-      </div>
     </div>
     <div class="query-bar">
       <el-form :inline="true" :label-position="right" label-width="80px">
         <el-form-item label="合同编号">
           <el-input v-model="queryData.id"></el-input>
-        </el-form-item>
-        <el-form-item label="合同类型">
-          <el-select v-model="queryData.type" filterable placeholder="合同类型">
-            <el-option :label="'全部'" :value="''"></el-option>
-            <el-option
-              :label="'以租代购'"
-              :value="'以租代购'">
-            </el-option>
-            <el-option
-              :label="'长租'"
-              :value="'长租'">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="车牌号">
-          <el-select filterable v-model="queryData.license">
-            <el-option :label="'全部'" :value="''"></el-option>
-            <el-option
-              v-for="item in carData"
-              :key="item.id"
-              :label="item.license"
-              :value="item.id">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="承租人">
-          <el-select filterable v-model="queryData.name">
-            <el-option :label="'全部'" :value="''"></el-option>
-            <el-option
-              v-for="item in driverData"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
-            </el-option>
-          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button type="info" plain="" @click="query">查询</el-button>
@@ -65,16 +25,15 @@
             <span>{{scope.row.id}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="type" label="合同类型"></el-table-column>
         <el-table-column prop="license" label="车牌号"></el-table-column>
-        <el-table-column prop="model" label="车型"></el-table-column>
-        <el-table-column prop="name" label="承租人" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="phone" label="联系方式" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="start_time" label="合同起始日" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="end_time" label="合同到期日" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="model" label="承租人"></el-table-column>
+        <el-table-column prop="name" label="验车审核" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="phone" label="违章审核" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="start_time" label="财务审核" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="end_time" label="结算状态" show-overflow-tooltip></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="detailContract(scope.row.id)">查看</el-button>
+            <el-button type="text" size="small" @click="detailSettlement(scope.row.id)">查看</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -198,8 +157,8 @@
       // editDriver(id){
       //   this.$router.push('adddriver/'+id)
       // },
-      detailContract(id){
-        this.$router.push('contractdetail/'+id)
+      detailSettlement(id){
+        this.$router.push('settlementdetail/'+id)
       }
     },
   }

@@ -52,35 +52,26 @@
           </div>
           <div style="clear:both"></div>
         </el-tab-pane>
-        <el-tab-pane label="保险"></el-tab-pane>
-        <el-tab-pane label="维保">角色管理</el-tab-pane>
-        <el-tab-pane label="事故">
-          <el-button type="primary" class="tab-button">新增事故</el-button>
+        <el-tab-pane label="保险">
+          <el-button icon="el-icon-plus" type="success" @click="addinsurance(cardata.car.id)">新增保险</el-button>
           <div class="view_table" style="margin-top: 0">
-            <el-table
-              :data="tableData"
-              style="width: 100%">
-              <el-table-column
-                prop="date"
-                label="日期"
-                width="180">
-              </el-table-column>
-              <el-table-column
-                prop="name"
-                label="姓名"
-                width="180">
-              </el-table-column>
-              <el-table-column
-                prop="address"
-                label="地址">
-              </el-table-column>
+            <el-table ref="multipleTable" :data="this.cardata.insurance.slice((currpage - 1) * pagesize, currpage * pagesize)" tooltip-effect="dark" style="width: 100%"
+                      @selection-change="handleSelectionChange" highlight-current-row>
+              <el-table-column prop="id" label="保险单号"></el-table-column>
+              <el-table-column prop="type" label="保险类型" ></el-table-column>
+              <el-table-column prop="company_name" label="保险公司"></el-table-column>
+              <el-table-column prop="start_time" label="起始日"></el-table-column>
+              <el-table-column prop="end_time" label="到期日"></el-table-column>
+              <el-table-column prop="money" label="金额"></el-table-column>
             </el-table>
             <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
                            :page-sizes="[10, 20, 30, 40]" :page-size="pagesize"
                            layout="total, sizes, prev, pager, next, jumper"
-                           :total="400"></el-pagination>
+                           :total="this.cardata.insurance.length"></el-pagination>
           </div>
         </el-tab-pane>
+        <el-tab-pane label="维保"></el-tab-pane>
+        <el-tab-pane label="事故"></el-tab-pane>
       </el-tabs>
     </div>
   </div>
@@ -89,34 +80,21 @@
 <script>
   import axios from 'axios'
   export default {
+    inject:['reload'],
     name: "cardetail",
     data() {
       return {
         cardata: {
-          car:[]
+          car:[],
+          insurance:[],
         },
-        tabPosition: 'left',
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }]
+        currpage:1,
+        pagesize:10,
+        tabPosition:'left',
       }
     },
-    created(){
-      this.getData()
+    mounted() {
+      this.getData();
     },
     methods: {
       getData() {
@@ -134,8 +112,32 @@
           })
           .catch(function (error) {
             console.log(error)
+          });
+        axios.get(url+'/car/queryInsurance?id='+id)
+          .then(response => {
+            if (response.data.code == '200') {
+              this.cardata.insurance = response.data.data
+            }
+            if (response.data.code == '1') {
+              this.cardata.insurance = []
+            }
           })
+          .catch(function (error) {
+            console.log(error)
+          });
       },
+      handleSelectionChange(val) {
+        this.multipleSelection = val;
+      },
+      handleCurrentChange(cpage) {
+        this.currpage = cpage;
+      },
+      handleSizeChange(psize) {
+        this.pagesize = psize;
+      },
+      addinsurance(id){
+        this.$router.push('addinsurance/'+id)
+      }
     },
   }
 </script>

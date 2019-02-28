@@ -20,6 +20,7 @@ import settlementlist from "@/page/contract/settlementlist"
 import accidentlist from "@/page/operate/accidentlist"
 import detainlist from "@/page/operate/detainlist"
 import maintainancelist from "@/page/operate/maintainancelist"
+import addmaintainance from "@/page/operate/addmaintainance"
 import remindlist from "@/page/operate/remindlist"
 import violationlist from "@/page/operate/violationlist"
 import billlist from "@/page/account/billlist"
@@ -31,6 +32,8 @@ import info from "@/page/system/info"
 import partnerlist from "@/page/system/partnerlist"
 import rolelist from "@/page/system/rolelist"
 import userlist from "@/page/system/userlist"
+import settlementdetail from "@/page/contract/settlementdetail"
+import addinsurance from  "@/page/car/addinsurance"
 
 Vue.use(Router)
 
@@ -70,6 +73,10 @@ export default new Router({
         {
           path: 'cardetail/:id',
           component: cardetail
+        },
+        {
+          path: 'cardetail/addinsurance/:id',
+          component: addinsurance
         },
         {
           path: 'addcartype/:id',
@@ -121,6 +128,10 @@ export default new Router({
           path: 'settlementlist',
           component: settlementlist
         },
+        {
+          path: 'settlementdetail/:id',
+          component: settlementdetail
+        },
       ],
     },
     { //运营管理路由
@@ -137,6 +148,10 @@ export default new Router({
         {
           path: 'maintainancelist',
           component: maintainancelist
+        },
+        {
+          path: 'addmaintainance/:id',
+          component: addmaintainance
         },
         {
           path: 'remindlist',
