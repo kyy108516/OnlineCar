@@ -178,7 +178,7 @@ export default new Router({
       },
         {
           path: 'detaillist',
-          component: detainlist
+          component: detaillist
         },
         {
           path: 'practicallist',

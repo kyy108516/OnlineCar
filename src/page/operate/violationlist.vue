@@ -79,7 +79,7 @@
     },
     methods: {
       getData() {
-        axios.post(url + '/accident/query')
+        axios.post(url + '/car/queryViolation')
           .then(response => {
             if (response.data.code == '200') {
               this.tableData = response.data.data

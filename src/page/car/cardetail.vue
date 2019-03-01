@@ -70,8 +70,83 @@
                            :total="this.cardata.insurance.length"></el-pagination>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="维保"></el-tab-pane>
-        <el-tab-pane label="事故"></el-tab-pane>
+        <el-tab-pane label="维保">
+          <div class="view_table" style="margin-top: 0">
+            <el-table ref="multipleTable" :data="this.cardata.maintenance.slice((currpage - 1) * pagesize, currpage * pagesize)" tooltip-effect="dark" style="width: 100%"
+                      @selection-change="handleSelectionChange" highlight-current-row>
+              <el-table-column type="selection" width="55"></el-table-column>
+              <el-table-column prop="id" label="维修单号">
+                <template slot-scope="scope">
+                  <span>{{scope.row.id}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="name" label="司机"></el-table-column>
+              <el-table-column prop="type" label="维保类型"></el-table-column>
+              <el-table-column prop="send_time" label="送修时间" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="money" label="维保金额" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="company_name" label="维修厂" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="season" label="送修原因" show-overflow-tooltip></el-table-column>
+            </el-table>
+            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                           :page-sizes="[10, 20, 30, 40]" :page-size="pagesize"
+                           layout="total, sizes, prev, pager, next, jumper"
+                           :total="this.cardata.maintenance.length"></el-pagination>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="事故">
+          <div class="view_table" style="margin-top: 0">
+            <el-table ref="multipleTable" :data="this.cardata.accident.slice((currpage - 1) * pagesize, currpage * pagesize)" tooltip-effect="dark" style="width: 100%"
+                      @selection-change="handleSelectionChange" highlight-current-row>
+              <el-table-column prop="id" label="事故编号">
+                <template slot-scope="scope">
+                  <span>{{scope.row.id}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="contract_id" label="合同编号"></el-table-column>
+              <el-table-column prop="name" label="司机"></el-table-column>
+              <el-table-column prop="happen_site" label="出险地点" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="happen_time" label="出险时间" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="money" label="定损金额" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="state" label="事故状态" show-overflow-tooltip></el-table-column>
+              <el-table-column label="操作">
+                <template slot-scope="scope">
+                  <el-button type="text" size="small" @click="detailSettlement(scope.row.id)">查看</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                           :page-sizes="[10, 20, 30, 40]" :page-size="pagesize"
+                           layout="total, sizes, prev, pager, next, jumper"
+                           :total="this.cardata.accident.length"></el-pagination>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="违章">
+          <div class="view_table" style="margin-top: 0">
+            <el-table ref="multipleTable" :data="this.cardata.violation.slice((currpage - 1) * pagesize, currpage * pagesize)" tooltip-effect="dark" style="width: 100%"
+                      @selection-change="handleSelectionChange" highlight-current-row>
+              <el-table-column prop="id" label="违章单号">
+                <template slot-scope="scope">
+                  <span>{{scope.row.id}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="name" label="司机"></el-table-column>
+              <el-table-column prop="happen_site" label="违章地点" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="happen_time" label="违章时间" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="score" label="扣分" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="money" label="罚款" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="state" label="是否处理" show-overflow-tooltip></el-table-column>
+              <el-table-column label="操作">
+                <template slot-scope="scope">
+                  <el-button type="text" size="small" @click="detailSettlement(scope.row.id)">查看</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                           :page-sizes="[10, 20, 30, 40]" :page-size="pagesize"
+                           layout="total, sizes, prev, pager, next, jumper"
+                           :total="this.cardata.violation.length"></el-pagination>
+          </div>
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>
@@ -87,6 +162,9 @@
         cardata: {
           car:[],
           insurance:[],
+          maintenance:[],
+          accident:[],
+          violation:[],
         },
         currpage:1,
         pagesize:10,
@@ -121,6 +199,27 @@
             if (response.data.code == '1') {
               this.cardata.insurance = []
             }
+          })
+          .catch(function (error) {
+            console.log(error)
+          });
+        axios.post(url + '/maintainance/query')
+          .then(response => {
+            this.cardata.maintenance = response.data.data
+          })
+          .catch(function (error) {
+            console.log(error)
+          });
+        axios.post(url + '/accident/query')
+          .then(response => {
+            this.cardata.accident = response.data.data
+          })
+          .catch(function (error) {
+            console.log(error)
+          });
+        axios.post(url + '/car/queryViolation')
+          .then(response => {
+            this.cardata.violation = response.data.data
           })
           .catch(function (error) {
             console.log(error)

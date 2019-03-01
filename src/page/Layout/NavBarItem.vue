@@ -26,9 +26,9 @@
     </el-submenu>
     <el-submenu index="5">
       <template slot="title">财务管理</template>
-      <el-menu-item index="/account/billlist">应收账款</el-menu-item>
+      <el-menu-item index="/account/receivablelist">应收账款</el-menu-item>
       <el-menu-item index="/account/practicallist">实收账款</el-menu-item>
-      <el-menu-item index="/account/receivablelist">应付账款</el-menu-item>
+      <el-menu-item index="/account/billlist">应付账款</el-menu-item>
       <el-menu-item index="/account/detaillist">财务明细</el-menu-item>
     </el-submenu>
     <el-submenu index="6">
