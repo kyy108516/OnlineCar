@@ -12,15 +12,15 @@
     </div>
     <div class="query-bar">
       <el-form :inline="true" :label-position="right" label-width="80px">
-        <el-form-item label="车型编号">
-          <el-input v-model="queryData.id"></el-input>
-        </el-form-item>
+        <!--<el-form-item label="车型编号">-->
+          <!--<el-input v-model="queryData.id"></el-input>-->
+        <!--</el-form-item>-->
         <el-form-item label="品牌">
           <el-input v-model="queryData.brand"></el-input>
         </el-form-item>
-        <el-form-item label="车型">
-          <el-input v-model="queryData.model"></el-input>
-        </el-form-item>
+        <!--<el-form-item label="车型">-->
+          <!--<el-input v-model="queryData.model"></el-input>-->
+        <!--</el-form-item>-->
         <el-form-item label="类型">
           <el-select v-model="queryData.type" placeholder="请选择">
             <el-option :key="1" :label="'全部'" :value="''"></el-option>
@@ -80,29 +80,10 @@
           dialogFormVisible:false
         }
       },
-      // computed:{
-      //   ...mapState({
-      //     currpage: state => state.currpage_cartype
-      //   })
-      // },
       created() {
         this.getData();
       },
       methods: {
-        // ...mapMutations([
-        //   'update',
-        //   'reset'
-        // ]),
-        // getData() {
-        //   var url = "http://localhost:3000";
-        //   axios.get(url + '/cartype/queryAll')
-        //     .then(response => {
-        //       this.tableData = response.data.data
-        //     })
-        //     .catch(function (error) {
-        //       console.log(error)
-        //     })
-        // },
         getData(){
           var url = "http://localhost:3000";
           axios.post(url+'/cartype/query',this.queryData)
