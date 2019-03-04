@@ -57,8 +57,6 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="detailCar(scope.row.id)">查看</el-button>
-            <el-button type="text" size="small" @click="editCar(scope.row.id)">编辑</el-button>
-            <el-button type="text" size="small" @click="deleteCar(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -150,20 +148,20 @@
             console.log(error);
           });
       },
-      deleteCar(id) {
-        var url = "http://localhost:3000";
-        axios.get(url + "/car/deleteCar?id=" + id)
-          .then(response => {
-            console.log(response)
-            this.reload()
-          })
-          .catch(function (error) {
-            console.log(error)
-          })
-      },
-      editCar(id){
-        this.$router.push('addcar/'+id)
-      },
+      // deleteCar(id) {
+      //   var url = "http://localhost:3000";
+      //   axios.get(url + "/car/deleteCar?id=" + id)
+      //     .then(response => {
+      //       console.log(response)
+      //       this.reload()
+      //     })
+      //     .catch(function (error) {
+      //       console.log(error)
+      //     })
+      // },
+      // editCar(id){
+      //   this.$router.push('addcar/'+id)
+      // },
       detailCar(id){
         this.$router.push('cardetail/'+id)
       }
