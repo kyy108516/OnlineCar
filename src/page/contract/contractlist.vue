@@ -50,6 +50,27 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="合同状态">
+          <el-select v-model="queryData.state" filterable placeholder="合同状态">
+            <el-option :label="'全部'" :value="''"></el-option>
+            <el-option
+              :label="'录入中'"
+              :value="'录入中'">
+            </el-option>
+            <el-option
+              :label="'执行中'"
+              :value="'执行中'">
+            </el-option>
+            <el-option
+              :label="'结算中'"
+              :value="'结算中'">
+            </el-option>
+            <el-option
+              :label="'已完成'"
+              :value="'已完成'">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item>
           <el-button type="info" plain="" @click="query">查询</el-button>
         </el-form-item>
@@ -138,6 +159,7 @@
           name: '',
           sex: '',
           phone: '',
+          state:'是'
         })
           .then(response => {
             if (response.data.code == '200') {

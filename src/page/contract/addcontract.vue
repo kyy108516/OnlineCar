@@ -2,8 +2,7 @@
   <div>
     <div class="topbar">
       <div class="topbar-cell">
-        <b class="topbar-tit" v-if="this.$route.params.id!=0">编辑合同</b>
-        <b class="topbar-tit" v-else>新增合同</b>
+        <b class="topbar-tit">新增合同</b>
         <el-button class="back-last" @click="$router.go(-1)">
           <span class="icon"><i class="el-icon-back"></i> 返回上一级</span>
         </el-button>
@@ -99,6 +98,7 @@
       <div style="clear:both"></div>
       <div class="dataAllHead">财务约定
         <el-button type="primary" class="button-caiwu" @click="addLine">添加</el-button>
+        <!--<el-button type="primary" class="button-caiwu" @click="save">显示</el-button>-->
       </div>
       <el-table
         :data="itemdata"
@@ -260,7 +260,6 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.changetime()
-            console.log(this.tabledata.startTime)
             var url = "http://localhost:3000";
             axios.get(url + '/contract/addContract?id=' + this.tabledata.id + '&type=' + this.tabledata.type + '&car_id=' + this.tabledata.car_id+ '&driver_id=' + this.tabledata.driver_id+ '&start_time=' + this.tabledata.startTime+ '&end_time=' + this.tabledata.endTime)
               .then(response => {
@@ -274,7 +273,6 @@
               this.itemdata[i].time = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
               axios.get(url + '/contract/addContractItem?id=' + this.tabledata.id + '&type=' + this.itemdata[i].type + '&period=' + this.itemdata[i].period + '&money=' + this.itemdata[i].money + '&time=' + this.itemdata[i].time)
                 .then(response => {
-                  // this.$router.push('/contract/contractlist')
                 })
                 .catch(function (error) {
                   console.log(error)
@@ -318,6 +316,10 @@
       handleDelete(index) { //删除行数
         this.itemdata.splice(index, 1)
       },
+      // save(){
+      //   //这部分应该是保存提交你添加的内容
+      //   console.log(JSON.stringify(this.itemdata))
+      // },
       changetime() {
         var d1 = new Date(this.tabledata.startTime)
         var d2 = new Date(this.tabledata.endTime)

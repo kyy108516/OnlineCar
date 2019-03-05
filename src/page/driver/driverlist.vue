@@ -53,7 +53,7 @@
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="detailDriver(scope.row.id)">查看</el-button>
             <el-button type="text" size="small" @click="editDriver(scope.row.id)">编辑</el-button>
-            <el-button type="text" size="small" @click="deleteDriver(scope.row.id)">删除</el-button>
+            <!--<el-button type="text" size="small" @click="deleteDriver(scope.row.id)">删除</el-button>-->
           </template>
         </el-table-column>
       </el-table>
@@ -113,17 +113,17 @@
       handleSizeChange(psize) {
         this.pagesize = psize;
       },
-      deleteDriver(id) {
-        var url = "http://localhost:3000";
-        axios.get(url + "/driver/deleteDriver?id=" + id)
-          .then(response => {
-            console.log(response)
-            this.reload()
-          })
-          .catch(function (error) {
-            console.log(error)
-          })
-      },
+      // deleteDriver(id) {
+      //   var url = "http://localhost:3000";
+      //   axios.get(url + "/driver/deleteDriver?id=" + id)
+      //     .then(response => {
+      //       console.log(response)
+      //       this.reload()
+      //     })
+      //     .catch(function (error) {
+      //       console.log(error)
+      //     })
+      // },
       editDriver(id){
         this.$router.push('adddriver/'+id)
       },
