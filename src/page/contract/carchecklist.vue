@@ -32,10 +32,14 @@
             <span>{{scope.row.state}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="contract_id" label="合同编号" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="contract_id" label="合同编号" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{scope.row.contract_id}}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="validate(scope.row.id)" v-if="scope.row.state=='已验车'">交车</el-button>
+            <el-button type="text" size="small" @click="getitem(scope.row.contract_id)" v-if="scope.row.state=='已验车'">交车</el-button>
             <el-button type="text" size="small" @click="validate(scope.row.id)" v-if="scope.row.state=='未验车'">验车</el-button>
           </template>
         </el-table-column>
@@ -45,21 +49,34 @@
                      layout="total, sizes, prev, pager, next, jumper"
                      :total="this.tableData.length"></el-pagination>
     </div>
+    <el-dialog
+      title="提示"
+      :visible.sync="dialogVisible"
+      width="30%"
+      :before-close="handleClose">
+      <span>是否确认交车？</span>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="submit(scope.row.id,scope.row.contract_id)">确 定</el-button>
+  </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import axios from 'axios'
-
   var url = "http://localhost:3000";
   export default {
     inject: ['reload'],
     name: "carchecklist",//交车管理
     data() {
       return {
+        dialogVisible: false,
         queryData: {
+          id:'',
           state:''
         },
+        itemData:[],
         tableData:[],
         carData: [],
         driverData: [],
@@ -137,20 +154,48 @@
             console.log(error);
           });
       },
-      // deleteDriver(id) {
-      //   var url = "http://localhost:3000";
-      //   axios.get(url + "/driver/deleteDriver?id=" + id)
-      //     .then(response => {
-      //       console.log(response)
-      //       this.reload()
-      //     })
-      //     .catch(function (error) {
-      //       console.log(error)
-      //     })
-      // },
-      // editDriver(id){
-      //   this.$router.push('adddriver/'+id)
-      // },
+      submit(id,contract_id){
+        axios.get(url + '/validate/updateState?state=已完成&id=' + id)
+          .then(response => {
+            this.reload()
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+        axios.get(url + '/contract/updateState?state=执行中&id=' + contract_id)
+          .then(response => {
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+        for (let i=0;i<this.itemData.length;i++){
+          for (let j=0;j<this.itemData[i].period;j++){
+            axios.get(url + '/account/addReceivable?contract_id=' + this.itemData[i].contract_id+'&money='+this.itemData[i].money+'&time='+this.itemData[i].time.substr(0,10)+'&type='+this.itemData[i].type)
+              .then(response => {
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
+          }
+        }
+      },
+      getitem(id){
+        axios.post(url + '/contract/queryItem', {
+          id:id
+        })
+          .then(response => {
+            if (response.data.code == '200') {
+              this.itemData = response.data.data
+            }
+            if (response.data.code == '1') {
+              this.itemData = []
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+        this.dialogVisible=true
+      },
       validate(id){
         this.$router.push('carvalidate/'+id)
       }
