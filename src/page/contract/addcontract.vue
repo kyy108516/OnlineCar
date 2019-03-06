@@ -318,7 +318,10 @@
       },
       // save(){
       //   //这部分应该是保存提交你添加的内容
+      //   let date=new Date()
+      //   let id=''+date.getFullYear()+(date.getMonth()+1)+date.getDate()+date.getHours()+date.getMinutes()+date.getSeconds()
       //   console.log(JSON.stringify(this.itemdata))
+      //   console.log(id)
       // },
       changetime() {
         var d1 = new Date(this.tabledata.startTime)

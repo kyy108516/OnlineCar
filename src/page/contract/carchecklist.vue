@@ -39,7 +39,7 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="getitem(scope.row.contract_id)" v-if="scope.row.state=='已验车'">交车</el-button>
+            <el-button type="text" size="small" @click="getitem(scope.row.id,scope.row.contract_id)" v-if="scope.row.state=='已验车'">交车</el-button>
             <el-button type="text" size="small" @click="validate(scope.row.id)" v-if="scope.row.state=='未验车'">验车</el-button>
           </template>
         </el-table-column>
@@ -57,7 +57,7 @@
       <span>是否确认交车？</span>
       <span slot="footer" class="dialog-footer">
     <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="submit(scope.row.id,scope.row.contract_id)">确 定</el-button>
+    <el-button type="primary" @click="submit(id,contract_id)">确 定</el-button>
   </span>
     </el-dialog>
   </div>
@@ -83,7 +83,9 @@
         contractData: [],
         currpage: 1,
         pagesize: 10,
-        data: ''
+        data: '',
+        id:'',
+        contract_id:'',
       }
     },
     mounted() {
@@ -155,6 +157,8 @@
           });
       },
       submit(id,contract_id){
+        let date=new Date()
+        let receivable_id='YS'+date.getFullYear()+(date.getMonth()+1)+date.getDate()+date.getHours()+date.getMinutes()+date.getSeconds();
         axios.get(url + '/validate/updateState?state=已完成&id=' + id)
           .then(response => {
             this.reload()
@@ -170,7 +174,14 @@
           })
         for (let i=0;i<this.itemData.length;i++){
           for (let j=0;j<this.itemData[i].period;j++){
-            axios.get(url + '/account/addReceivable?contract_id=' + this.itemData[i].contract_id+'&money='+this.itemData[i].money+'&time='+this.itemData[i].time.substr(0,10)+'&type='+this.itemData[i].type)
+            let d1 = new Date(this.itemData[i].time);
+            let month=d1.getMonth()+1+j;
+            if (month>12){
+              month=month-12
+            }
+            let datetime1 = d1.getFullYear() + '-' + month + '-' + d1.getDate();
+            this.itemData[i].time = datetime1
+            axios.get(url + '/account/addReceivable?id='+(receivable_id+i+j)+'&contract_id=' + contract_id+'&money='+this.itemData[i].money+'&time='+this.itemData[i].time+'&type='+this.itemData[i].type)
               .then(response => {
               })
               .catch(function (error) {
@@ -179,9 +190,11 @@
           }
         }
       },
-      getitem(id){
+      getitem(id,contract_id){
+        this.id=id
+        this.contract_id=contract_id
         axios.post(url + '/contract/queryItem', {
-          id:id
+          id:contract_id
         })
           .then(response => {
             if (response.data.code == '200') {
