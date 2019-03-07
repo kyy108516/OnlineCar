@@ -6,7 +6,7 @@
       </div>
       <div class="topbar-cell">
         <span class="fr">
-          <router-link to="/operate/addaccident/0" class="actions"><i class="el-icon-plus"></i>新增违章</router-link>
+          <router-link to="/operate/addviolation" class="actions"><i class="el-icon-plus"></i>新增违章</router-link>
         </span>
       </div>
     </div>

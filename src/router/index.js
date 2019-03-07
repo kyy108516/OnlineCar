@@ -36,6 +36,7 @@ import settlementdetail from "@/page/contract/settlementdetail"
 import addinsurance from  "@/page/car/addinsurance"
 import addpartner from "@/page/system/addpartner"
 import addaccident from "@/page/operate/addaccident"
+import addviolation from "@/page/operate/addviolation"
 
 Vue.use(Router)
 
@@ -166,6 +167,10 @@ export default new Router({
         {
           path: 'violationlist',
           component: violationlist
+        },
+        {
+          path: 'addviolation',
+          component: addviolation
         },
       ],
     },

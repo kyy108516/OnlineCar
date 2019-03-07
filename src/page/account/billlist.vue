@@ -7,8 +7,38 @@
     </div>
     <div class="query-bar">
       <el-form :inline="true" :label-position="right" label-width="80px">
-        <el-form-item label="合同编号">
+        <el-form-item label="应付单号">
           <el-input v-model="queryData.id"></el-input>
+        </el-form-item>
+        <el-form-item label="财务类型">
+          <el-select v-model="queryData.type" filterable>
+            <el-option :label="'全部'" :value="''"></el-option>
+            <el-option
+              :label="'维保结算'"
+              :value="'维保结算'">
+            </el-option>
+            <el-option
+              :label="'事故费用'"
+              :value="'事故费用'">
+            </el-option>
+            <el-option
+              :label="'退款结算'"
+              :value="'退款结算'">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="是否结算">
+          <el-select v-model="queryData.state" filterable>
+            <el-option :label="'全部'" :value="''"></el-option>
+            <el-option
+              :label="'已完成'"
+              :value="'已完成'">
+            </el-option>
+            <el-option
+              :label="'未完成'"
+              :value="'未完成'">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button type="info" plain="" @click="query">查询</el-button>
@@ -28,10 +58,14 @@
         <el-table-column prop="type" label="财务类型"></el-table-column>
         <el-table-column prop="money" label="应付金额" show-overflow-tooltip></el-table-column>
         <el-table-column prop="time" label="处理日期" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="state" label="是否结算" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="state" label="是否结算" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{scope.row.state}}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="detailSettlement(scope.row.id)">结算</el-button>
+            <el-button v-if="scope.row.state=='未完成'" type="text" size="small" @click="pay(scope.row.id)">结算</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -45,6 +79,7 @@
 
 <script>
   import axios from 'axios'
+
   var url = "http://localhost:3000";
   export default {
     inject: ['reload'],
@@ -54,13 +89,10 @@
         queryData: {
           id: '',
           type: '',
-          license: '',
-          name: '',
+          state: '',
         },
-        tableData:[],
-        carData: [],
-        driverData: [],
-        contractData: [],
+        tableData: [],
+        typeData: [],
         currpage: 1,
         pagesize: 10,
         data: ''
@@ -71,7 +103,7 @@
     },
     methods: {
       getData() {
-        axios.post(url + '/account/queryBill')
+        axios.post(url + '/account/queryBill', this.queryData)
           .then(response => {
             if (response.data.code == '200') {
               this.tableData = response.data.data
@@ -85,13 +117,13 @@
           });
       },
       query() {
-        axios.post(url + '/contract/query', this.queryData)
+        axios.post(url + '/account/queryBill', this.queryData)
           .then(response => {
             if (response.data.code == '200') {
-              this.contractData = response.data.data
+              this.tableData = response.data.data
             }
             if (response.data.code == '1') {
-              this.contractData = []
+              this.tableData = []
             }
           })
           .catch(error => {
@@ -107,8 +139,17 @@
       handleSizeChange(psize) {
         this.pagesize = psize;
       },
-      detailSettlement(id){
-        this.$router.push('settlementdetail/'+id)
+      pay(id) {
+        let date = new Date();
+        let time = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+        console.log(time)
+        axios.get(url + '/account/updateBill?time=' + time + '&state=已完成&id=' + id)
+          .then(response => {
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+        this.reload()
       }
     },
   }
