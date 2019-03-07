@@ -141,7 +141,7 @@
           license: '',
           vin: '',
           model: '',
-          state: '运营中'
+          state: ''
         })
           .then(response => {
             if (response.data.code == '200') {
@@ -159,7 +159,7 @@
           name: '',
           sex: '',
           phone: '',
-          state:'是'
+          state:''
         })
           .then(response => {
             if (response.data.code == '200') {

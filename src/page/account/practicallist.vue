@@ -5,16 +5,6 @@
         <b class="topbar-tit">实收账款</b>
       </div>
     </div>
-    <div class="query-bar">
-      <el-form :inline="true" :label-position="right" label-width="80px">
-        <el-form-item label="合同编号">
-          <el-input v-model="queryData.id"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="info" plain="" @click="query">查询</el-button>
-        </el-form-item>
-      </el-form>
-    </div>
     <div class="view_table">
       <el-table ref="multipleTable" :data="tableData.slice((currpage - 1) * pagesize, currpage * pagesize)"
                 tooltip-effect="dark" style="width: 100%"
@@ -79,20 +69,20 @@
             console.log(error);
           });
       },
-      query() {
-        axios.post(url + '/contract/query', this.queryData)
-          .then(response => {
-            if (response.data.code == '200') {
-              this.contractData = response.data.data
-            }
-            if (response.data.code == '1') {
-              this.contractData = []
-            }
-          })
-          .catch(error => {
-            console.log(error);
-          });
-      },
+      // query() {
+      //   axios.post(url + '/contract/query', this.queryData)
+      //     .then(response => {
+      //       if (response.data.code == '200') {
+      //         this.contractData = response.data.data
+      //       }
+      //       if (response.data.code == '1') {
+      //         this.contractData = []
+      //       }
+      //     })
+      //     .catch(error => {
+      //       console.log(error);
+      //     });
+      // },
       handleSelectionChange(val) {
         this.multipleSelection = val;
       },

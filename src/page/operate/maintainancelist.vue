@@ -12,8 +12,32 @@
     </div>
     <div class="query-bar">
       <el-form :inline="true" :label-position="right" label-width="80px">
-        <el-form-item label="合同编号">
+        <el-form-item label="维修单号">
           <el-input v-model="queryData.id"></el-input>
+        </el-form-item>
+        <el-form-item label="车牌号">
+          <el-select filterable v-model="queryData.license">
+            <el-option :label="'全部'" :value="''"></el-option>
+            <el-option
+              v-for="item in carData"
+              :key="item.id"
+              :label="item.license"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="状态">
+          <el-select v-model="queryData.state" filterable>
+            <el-option :label="'全部'" :value="''"></el-option>
+            <el-option
+              :label="'已完成'"
+              :value="'已完成'">
+            </el-option>
+            <el-option
+              :label="'未完成'"
+              :value="'未完成'">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button type="info" plain="" @click="query">查询</el-button>
@@ -31,15 +55,23 @@
           </template>
         </el-table-column>
         <el-table-column prop="license" label="车牌号"></el-table-column>
-        <el-table-column prop="name" label="司机"></el-table-column>
         <el-table-column prop="type" label="维保类型"></el-table-column>
         <el-table-column prop="send_time" label="送修时间" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="money" label="维保金额" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="money" label="维保金额" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{scope.row.money}}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="company_name" label="维修厂" show-overflow-tooltip></el-table-column>
         <el-table-column prop="season" label="送修原因" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="state" label="状态" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{scope.row.state}}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="detailSettlement(scope.row.id)">查看</el-button>
+            <el-button v-if="scope.row.state=='未完成'" type="text" size="small" @click="submit(scope.row.id,scope.row.money)">完成</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -61,14 +93,11 @@
       return {
         queryData: {
           id: '',
-          type: '',
           license: '',
-          name: '',
+          state:'',
         },
         tableData:[],
         carData: [],
-        driverData: [],
-        contractData: [],
         currpage: 1,
         pagesize: 10,
         data: ''
@@ -79,7 +108,7 @@
     },
     methods: {
       getData() {
-        axios.post(url + '/maintainance/query')
+        axios.post(url + '/maintainance/query',this.queryData)
           .then(response => {
             if (response.data.code == '200') {
               this.tableData = response.data.data
@@ -91,15 +120,33 @@
           .catch(error => {
             console.log(error);
           });
-      },
-      query() {
-        axios.post(url + '/contract/query', this.queryData)
+        axios.post(url + '/car/query', {
+          id: '',
+          license: '',
+          vin: '',
+          model: '',
+          state: ''
+        })
           .then(response => {
             if (response.data.code == '200') {
-              this.contractData = response.data.data
+              this.carData = response.data.data
             }
             if (response.data.code == '1') {
-              this.contractData = []
+              this.carData = []
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      },
+      query() {
+        axios.post(url + '/maintainance/query', this.queryData)
+          .then(response => {
+            if (response.data.code == '200') {
+              this.tableData = response.data.data
+            }
+            if (response.data.code == '1') {
+              this.tableData = []
             }
           })
           .catch(error => {
@@ -115,9 +162,23 @@
       handleSizeChange(psize) {
         this.pagesize = psize;
       },
-      detailSettlement(id){
-        this.$router.push('settlementdetail/'+id)
-      }
+      submit(id,money){
+        let date = new Date();
+        let bill_id = 'YF' + date.getFullYear() + (date.getMonth() + 1) + date.getDate() + date.getHours() + date.getMinutes() + date.getSeconds();
+        axios.get(url + '/maintainance/update?id='+id)
+          .then(response => {
+          })
+          .catch(error => {
+            console.log(error);
+          });
+        axios.get(url + '/account/addBill?id=' + bill_id + '&type=维保结算&money=' + money)
+          .then(response => {
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+        this.reload()
+      },
     },
   }
 </script>

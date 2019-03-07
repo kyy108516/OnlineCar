@@ -42,8 +42,7 @@
             <em>*</em> 车牌号
           </div>
           <div class="dataReviseText">
-            <el-select v-model="tabledata.car_id" filterable placeholder="请选择"
-            @change="selectinfo(tabledata.car_id)">
+            <el-select v-model="tabledata.car_id" filterable placeholder="请选择">
               <el-option
                 v-for="item in carData"
                 :key="item.id"
@@ -192,29 +191,6 @@
             }
             if (response.data.code == '1') {
               this.partnerData = []
-            }
-          })
-          .catch(error => {
-            console.log(error);
-          });
-      },
-      selectinfo(id){
-        var url = "http://localhost:3000";
-        axios.post(url + '/contract/query',{
-          id: '',
-          type: '',
-          license: id,
-          name: '',
-          state:'执行中',
-        })
-          .then(response => {
-            if (response.data.code == '200') {
-              this.tabledata.driver_id = response.data.data[0].driver_id;
-              this.tabledata.contract_id = response.data.data[0].id;
-            }
-            if (response.data.code == '1') {
-              this.tabledata.driver_id = '';
-              this.tabledata.contract_id = '';
             }
           })
           .catch(error => {

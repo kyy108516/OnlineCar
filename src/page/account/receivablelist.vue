@@ -48,7 +48,10 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="collect(scope.row.id,scope.row.money,scope.row.already_money,scope.row.type)" v-if="scope.row.state=='未完成'">收款</el-button>
+            <el-button type="text" size="small"
+                       @click="collect(scope.row.id,scope.row.money,scope.row.already_money,scope.row.type)"
+                       v-if="scope.row.state=='未完成'">收款
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -58,11 +61,11 @@
                      :total="this.tableData.length"></el-pagination>
     </div>
     <el-dialog title="收款" :visible.sync="dialogFormVisible">
-      <el-form :model="practicalData">
-        <el-form-item label="实收金额" :label-width="'120px'">
+      <el-form :model="practicalData" :rules="rules" ref="practicalData">
+        <el-form-item label="实收金额" :label-width="'120px'" prop="money">
           <el-input v-model="practicalData.money" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="实收日期" :label-width="'120px'">
+        <el-form-item label="实收日期" :label-width="'120px'" prop="time">
           <el-date-picker
             v-model="practicalData.time"
             align="right"
@@ -74,7 +77,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submit">确 定</el-button>
+        <el-button type="primary" @click="submit('practicalData')">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -82,6 +85,7 @@
 
 <script>
   import axios from 'axios'
+
   var url = "http://localhost:3000";
   export default {
     inject: ['reload'],
@@ -90,49 +94,53 @@
       return {
         dialogFormVisible: false,
         queryData: {
-          contract_id:'',
+          contract_id: '',
         },
-        practicalData:{
-          money:'',
-          receivable_id:'',
-          time:'',
-          type:'',
+        practicalData: {
+          money: '',
+          receivable_id: '',
+          time: '',
+          type: '',
         },
-        rowData:{
-          receivable_id:'',
-          money:'',
-          already_money:'',
-          type:'',
+        rowData: {
+          receivable_id: '',
+          money: '',
+          already_money: '',
+          type: '',
         },
-        tableData:[],
+        tableData: [],
         carData: [],
         driverData: [],
         contractData: [],
         currpage: 1,
         pagesize: 10,
         data: '',
-      pickerOptions1: { //日期选择器
-        shortcuts: [{
-          text: '今天',
-          onClick(picker) {
-            picker.$emit('pick', new Date());
-          }
-        }, {
-          text: '昨天',
-          onClick(picker) {
-            const date = new Date();
-            date.setTime(date.getTime() - 3600 * 1000 * 24);
-            picker.$emit('pick', date);
-          }
-        }, {
-          text: '一周前',
-          onClick(picker) {
-            const date = new Date();
-            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-            picker.$emit('pick', date);
-          }
-        }]
-      },
+        pickerOptions1: { //日期选择器
+          shortcuts: [{
+            text: '今天',
+            onClick(picker) {
+              picker.$emit('pick', new Date());
+            }
+          }, {
+            text: '昨天',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24);
+              picker.$emit('pick', date);
+            }
+          }, {
+            text: '一周前',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', date);
+            }
+          }]
+        },
+        rules: {
+          time: [{required: true, message: '请选择时间', trigger: 'change'}],
+          money: [{required: true, message: '请输入金额', trigger: 'blur'}],
+        },
       }
     },
     mounted() {
@@ -140,7 +148,7 @@
     },
     methods: {
       getData() {
-        axios.post(url + '/account/queryReceivable',this.queryData)
+        axios.post(url + '/account/queryReceivable', this.queryData)
           .then(response => {
             if (response.data.code == '200') {
               this.tableData = response.data.data
@@ -176,53 +184,73 @@
       handleSizeChange(psize) {
         this.pagesize = psize;
       },
-      collect(id,money,already_money,type){
-        this.rowData.receivable_id=id;
-        this.rowData.money=money;
-        this.rowData.already_money=already_money;
-        this.rowData.type=type;
-        this.dialogFormVisible=true
+      collect(id, money, already_money, type) {
+        this.rowData.receivable_id = id;
+        this.rowData.money = money;
+        this.rowData.already_money = already_money;
+        this.rowData.type = type;
+        this.dialogFormVisible = true
       },
-      submit(){
-        var d1 = new Date(this.practicalData.time)
-        var datetime1 = d1.getFullYear() + '-' + (d1.getMonth() + 1) + '-' + d1.getDate();
-        let date=new Date();
-        let practical_id='SS'+date.getFullYear()+(date.getMonth()+1)+date.getDate()+date.getHours()+date.getMinutes()+date.getSeconds();
-        this.practicalData.time = datetime1
-        if (this.practicalData.money>(this.rowData.money-this.rowData.already_money)){
-          this.$message.error('实收金额大于未缴金额');
-          return 0;
-        }
-        if(this.practicalData.money==(this.rowData.money-this.rowData.already_money)){
-          axios.get(url + '/account/updateReceivable?money='+this.practicalData.money+'&state=已完成&id='+this.rowData.receivable_id)
-            .then(response => {
-            })
-            .catch(error => {
-              console.log(error);
-            });
-          axios.get(url + '/account/addPractical?id='+practical_id+'&receivable_id=' + this.rowData.receivable_id+'&money='+this.practicalData.money+'&time='+this.practicalData.time+'&type='+this.rowData.type)
-            .then(response => {
-            })
-            .catch(function (error) {
-              console.log(error)
-            })
-          this.reload()
-        }
-        if(this.practicalData.money<(this.rowData.money-this.rowData.already_money)){
-          axios.get(url + '/account/updateReceivable?money='+this.practicalData.money+'&state=未完成&id='+this.rowData.receivable_id)
-            .then(response => {
-            })
-            .catch(error => {
-              console.log(error);
-            });
-          axios.get(url + '/account/addPractical?id='+practical_id+'&receivable_id=' + this.rowData.receivable_id+'&money='+this.practicalData.money+'&time='+this.practicalData.time+'&type='+this.rowData.type)
-            .then(response => {
-            })
-            .catch(function (error) {
-              console.log(error)
-            })
-          this.reload()
-        }
+
+      submit(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            var d1 = new Date(this.practicalData.time)
+            var datetime1 = d1.getFullYear() + '-' + (d1.getMonth() + 1) + '-' + d1.getDate();
+            let date = new Date();
+            let practical_id = 'SS' + date.getFullYear() + (date.getMonth() + 1) + date.getDate() + date.getHours() + date.getMinutes() + date.getSeconds();
+            this.practicalData.time = datetime1
+            if (this.practicalData.money > (this.rowData.money - this.rowData.already_money)) {
+              this.$message.error('实收金额大于未缴金额');
+              return 0;
+            }
+            if (this.practicalData.money == (this.rowData.money - this.rowData.already_money)) {
+              axios.get(url + '/account/updateReceivable?money=' + this.practicalData.money + '&state=已完成&id=' + this.rowData.receivable_id)
+                .then(response => {
+                })
+                .catch(error => {
+                  console.log(error);
+                });
+              axios.get(url + '/account/addPractical?id=' + practical_id + '&receivable_id=' + this.rowData.receivable_id + '&money=' + this.practicalData.money + '&time=' + this.practicalData.time + '&type=' + this.rowData.type)
+                .then(response => {
+                })
+                .catch(function (error) {
+                  console.log(error)
+                })
+              axios.get(url + '/account/addDetail?id=' + practical_id + '&type=' + this.rowData.type + '&state=收入&money=' + this.practicalData.money + '&time=' + this.practicalData.time)
+                .then(response => {
+                })
+                .catch(function (error) {
+                  console.log(error)
+                })
+              this.reload()
+            }
+            if (this.practicalData.money < (this.rowData.money - this.rowData.already_money)) {
+              axios.get(url + '/account/updateReceivable?money=' + this.practicalData.money + '&state=未完成&id=' + this.rowData.receivable_id)
+                .then(response => {
+                })
+                .catch(error => {
+                  console.log(error);
+                });
+              axios.get(url + '/account/addPractical?id=' + practical_id + '&receivable_id=' + this.rowData.receivable_id + '&money=' + this.practicalData.money + '&time=' + this.practicalData.time + '&type=' + this.rowData.type)
+                .then(response => {
+                })
+                .catch(function (error) {
+                  console.log(error)
+                })
+              axios.get(url + '/account/addDetail?id=' + practical_id + '&type=' + this.rowData.type + '&state=收入&money=' + this.practicalData.money + '&time=' + this.practicalData.time)
+                .then(response => {
+                })
+                .catch(function (error) {
+                  console.log(error)
+                })
+              this.reload()
+            }
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
       },
     },
   }
