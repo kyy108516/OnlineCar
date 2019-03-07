@@ -12,8 +12,40 @@
     </div>
     <div class="query-bar">
       <el-form :inline="true" :label-position="right" label-width="80px">
-        <el-form-item label="合同编号">
-          <el-input v-model="queryData.id"></el-input>
+        <el-form-item label="车牌号">
+          <el-select filterable v-model="queryData.license">
+            <el-option :label="'全部'" :value="''"></el-option>
+            <el-option
+              v-for="item in carData"
+              :key="item.id"
+              :label="item.license"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="司机">
+          <el-select filterable v-model="queryData.name">
+            <el-option :label="'全部'" :value="''"></el-option>
+            <el-option
+              v-for="item in driverData"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="是否处理">
+          <el-select v-model="queryData.state" filterable>
+            <el-option :label="'全部'" :value="''"></el-option>
+            <el-option
+              :label="'是'"
+              :value="'是'">
+            </el-option>
+            <el-option
+              :label="'否'"
+              :value="'否'">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button type="info" plain="" @click="query">查询</el-button>
@@ -36,10 +68,14 @@
         <el-table-column prop="happen_time" label="违章时间" show-overflow-tooltip></el-table-column>
         <el-table-column prop="score" label="扣分" show-overflow-tooltip></el-table-column>
         <el-table-column prop="money" label="罚款" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="state" label="是否处理" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="state" label="是否处理" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{scope.row.state}}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="detailSettlement(scope.row.id)">查看</el-button>
+            <el-button v-if="scope.row.state=='否'" type="text" size="small" @click="handleviolation(scope.row.id)">处理</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -60,15 +96,13 @@
     data() {
       return {
         queryData: {
-          id: '',
-          type: '',
+          state:'',
           license: '',
           name: '',
         },
         tableData:[],
         carData: [],
         driverData: [],
-        contractData: [],
         currpage: 1,
         pagesize: 10,
         data: ''
@@ -79,7 +113,43 @@
     },
     methods: {
       getData() {
-        axios.post(url + '/car/queryViolation')
+        axios.post(url + '/car/query', {
+          id: '',
+          license: '',
+          vin: '',
+          model: '',
+          state: ''
+        })
+          .then(response => {
+            if (response.data.code == '200') {
+              this.carData = response.data.data
+            }
+            if (response.data.code == '1') {
+              this.carData = []
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+        axios.post(url + '/driver/query', {
+          id: '',
+          name: '',
+          sex: '',
+          phone: '',
+          state:''
+        })
+          .then(response => {
+            if (response.data.code == '200') {
+              this.driverData = response.data.data
+            }
+            if (response.data.code == '1') {
+              this.driverData = []
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+        axios.post(url + '/car/queryViolation',this.queryData)
           .then(response => {
             if (response.data.code == '200') {
               this.tableData = response.data.data
@@ -93,13 +163,13 @@
           });
       },
       query() {
-        axios.post(url + '/contract/query', this.queryData)
+        axios.post(url + '/car/queryViolation',this.queryData)
           .then(response => {
             if (response.data.code == '200') {
-              this.contractData = response.data.data
+              this.tableData = response.data.data
             }
             if (response.data.code == '1') {
-              this.contractData = []
+              this.tableData = []
             }
           })
           .catch(error => {
@@ -115,8 +185,14 @@
       handleSizeChange(psize) {
         this.pagesize = psize;
       },
-      detailSettlement(id){
-        this.$router.push('settlementdetail/'+id)
+      handleviolation(id){
+        axios.get(url + '/car/updateViolation?id='+id)
+          .then(response => {
+          })
+          .catch(error => {
+            console.log(error);
+          });
+        this.reload()
       }
     },
   }
