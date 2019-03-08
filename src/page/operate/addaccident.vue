@@ -12,21 +12,13 @@
     <div class="edit">
       <div class="dataAllHead">事故信息</div>
       <el-form class="dataRevise" :model="tabledata" :rules="rules" ref="tabledata">
-        <!--<el-form-item class="dataReviseTd" prop="id">-->
-          <!--<div class="dataReviseLabel">-->
-            <!--<em>*</em> 维保单号-->
-          <!--</div>-->
-          <!--<div class="dataReviseText">-->
-            <!--<el-input placeholder="维保单号" v-model="tabledata.id"></el-input>-->
-          <!--</div>-->
-        <!--</el-form-item>-->
         <el-form-item class="dataReviseTd" prop="car_id">
           <div class="dataReviseLabel">
             <em>*</em> 车牌号
           </div>
           <div class="dataReviseText">
             <el-select v-model="tabledata.car_id" filterable placeholder="请选择"
-                       @change="selectinfo(tabledata.car_id)">
+                       @change="selectcar(tabledata.car_id)">
               <el-option
                 v-for="item in carData"
                 :key="item.id"
@@ -36,12 +28,28 @@
             </el-select>
           </div>
         </el-form-item>
-        <el-form-item class="dataReviseTd">
+        <el-form-item class="dataReviseTd" prop="driver_id">
+          <div class="dataReviseLabel">
+            <em>*</em> 司机
+          </div>
+          <div class="dataReviseText">
+            <el-select v-model="tabledata.driver_id" filterable placeholder="请选择"
+                       @change="selectdriver(tabledata.driver_id)">
+              <el-option
+                v-for="item in driverData"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+              </el-option>
+            </el-select>
+          </div>
+        </el-form-item>
+        <el-form-item class="dataReviseTd" >
           <div class="dataReviseLabel">
             <em>*</em>合同编号
           </div>
           <div class="dataReviseText">
-            <el-input placeholder="合同" v-model="tabledata.season"></el-input>
+            <el-input placeholder="合同" v-model="tabledata.contract_id" disabled="true"></el-input>
           </div>
         </el-form-item>
         <el-form-item class="dataReviseTd" prop="happen_time">
@@ -58,9 +66,9 @@
             </el-date-picker>
           </div>
         </el-form-item>
-        <el-form-item class="dataReviseTd">
+        <el-form-item class="dataReviseTd" prop="happen_site">
           <div class="dataReviseLabel">
-            出险地点
+            <em>*</em>出险地点
           </div>
           <div class="dataReviseText">
             <el-input placeholder="出险地点" v-model="tabledata.happen_site"></el-input>
@@ -71,7 +79,7 @@
             <em>*</em> 定损金额
           </div>
           <div class="dataReviseText">
-            <el-input placeholder="定损金额" v-model="tabledata.money"></el-input>
+            <el-input v-model="tabledata.money" disabled="true"></el-input>
           </div>
         </el-form-item>
       </el-form>
@@ -98,7 +106,7 @@
         </el-table-column>
         <el-table-column prop="money" label="金额">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.money" placeholder="金额"></el-input>
+            <el-input v-model="scope.row.money" placeholder="金额" @blur="sum_money(scope.row.money)" @focus="jian(scope.row.money)"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="操作">
@@ -131,17 +139,22 @@
           contract_id:'',
           happen_site:'',
           happen_time:'',
-          money:'',
+          money:0,
           state:'',
+          car_id:'',
+          driver_id:'',
         },
         itemdata: [{
           type: '',//财务类型
           money: '',
         }],
         carData: [],
+        driverData:[],
         rules: {
           car_id: [{required: true, message: '请选择车牌', trigger: 'change'}],
-          happen_time: [{required: true, message: '请选择时间', trigger: 'change'}],
+          driver_id: [{required: true, message: '请选择司机', trigger: 'change'}],
+          happen_time: [{required: true, message: '请选择日期', trigger: 'change'}],
+          happen_site: [{required: true, message: '请输入地点', trigger: 'blur'}],
         },
         pickerOptions1: { //日期选择器
           shortcuts: [{
@@ -173,13 +186,12 @@
     methods: {
       getData() {
         var url = "http://localhost:3000";
-        var id = this.$route.params.id
         axios.post(url + '/car/query', {
           id: '',
           license: '',
           vin: '',
           model: '',
-          state: ''
+          state: '运营中'
         })
           .then(response => {
             if (response.data.code == '200') {
@@ -192,8 +204,26 @@
           .catch(error => {
             console.log(error);
           });
+        axios.post(url + '/driver/query', {
+          id: '',
+          name: '',
+          phone: '',
+          sex: '',
+          state: '是'
+        })
+          .then(response => {
+            if (response.data.code == '200') {
+              this.driverData = response.data.data
+            }
+            if (response.data.code == '1') {
+              this.driverData = []
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
       },
-      selectinfo(id){
+      selectcar(id){
         var url = "http://localhost:3000";
         axios.post(url + '/contract/query',{
           id: '',
@@ -216,18 +246,51 @@
             console.log(error);
           });
       },
+      selectdriver(id){
+        var url = "http://localhost:3000";
+        axios.post(url + '/contract/query',{
+          id: '',
+          type: '',
+          license: '',
+          name: id,
+          state:'执行中',
+        })
+          .then(response => {
+            if (response.data.code == '200') {
+              this.tabledata.car_id = response.data.data[0].car_id;
+              this.tabledata.contract_id = response.data.data[0].id;
+            }
+            if (response.data.code == '1') {
+              this.tabledata.car_id = '';
+              this.tabledata.contract_id = '';
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      },
       submit(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.changetime()
+            let date = new Date();
+            let id = 'SS' + date.getFullYear() + (date.getMonth() + 1) + date.getDate() + date.getHours() + date.getMinutes() + date.getSeconds();
             var url = "http://localhost:3000";
-            axios.get(url + '/maintainance/addMaintainance?id=' + this.tabledata.id + '&type=' + this.tabledata.type + '&money=' + this.tabledata.money+ '&send_time=' + this.tabledata.send_time+ '&season=' + this.tabledata.season+ '&partner_id=' + this.tabledata.partner_id+ '&contract_id=' + this.tabledata.contract_id+ '&car_id=' + this.tabledata.car_id+ '&driver_id=' + this.tabledata.driver_id)
+            axios.get(url + '/accident/add?id='+id+'&contract_id=' + this.tabledata.contract_id + '&happen_site=' + this.tabledata.happen_site + '&happen_time=' + this.tabledata.happen_time+ '&money=' + this.tabledata.money+ '&car_id=' + this.tabledata.car_id+ '&driver_id=' + this.tabledata.driver_id)
               .then(response => {
-                this.$router.push('/operate/maintainancelist')
               })
               .catch(function (error) {
                 console.log(error)
               })
+            for (let i=0;i<this.itemdata.length;i++) {
+              axios.get(url + '/accident/addItem?id=' +id + '&type=' + this.itemdata[i].type+'&money=' + this.itemdata[i].money)
+                .then(response => {
+                })
+                .catch(function (error) {
+                  console.log(error)
+                })
+            }
+            this.$router.push('/operate/accidentlist')
           } else {
             console.log('error submit!!');
             return false;
@@ -246,10 +309,29 @@
         this.itemdata.splice(index, 1)
       },
       changetime() {
-        var d1 = new Date(this.tabledata.send_time)
+        var d1 = new Date(this.tabledata.happen_time)
         var datetime1 = d1.getFullYear() + '-' + (d1.getMonth() + 1) + '-' + d1.getDate();
-        this.tabledata.send_time = datetime1
-      }
+        this.tabledata.happen_time = datetime1
+      },
+      sum_money(x){
+        console.log(x)
+        if (x==''){
+          return 0
+        }
+        else {
+          this.tabledata.money += parseInt(x)
+        }
+      },
+      jian(x){
+        console.log(x)
+        console.log(this.tabledata.money)
+        if (x==''){
+          return 0
+        }
+        else {
+          this.tabledata.money -= parseInt(x)
+        }
+      },
     }
   }
 </script>
