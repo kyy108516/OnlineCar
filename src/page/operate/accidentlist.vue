@@ -56,12 +56,20 @@
             <span>{{scope.row.id}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="contract_id" label="合同编号" width="80"></el-table-column>
+        <el-table-column prop="contract_id" label="合同编号" width="80">
+          <template slot-scope="scope">
+            <span>{{scope.row.contract_id}}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="license" label="车牌号" width="90"></el-table-column>
         <el-table-column prop="name" label="司机" width="80"></el-table-column>
         <el-table-column prop="happen_site" label="出险地点" show-overflow-tooltip></el-table-column>
         <el-table-column prop="happen_time" label="出险时间" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="money" label="定损金额" width="90" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="money" label="定损金额" width="90" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{scope.row.money}}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="state" label="事故状态" width="90" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{scope.row.state}}</span>
@@ -70,8 +78,8 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="detailSettlement(scope.row.id)">查看</el-button>
-            <el-button v-if="scope.row.state=='待结案'" type="text" size="small" @click="detailSettlement(scope.row.id)">结案</el-button>
-            <el-button v-if="scope.row.state=='待理赔'" type="text" size="small" @click="detailSettlement(scope.row.id)">完成</el-button>
+            <el-button v-if="scope.row.state=='待结案'" type="text" size="small" @click="submit1(scope.row.id,scope.row.contract_id,scope.row.money)">结案</el-button>
+            <el-button v-if="scope.row.state=='待理赔'" type="text" size="small" @click="submit2(scope.row.id)">完成</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -88,7 +96,7 @@
   var url = "http://localhost:3000";
   export default {
     inject: ['reload'],
-    name: "accidentlist",//维保管理
+    name: "accidentlist",//事故管理
     data() {
       return {
         queryData: {
@@ -210,6 +218,37 @@
           .catch(error => {
             console.log(error);
           });
+      },
+      submit1(id,contract_id,money){
+        let date=new Date();
+        let date1=new Date(date)
+        date1.setDate(date.getDate()+7)
+        let time = date1.getFullYear() + '-' + (date1.getMonth() + 1) + '-' + date1.getDate();
+        let receivable_id='YS'+date.getFullYear()+(date.getMonth()+1)+date.getDate()+date.getHours()+date.getMinutes()+date.getSeconds()
+        if (money!=0) {
+          axios.get(url + '/account/addReceivable?id=' + receivable_id + '&contract_id=' + contract_id + '&money=' + money + '&time=' + time + '&type=事故费用')
+            .then(response => {
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
+        }
+        axios.get(url + '/accident/update?state=待理赔&id=' + id)
+          .then(response => {
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+        this.reload()
+      },
+      submit2(id){
+        axios.get(url + '/accident/update?state=理赔完毕&id=' + id)
+          .then(response => {
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+        this.reload()
       },
     },
   }

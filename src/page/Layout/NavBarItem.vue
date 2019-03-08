@@ -20,7 +20,7 @@
       <template slot="title">运营管理</template>
       <el-menu-item index="/operate/maintainancelist">维保管理</el-menu-item>
       <el-menu-item index="/operate/accidentlist">事故管理</el-menu-item>
-      <el-menu-item index="/operate/remindlist">到期提醒</el-menu-item>
+      <el-menu-item index="/operate/insuranceremind">到期提醒</el-menu-item>
       <el-menu-item index="/operate/violationlist">违章管理</el-menu-item>
       <el-menu-item index="/operate/detainlist">扣车管理</el-menu-item>
     </el-submenu>

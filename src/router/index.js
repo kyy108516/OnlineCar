@@ -21,7 +21,8 @@ import accidentlist from "@/page/operate/accidentlist"
 import detainlist from "@/page/operate/detainlist"
 import maintainancelist from "@/page/operate/maintainancelist"
 import addmaintainance from "@/page/operate/addmaintainance"
-import remindlist from "@/page/operate/remindlist"
+import insuranceremind from "@/page/operate/insuranceremind"
+import contractremind from "@/page/operate/contractremind"
 import violationlist from "@/page/operate/violationlist"
 import billlist from "@/page/account/billlist"
 import detaillist from "@/page/account/detaillist"
@@ -161,8 +162,12 @@ export default new Router({
           component: addmaintainance
         },
         {
-          path: 'remindlist',
-          component: remindlist
+          path: 'insuranceremind',
+          component: insuranceremind
+        },
+        {
+          path: 'contractremind',
+          component: contractremind
         },
         {
           path: 'violationlist',
