@@ -9,8 +9,8 @@
       </div>
     </div>
     <div class="edit">
-      <el-tabs :tab-position="tabPosition" style="height: auto" class="detail-tab">
-        <el-tab-pane label="车辆">
+      <el-tabs :tab-position="tabPosition" style="height: auto" class="detail-tab" v-model="activeName">
+        <el-tab-pane label="车辆" name="one">
           <div class="dataAllHead">车辆信息</div>
           <div class="dataDetail">
             <div class="dataDetailTd">
@@ -52,7 +52,7 @@
           </div>
           <div style="clear:both"></div>
         </el-tab-pane>
-        <el-tab-pane label="保险">
+        <el-tab-pane label="保险" name="two">
           <el-button icon="el-icon-plus" type="success" @click="addinsurance(cardata.car.id)">新增保险</el-button>
           <div class="view_table" style="margin-top: 0">
             <el-table ref="multipleTable" :data="this.cardata.insurance.slice((currpage - 1) * pagesize, currpage * pagesize)" tooltip-effect="dark" style="width: 100%"
@@ -70,7 +70,7 @@
                            :total="this.cardata.insurance.length"></el-pagination>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="维保">
+        <el-tab-pane label="维保" name="three">
           <div class="view_table" style="margin-top: 0">
             <el-table ref="multipleTable" :data="this.cardata.maintenance.slice((currpage - 1) * pagesize, currpage * pagesize)" tooltip-effect="dark" style="width: 100%"
                       @selection-change="handleSelectionChange" highlight-current-row>
@@ -93,7 +93,7 @@
                            :total="this.cardata.maintenance.length"></el-pagination>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="事故">
+        <el-tab-pane label="事故" name="four">
           <div class="view_table" style="margin-top: 0">
             <el-table ref="multipleTable" :data="this.cardata.accident.slice((currpage - 1) * pagesize, currpage * pagesize)" tooltip-effect="dark" style="width: 100%"
                       @selection-change="handleSelectionChange" highlight-current-row>
@@ -120,7 +120,7 @@
                            :total="this.cardata.accident.length"></el-pagination>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="违章">
+        <el-tab-pane label="违章" name="five">
           <div class="view_table" style="margin-top: 0">
             <el-table ref="multipleTable" :data="this.cardata.violation.slice((currpage - 1) * pagesize, currpage * pagesize)" tooltip-effect="dark" style="width: 100%"
                       @selection-change="handleSelectionChange" highlight-current-row>
@@ -154,11 +154,13 @@
 
 <script>
   import axios from 'axios'
+  var url = "http://localhost:3000";
   export default {
     inject:['reload'],
     name: "cardetail",
     data() {
       return {
+        activeName:"one",
         cardata: {
           car:[],
           insurance:[],
@@ -176,7 +178,6 @@
     },
     methods: {
       getData() {
-        var url="http://localhost:3000";
         var id = this.$route.params.id
         axios.post(url + '/car/query', {
           id: id,
@@ -199,27 +200,6 @@
             if (response.data.code == '1') {
               this.cardata.insurance = []
             }
-          })
-          .catch(function (error) {
-            console.log(error)
-          });
-        axios.post(url + '/maintainance/query')
-          .then(response => {
-            this.cardata.maintenance = response.data.data
-          })
-          .catch(function (error) {
-            console.log(error)
-          });
-        axios.post(url + '/accident/query')
-          .then(response => {
-            this.cardata.accident = response.data.data
-          })
-          .catch(function (error) {
-            console.log(error)
-          });
-        axios.post(url + '/car/queryViolation')
-          .then(response => {
-            this.cardata.violation = response.data.data
           })
           .catch(function (error) {
             console.log(error)

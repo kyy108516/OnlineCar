@@ -55,8 +55,16 @@
             <span>{{scope.row.id}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="type" label="财务类型"></el-table-column>
-        <el-table-column prop="money" label="应付金额" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="type" label="财务类型">
+          <template slot-scope="scope">
+            <span>{{scope.row.type}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="money" label="应付金额" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{scope.row.money}}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="time" label="处理日期" show-overflow-tooltip></el-table-column>
         <el-table-column prop="state" label="是否结算" show-overflow-tooltip>
           <template slot-scope="scope">
@@ -65,7 +73,7 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button v-if="scope.row.state=='未完成'" type="text" size="small" @click="pay(scope.row.id)">结算</el-button>
+            <el-button v-if="scope.row.state=='未完成'" type="text" size="small" @click="pay(scope.row.id,scope.row.money,scope.row.type)">结算</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -79,7 +87,6 @@
 
 <script>
   import axios from 'axios'
-
   var url = "http://localhost:3000";
   export default {
     inject: ['reload'],
@@ -139,11 +146,17 @@
       handleSizeChange(psize) {
         this.pagesize = psize;
       },
-      pay(id) {
+      pay(id,money,type) {
         let date = new Date();
         let time = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
         console.log(time)
         axios.get(url + '/account/updateBill?time=' + time + '&state=已完成&id=' + id)
+          .then(response => {
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+        axios.get(url + '/account/addDetail?id=' + id + '&type=' + type + '&state=支出&money=' + money + '&time=' + time)
           .then(response => {
           })
           .catch(function (error) {

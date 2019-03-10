@@ -63,7 +63,8 @@
         queryData:{
           id:'',
           company_name:'',
-          type:''
+          type:'',
+          state:'激活',
         },
         tableData: [],
         currpage:1,
