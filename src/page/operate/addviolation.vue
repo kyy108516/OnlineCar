@@ -176,6 +176,12 @@
           if (valid) {
             this.changetime()
             var url = "http://localhost:3000";
+            axios.get(url + '/contract/DetainViolation?contract_id=' + this.tabledata.contract_id)
+              .then(response => {
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
             axios.get(url + '/car/addViolation?car_id=' + this.tabledata.car_id + '&happen_site=' + this.tabledata.happen_site + '&happen_time=' + this.tabledata.happen_time+ '&money=' + this.tabledata.money+ '&score=' + this.tabledata.score+ '&driver_id=' + this.tabledata.driver_id+ '&contract_id=' + this.tabledata.contract_id)
               .then(response => {
                 this.$router.push('/operate/violationlist')

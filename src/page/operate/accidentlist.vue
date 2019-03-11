@@ -77,7 +77,7 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="detailSettlement(scope.row.id)">查看</el-button>
+            <el-button type="text" size="small" @click="detail(scope.row.id)">查看</el-button>
             <el-button v-if="scope.row.state=='待结案'" type="text" size="small" @click="submit1(scope.row.id,scope.row.contract_id,scope.row.money)">结案</el-button>
             <el-button v-if="scope.row.state=='待理赔'" type="text" size="small" @click="submit2(scope.row.id)">完成</el-button>
           </template>
@@ -104,6 +104,7 @@
           license: '',
           name: '',
           state:'',
+          contract:'',
         },
         tableData:[],
         carData: [],
@@ -190,8 +191,8 @@
       handleSizeChange(psize) {
         this.pagesize = psize;
       },
-      detailSettlement(id){
-        this.$router.push('settlementdetail/'+id)
+      detail(id){
+        this.$router.push('accidentdetail/'+id)
       },
       handleClick(tab, event) {
         if (tab.label == '所有') {

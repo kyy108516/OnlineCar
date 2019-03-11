@@ -172,6 +172,12 @@
           .catch(function (error) {
             console.log(error)
           })
+        axios.get(url + '/contract/addDetain?contract_id=' + contract_id)
+          .then(response => {
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
         for (let i=0;i<this.itemData.length;i++){
           for (let j=0;j<this.itemData[i].period;j++){
             let d1 = new Date(this.itemData[i].time);

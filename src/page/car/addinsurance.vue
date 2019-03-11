@@ -163,11 +163,19 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.changetime()
+            let date = new Date();
+            let bill_id = 'YF' + date.getFullYear() + (date.getMonth() + 1) + date.getDate() + date.getHours() + date.getMinutes() + date.getSeconds();
             console.log(this.tabledata.end_time)
             var url = "http://localhost:3000";
             axios.get(url + '/car/addInsurance?id=' + this.tabledata.id + '&type=' + this.tabledata.type + '&partner_id=' + this.tabledata.partner_id+ '&car_id=' + this.tabledata.car_id+ '&start_time=' + this.tabledata.start_time+ '&end_time=' + this.tabledata.end_time +'&money='+this.tabledata.money)
               .then(response => {
                 this.$router.go(-1)
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
+            axios.get(url + '/account/addBill?id=' + bill_id + '&type=保险结算&money=' + this.tabledata.money)
+              .then(response => {
               })
               .catch(function (error) {
                 console.log(error)

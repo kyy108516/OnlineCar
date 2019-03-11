@@ -282,6 +282,12 @@
               .catch(function (error) {
                 console.log(error)
               })
+            axios.get(url + '/contract/DetainAccident?contract_id=' + this.tabledata.contract_id)
+              .then(response => {
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
             for (let i=0;i<this.itemdata.length;i++) {
               axios.get(url + '/accident/addItem?id=' +id + '&type=' + this.itemdata[i].type+'&money=' + this.itemdata[i].money)
                 .then(response => {

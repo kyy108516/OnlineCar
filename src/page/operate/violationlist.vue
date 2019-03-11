@@ -99,6 +99,7 @@
           state:'',
           license: '',
           name: '',
+          contract:'',
         },
         tableData:[],
         carData: [],
