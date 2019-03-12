@@ -93,10 +93,15 @@
         <el-table-column prop="phone" label="联系方式" show-overflow-tooltip></el-table-column>
         <el-table-column prop="start_time" label="合同起始日" show-overflow-tooltip></el-table-column>
         <el-table-column prop="end_time" label="合同到期日" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="state" label="合同状态" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="state" label="合同状态" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{scope.row.state}}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="detailContract(scope.row.id)">查看</el-button>
+            <el-button type="text" size="small" @click="settle(scope.row.id)" v-if="scope.row.state=='执行中'">结算</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -224,6 +229,24 @@
       // },
       detailContract(id){
         this.$router.push('contractdetail/'+id)
+      },
+      settle(id){
+        let date = new Date();
+        date.setDate(date.getDate()+2)
+        let time=date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+        axios.get(url+"/contract/updateState?state=结算中&id="+id)
+          .then(response => {
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+        axios.get(url + '/validate/addValidate?contract_id=' +id + '&time='+time+"&type=还车")
+          .then(response => {
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+        this.reload()
       }
     },
   }

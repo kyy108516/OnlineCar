@@ -34,11 +34,19 @@
             <el-input placeholder="验车类型" v-model="tabledata.type" disabled="true"></el-input>
           </div>
         </el-form-item>
+        <el-form-item class="dataReviseTd">
+          <div class="dataReviseLabel">
+            <em>*</em> 验车金额
+          </div>
+          <div class="dataReviseText">
+            <el-input placeholder="0" v-model="tabledata.money" disabled="true"></el-input>
+          </div>
+        </el-form-item>
       </el-form>
       <div style="clear:both"></div>
       <div class="dataAllHead">验车事项
         <el-button type="primary" class="button-caiwu" @click="addLine">添加</el-button>
-        <el-button type="primary" class="button-caiwu" @click="save">显示</el-button>
+        <!--<el-button type="primary" class="button-caiwu" @click="save">显示</el-button>-->
       </div>
       <el-table
         :data="itemdata"
@@ -50,7 +58,7 @@
         </el-table-column>
         <el-table-column prop="money" label="金额">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.money" placeholder="请输入金额"></el-input>
+            <el-input v-model="scope.row.money" placeholder="请输入金额" @blur="sum_money(scope.row.money)" @focus="jian(scope.row.money)"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="操作">
@@ -85,6 +93,7 @@
           contract_id:'',
           license:'',
           type:'',
+          money:0,
         },
         itemdata: [{
           description: '',
@@ -175,9 +184,28 @@
       handleDelete(index) { //删除行数
         this.itemdata.splice(index, 1)
       },
-      save(){
-        //这部分应该是保存提交你添加的内容
-        console.log(JSON.stringify(this.itemdata))
+      // save(){
+      //   //这部分应该是保存提交你添加的内容
+      //   console.log(JSON.stringify(this.itemdata))
+      // },
+      sum_money(x){
+        console.log(x)
+        if (x==''){
+          return 0
+        }
+        else {
+          this.tabledata.money += parseInt(x)
+        }
+      },
+      jian(x){
+        console.log(x)
+        console.log(this.tabledata.money)
+        if (x==''){
+          return 0
+        }
+        else {
+          this.tabledata.money -= parseInt(x)
+        }
       },
     }
   }

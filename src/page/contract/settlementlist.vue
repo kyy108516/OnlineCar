@@ -10,6 +10,28 @@
         <el-form-item label="合同编号">
           <el-input v-model="queryData.id"></el-input>
         </el-form-item>
+        <el-form-item label="车牌号">
+          <el-select filterable v-model="queryData.license">
+            <el-option :label="'全部'" :value="''"></el-option>
+            <el-option
+              v-for="item in carData"
+              :key="item.id"
+              :label="item.license"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="承租人">
+          <el-select filterable v-model="queryData.name">
+            <el-option :label="'全部'" :value="''"></el-option>
+            <el-option
+              v-for="item in driverData"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item>
           <el-button type="info" plain="" @click="query">查询</el-button>
         </el-form-item>
@@ -20,20 +42,34 @@
                 tooltip-effect="dark" style="width: 100%"
                 @selection-change="handleSelectionChange" highlight-current-row>
         <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column prop="id" label="合同编号">
+        <el-table-column prop="contract_id" label="合同编号">
           <template slot-scope="scope">
-            <span>{{scope.row.id}}</span>
+            <span>{{scope.row.contract_id}}</span>
           </template>
         </el-table-column>
         <el-table-column prop="license" label="车牌号"></el-table-column>
         <el-table-column prop="model" label="承租人"></el-table-column>
-        <el-table-column prop="name" label="验车审核" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="phone" label="违章审核" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="start_time" label="财务审核" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="end_time" label="结算状态" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="validatecheck" label="验车审核" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{scope.row.validatecheck}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="id" label="验车号" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{scope.row.id}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="financecheck" label="财务审核" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{scope.row.financecheck}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="state" label="结算状态" show-overflow-tooltip></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="detailSettlement(scope.row.id)">查看</el-button>
+            <el-button v-if="scope.row.financecheck=='已完成'" type="text" size="small" @click="detailSettlement(scope.row.id)">查看</el-button>
+            <el-button v-if="scope.row.validatecheck=='未完成'" type="text" size="small" @click="validate(scope.row.id)">验车</el-button>
+            <el-button v-if="scope.row.financecheck=='已完成'&&scope.row.validatecheck=='已完成'" type="text" size="small" @click="detailSettlement(scope.row.id)">财务审核</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -109,7 +145,7 @@
           .catch(error => {
             console.log(error);
           });
-        axios.post(url + '/contract/query', this.queryData)
+        axios.post(url + '/contract/querySettle', this.queryData)
           .then(response => {
             if (response.data.code == '200') {
               this.contractData = response.data.data
@@ -123,7 +159,7 @@
           });
       },
       query() {
-        axios.post(url + '/contract/query', this.queryData)
+        axios.post(url + '/contract/querySettle', this.queryData)
           .then(response => {
             if (response.data.code == '200') {
               this.contractData = response.data.data
@@ -147,6 +183,9 @@
       },
       detailSettlement(id){
         this.$router.push('settlementdetail/'+id)
+      },
+      validate(id){
+        this.$router.push("/carvalidate/"+id)
       }
     },
   }
