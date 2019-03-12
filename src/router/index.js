@@ -39,6 +39,7 @@ import addpartner from "@/page/system/addpartner"
 import addaccident from "@/page/operate/addaccident"
 import addviolation from "@/page/operate/addviolation"
 import accidentdetail from "@/page/operate/accidentdetail"
+import financecheck from "@/page/contract/financecheck"
 
 Vue.use(Router)
 
@@ -120,6 +121,10 @@ export default new Router({
         {
           path: 'contractdetail/:id',
           component: contractdetail
+        },
+        {
+          path: 'financecheck/:id',
+          component: financecheck
         },
         {
           path: 'carchecklist',

@@ -74,7 +74,8 @@
         dialogVisible: false,
         queryData: {
           id:'',
-          state:''
+          state:'',
+          type:'交车',
         },
         itemData:[],
         tableData:[],

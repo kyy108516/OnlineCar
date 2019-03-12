@@ -140,7 +140,8 @@
         var id = this.$route.params.id
         axios.post(url + '/validate/query', {
           id: id,
-          state: ''
+          state: '',
+          type:'',
         })
           .then(response => {
             if (response.data.code == '200') {
@@ -159,7 +160,6 @@
             for (let i=0;i<this.itemdata.length;i++) {
               axios.get(url + '/validate/addValidateItem?id=' + this.tabledata.id + '&description=' + this.itemdata[i].description+ '&money=' + this.itemdata[i].money)
                 .then(response => {
-                  // this.$router.push('/contract/contractlist')
                 })
                 .catch(function (error) {
                   console.log(error)
@@ -167,11 +167,22 @@
             }
             axios.get(url + '/validate/updateState?state=已验车&id=' + this.tabledata.id)
               .then(response => {
-                this.$router.push('/contract/carchecklist')
               })
               .catch(function (error) {
                 console.log(error)
               })
+        if (this.tabledata.type=='交车') {
+          this.$router.push('/contract/carchecklist')
+        }
+        if (this.tabledata.type=='还车'){
+          axios.get(url + '/contract/updateSettle?validatecheck=已完成&id=' + this.tabledata.contract_id)
+            .then(response => {
+              this.$router.push('/contract/settlementlist')
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
+        }
       },
       addLine() { //添加行数
         var newValue = {
