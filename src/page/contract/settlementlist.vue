@@ -58,6 +58,7 @@
           type: '',
           license: '',
           name: '',
+          state:'',
         },
         carData: [],
         driverData: [],
@@ -77,7 +78,7 @@
           license: '',
           vin: '',
           model: '',
-          state: '运营中'
+          state: ''
         })
           .then(response => {
             if (response.data.code == '200') {
@@ -95,6 +96,7 @@
           name: '',
           sex: '',
           phone: '',
+          state:'',
         })
           .then(response => {
             if (response.data.code == '200') {
@@ -143,20 +145,6 @@
       handleSizeChange(psize) {
         this.pagesize = psize;
       },
-      // deleteDriver(id) {
-      //   var url = "http://localhost:3000";
-      //   axios.get(url + "/driver/deleteDriver?id=" + id)
-      //     .then(response => {
-      //       console.log(response)
-      //       this.reload()
-      //     })
-      //     .catch(function (error) {
-      //       console.log(error)
-      //     })
-      // },
-      // editDriver(id){
-      //   this.$router.push('adddriver/'+id)
-      // },
       detailSettlement(id){
         this.$router.push('settlementdetail/'+id)
       }

@@ -74,32 +74,43 @@
         </div>
         </el-tab-pane>
         <el-tab-pane label="事故赔款" name="three">
-        <!--<div class="view_table" style="margin-top: 0">-->
-        <!--<el-table ref="multipleTable"-->
-        <!--:data="this.maintenance.slice((currpage - 1) * pagesize, currpage * pagesize)"-->
-        <!--tooltip-effect="dark" style="width: 100%"-->
-        <!--@selection-change="handleSelectionChange" highlight-current-row>-->
-        <!--<el-table-column type="selection" width="55"></el-table-column>-->
-        <!--<el-table-column prop="id" label="维修单号">-->
-        <!--<template slot-scope="scope">-->
-        <!--<span>{{scope.row.id}}</span>-->
-        <!--</template>-->
-        <!--</el-table-column>-->
-        <!--<el-table-column prop="name" label="司机"></el-table-column>-->
-        <!--<el-table-column prop="type" label="维保类型"></el-table-column>-->
-        <!--<el-table-column prop="send_time" label="送修时间" show-overflow-tooltip></el-table-column>-->
-        <!--<el-table-column prop="money" label="维保金额" show-overflow-tooltip></el-table-column>-->
-        <!--<el-table-column prop="company_name" label="维修厂" show-overflow-tooltip></el-table-column>-->
-        <!--<el-table-column prop="season" label="送修原因" show-overflow-tooltip></el-table-column>-->
-        <!--</el-table>-->
-        <!--<el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"-->
-        <!--:page-sizes="[10, 20, 30, 40]" :page-size="pagesize"-->
-        <!--layout="total, sizes, prev, pager, next, jumper"-->
-        <!--:total="this.maintenance.length"></el-pagination>-->
-        <!--</div>-->
+          <el-button icon="el-icon-plus" type="success" @click="dialogFormVisible=true" v-if="accident.state=='待理赔'">新增赔款</el-button>
+          <div class="view_table" style="margin-top: 0">
+            <el-table ref="multipleTable"
+                      :data="this.reparation.slice((currpage - 1) * pagesize, currpage * pagesize)"
+                      tooltip-effect="dark" style="width: 100%"
+                      @selection-change="handleSelectionChange" highlight-current-row>
+              <el-table-column prop="money" label="金额"></el-table-column>
+              <el-table-column prop="time" label="实收日期"></el-table-column>
+            </el-table>
+            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                           :page-sizes="[10, 20, 30, 40]" :page-size="pagesize"
+                           layout="total, sizes, prev, pager, next, jumper"
+                           :total="this.reparation.length"></el-pagination>
+          </div>
         </el-tab-pane>
       </el-tabs>
     </div>
+    <el-dialog title="新增赔款" :visible.sync="dialogFormVisible">
+      <el-form :model="reparationData" :rules="rules" ref="reparationData">
+        <el-form-item label="赔款金额" :label-width="'120px'" prop="money">
+          <el-input v-model="reparationData.money" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="实收日期" :label-width="'120px'" prop="time">
+          <el-date-picker
+            v-model="reparationData.time"
+            align="right"
+            type="date"
+            placeholder="选择日期"
+            :picker-options="pickerOptions1">
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submit('reparationData')">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -111,6 +122,11 @@
     name: "accidentdetail",
     data() {
       return {
+        dialogFormVisible: false,
+        reparationData:{
+          money:'',
+          time:'',
+        },
         activeName: "one",
         reparation: [],
         accident: [],
@@ -118,6 +134,32 @@
         currpage: 1,
         pagesize: 10,
         tabPosition: 'left',
+        pickerOptions1: { //日期选择器
+          shortcuts: [{
+            text: '今天',
+            onClick(picker) {
+              picker.$emit('pick', new Date());
+            }
+          }, {
+            text: '昨天',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24);
+              picker.$emit('pick', date);
+            }
+          }, {
+            text: '一周前',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', date);
+            }
+          }]
+        },
+        rules: {
+          time: [{required: true, message: '请选择时间', trigger: 'change'}],
+          money: [{required: true, message: '请输入金额', trigger: 'blur'}],
+        },
       }
     },
     mounted() {
@@ -156,6 +198,20 @@
           .catch(error => {
             console.log(error);
           });
+        axios.post(url + '/accident/queryReparation',{
+          id:id
+        })
+          .then(response => {
+            if (response.data.code == '200') {
+              this.reparation = response.data.data
+            }
+            if (response.data.code == '1') {
+              this.reparation = []
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
       },
       handleSelectionChange(val) {
         this.multipleSelection = val;
@@ -166,9 +222,34 @@
       handleSizeChange(psize) {
         this.pagesize = psize;
       },
-      addinsurance(id) {
-        this.$router.push('addinsurance/' + id)
-      }
+      submit(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            var id = this.$route.params.id
+            var d1 = new Date(this.reparationData.time)
+            var datetime1 = d1.getFullYear() + '-' + (d1.getMonth() + 1) + '-' + d1.getDate();
+            this.reparationData.time = datetime1
+            let date = new Date();
+            let practical_id = 'SS' + date.getFullYear() + (date.getMonth() + 1) + date.getDate() + date.getHours() + date.getMinutes() + date.getSeconds();
+            axios.get(url + '/accident/addReparation?id=' + id  + '&money=' + this.reparationData.money+ '&time=' + this.reparationData.time)
+              .then(response => {
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
+            axios.get(url + '/account/addDetail?id=' + practical_id + '&type=事故理赔&state=收入&money=' + this.reparationData.money + '&time=' + this.reparationData.time)
+              .then(response => {
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
+            this.reload()
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
     },
   }
 </script>
