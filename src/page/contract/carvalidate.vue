@@ -142,6 +142,7 @@
           id: id,
           state: '',
           type:'',
+          contract_id:'',
         })
           .then(response => {
             if (response.data.code == '200') {
@@ -165,7 +166,7 @@
                   console.log(error)
                 })
             }
-            axios.get(url + '/validate/updateState?state=已验车&id=' + this.tabledata.id)
+            axios.get(url + '/validate/updateState?state=已验车&money='+this.tabledata.money+'&id=' + this.tabledata.id)
               .then(response => {
               })
               .catch(function (error) {

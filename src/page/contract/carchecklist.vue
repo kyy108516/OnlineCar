@@ -74,6 +74,7 @@
         dialogVisible: false,
         queryData: {
           id:'',
+          contract_id:'',
           state:'',
           type:'交车',
         },

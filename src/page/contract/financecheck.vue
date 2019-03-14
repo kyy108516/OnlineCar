@@ -11,22 +11,6 @@
     <div class="edit">
       <div class="dataAllHead">财务信息</div>
       <el-form class="dataRevise" :model="tabledata" :rules="rules" ref="tabledata">
-        <el-form-item class="dataReviseTd" prop="car_id">
-          <div class="dataReviseLabel">
-            <em>*</em> 车牌号
-          </div>
-          <div class="dataReviseText">
-            <el-input placeholder="" v-model="tabledata.happen_site"></el-input>
-          </div>
-        </el-form-item>
-        <el-form-item class="dataReviseTd" prop="driver_id">
-          <div class="dataReviseLabel">
-            <em>*</em> 司机
-          </div>
-          <div class="dataReviseText">
-            <el-input placeholder="出险地点" v-model="tabledata.happen_site"></el-input>
-          </div>
-        </el-form-item>
         <el-form-item class="dataReviseTd" >
           <div class="dataReviseLabel">
             <em>*</em>合同编号
@@ -35,13 +19,29 @@
             <el-input placeholder="合同" v-model="tabledata.contract_id" disabled="true"></el-input>
           </div>
         </el-form-item>
-        <el-form-item class="dataReviseTd" prop="happen_time">
+        <el-form-item class="dataReviseTd">
+          <div class="dataReviseLabel">
+            <em>*</em> 车牌号
+          </div>
+          <div class="dataReviseText">
+            <el-input placeholder="" v-model="tabledata.license" disabled="true"></el-input>
+          </div>
+        </el-form-item>
+        <el-form-item class="dataReviseTd">
+          <div class="dataReviseLabel">
+            <em>*</em> 承租人
+          </div>
+          <div class="dataReviseText">
+            <el-input placeholder="出险地点" v-model="tabledata.name" disabled="true"></el-input>
+          </div>
+        </el-form-item>
+        <el-form-item class="dataReviseTd" prop="time">
           <div class="dataReviseLabel">
             <em>*</em> 收付款日期
           </div>
           <div class="dataReviseText">
             <el-date-picker
-              v-model="tabledata.happen_time"
+              v-model="tabledata.time"
               align="right"
               type="date"
               placeholder="选择日期"
@@ -49,12 +49,12 @@
             </el-date-picker>
           </div>
         </el-form-item>
-        <el-form-item class="dataReviseTd" prop="happen_site">
+        <el-form-item class="dataReviseTd" prop="finance_money">
           <div class="dataReviseLabel">
             <em>*</em>账单金额
           </div>
           <div class="dataReviseText">
-            <el-input placeholder="出险地点" v-model="tabledata.happen_site"></el-input>
+            <el-input placeholder="0" v-model="tabledata.finance_money" disabled="true"></el-input>
           </div>
         </el-form-item>
       </el-form>
@@ -69,12 +69,12 @@
           <template slot-scope="scope">
             <el-select v-model="scope.row.type" filterable placeholder="请选择">
               <el-option
-                :label="'保险上浮费'"
-                :value="'保险上浮费'">
+                :label="'押金'"
+                :value="'押金'">
               </el-option>
               <el-option
-                :label="'车损费'"
-                :value="'车损费'">
+                :label="'其他'"
+                :value="'其他'">
               </el-option>
             </el-select>
           </template>
@@ -112,24 +112,17 @@
       return {
         tabledata: {
           contract_id:'',
-          happen_site:'',
-          happen_time:'',
-          money:0,
-          state:'',
-          car_id:'',
-          driver_id:'',
+          license:'',
+          name:'',
+          time:'',
+          finance_money:0,
         },
         itemdata: [{
-          type: '',//财务类型
-          money: '',
+          type: '验车审核',//财务类型
+          money: 0,
         }],
-        carData: [],
-        driverData:[],
         rules: {
-          car_id: [{required: true, message: '请选择车牌', trigger: 'change'}],
-          driver_id: [{required: true, message: '请选择司机', trigger: 'change'}],
-          happen_time: [{required: true, message: '请选择日期', trigger: 'change'}],
-          happen_site: [{required: true, message: '请输入地点', trigger: 'blur'}],
+          time: [{required: true, message: '请选择日期', trigger: 'change'}],
         },
         pickerOptions1: { //日期选择器
           shortcuts: [{
@@ -161,37 +154,42 @@
     methods: {
       getData() {
         var url = "http://localhost:3000";
-        axios.post(url + '/car/query', {
-          id: '',
+        var id = this.$route.params.id
+        axios.post(url+"/contract/query",{
+          id: id,
+          type: '',
           license: '',
-          vin: '',
-          model: '',
-          state: '运营中'
+          name: '',
+          state:'',
         })
           .then(response => {
             if (response.data.code == '200') {
-              this.carData = response.data.data
+              this.tabledata.contract_id = response.data.data[0].id;
+              this.tabledata.license = response.data.data[0].license;
+              this.tabledata.name = response.data.data[0].name;
             }
             if (response.data.code == '1') {
-              this.carData = []
+              this.tabledata.contract_id = '';
+              this.tabledata.license = '';
+              this.tabledata.name = '';
             }
           })
           .catch(error => {
             console.log(error);
           });
-        axios.post(url + '/driver/query', {
-          id: '',
-          name: '',
-          phone: '',
-          sex: '',
-          state: '是'
+        axios.post(url + '/validate/query',{
+          id:'',
+          contract_id:id,
+          state:'',
+          type:'',
         })
           .then(response => {
             if (response.data.code == '200') {
-              this.driverData = response.data.data
+              this.itemdata[0].money = response.data.data[1].money-response.data.data[0].money
+              this.tabledata.finance_money = response.data.data[1].money-response.data.data[0].money
             }
             if (response.data.code == '1') {
-              this.driverData = []
+              this.itemdata[0].money = 0
             }
           })
           .catch(error => {
@@ -247,31 +245,51 @@
       submit(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
+            var url = "http://localhost:3000";
             this.changetime()
             let date = new Date();
-            let id = 'SS' + date.getFullYear() + (date.getMonth() + 1) + date.getDate() + date.getHours() + date.getMinutes() + date.getSeconds();
-            var url = "http://localhost:3000";
-            axios.get(url + '/accident/add?id='+id+'&contract_id=' + this.tabledata.contract_id + '&happen_site=' + this.tabledata.happen_site + '&happen_time=' + this.tabledata.happen_time+ '&money=' + this.tabledata.money+ '&car_id=' + this.tabledata.car_id+ '&driver_id=' + this.tabledata.driver_id)
-              .then(response => {
-              })
-              .catch(function (error) {
-                console.log(error)
-              })
-            axios.get(url + '/contract/DetainAccident?contract_id=' + this.tabledata.contract_id)
-              .then(response => {
-              })
-              .catch(function (error) {
-                console.log(error)
-              })
+            if (this.tabledata.finance_money<0){
+              let money=0-this.tabledata.finance_money
+              let bill_id = 'YF' + date.getFullYear() + (date.getMonth() + 1) + date.getDate() + date.getHours() + date.getMinutes() + date.getSeconds();
+              axios.get(url + '/account/addBill?id=' + bill_id + '&type=尾款结算&money=' + money)
+                .then(response => {
+                })
+                .catch(function (error) {
+                  console.log(error)
+                })
+              axios.get(url + '/contract/updateSettleFinance?financecheck=已完成&finance_money='+money+'&id=' + this.tabledata.contract_id)
+                .then(response => {
+                  this.$router.push('/contract/settlementlist')
+                })
+                .catch(function (error) {
+                  console.log(error)
+                })
+            }
+            if (this.tabledata.finance_money>0){
+              let receivable_id = 'YS' + date.getFullYear() + (date.getMonth() + 1) + date.getDate() + date.getHours() + date.getMinutes() + date.getSeconds();
+              axios.get(url + '/account/addReceivable?id='+receivable_id+'&contract_id=' + this.tabledata.contract_id+'&money='+this.tabledata.finance_money+'&time='+this.tabledata.time+'&type=尾款结算')
+                .then(response => {
+                })
+                .catch(function (error) {
+                  console.log(error)
+                })
+              axios.get(url + '/contract/updateSettleFinance?financecheck=已完成&finance_money='+this.tabledata.finance_money+'&id=' + this.tabledata.contract_id)
+                .then(response => {
+                  this.$router.push('/contract/settlementlist')
+                })
+                .catch(function (error) {
+                  console.log(error)
+                })
+            }
             for (let i=0;i<this.itemdata.length;i++) {
-              axios.get(url + '/accident/addItem?id=' +id + '&type=' + this.itemdata[i].type+'&money=' + this.itemdata[i].money)
+              axios.get(url + '/contract/addSettleItem?id=' +this.tabledata.contract_id + '&type=' + this.itemdata[i].type+'&money=' + this.itemdata[i].money)
                 .then(response => {
                 })
                 .catch(function (error) {
                   console.log(error)
                 })
             }
-            this.$router.push('/operate/accidentlist')
+            this.$router.push('/contract/settlementlist')
           } else {
             console.log('error submit!!');
             return false;
@@ -290,27 +308,24 @@
         this.itemdata.splice(index, 1)
       },
       changetime() {
-        var d1 = new Date(this.tabledata.happen_time)
+        var d1 = new Date(this.tabledata.time)
         var datetime1 = d1.getFullYear() + '-' + (d1.getMonth() + 1) + '-' + d1.getDate();
-        this.tabledata.happen_time = datetime1
+        this.tabledata.time = datetime1
       },
       sum_money(x){
-        console.log(x)
         if (x==''){
           return 0
         }
         else {
-          this.tabledata.money += parseInt(x)
+          this.tabledata.finance_money += parseInt(x)
         }
       },
       jian(x){
-        console.log(x)
-        console.log(this.tabledata.money)
         if (x==''){
           return 0
         }
         else {
-          this.tabledata.money -= parseInt(x)
+          this.tabledata.finance_money -= parseInt(x)
         }
       },
     }
