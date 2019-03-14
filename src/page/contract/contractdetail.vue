@@ -157,6 +157,38 @@
                            :total="this.receivable.length"></el-pagination>
           </div>
         </el-tab-pane>
+        <el-tab-pane label="验车">
+          <div class="view_table" style="margin-top: 0">
+            <el-table ref="multipleTable"
+                      :data="this.validate.slice((currpage - 1) * pagesize, currpage * pagesize)"
+                      tooltip-effect="dark" style="width: 100%"
+                      @selection-change="handleSelectionChange" highlight-current-row>
+              <el-table-column prop="id" label="验车单号"></el-table-column>
+              <el-table-column prop="description" label="描述" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="money" label="金额" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="type" label="类型" show-overflow-tooltip></el-table-column>
+            </el-table>
+            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                           :page-sizes="[10, 20, 30, 40]" :page-size="pagesize"
+                           layout="total, sizes, prev, pager, next, jumper"
+                           :total="this.validate.length"></el-pagination>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="结算事项">
+          <div class="view_table" style="margin-top: 0">
+            <el-table ref="multipleTable"
+                      :data="this.settle.slice((currpage - 1) * pagesize, currpage * pagesize)"
+                      tooltip-effect="dark" style="width: 100%"
+                      @selection-change="handleSelectionChange" highlight-current-row>
+              <el-table-column prop="type" label="类型" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="money" label="金额" show-overflow-tooltip></el-table-column>
+            </el-table>
+            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                           :page-sizes="[10, 20, 30, 40]" :page-size="pagesize"
+                           layout="total, sizes, prev, pager, next, jumper"
+                           :total="this.settle.length"></el-pagination>
+          </div>
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>
@@ -173,6 +205,8 @@
         accident: [],
         item: [],
         receivable: [],
+        validate:[],
+        settle:[],
         tabPosition: 'left',
         currpage: 1,
         pagesize: 10,
@@ -260,6 +294,34 @@
           })
           .catch(error => {
             console.log(error);
+          });
+        axios.post(url + '/validate/queryItem', {
+          contract_id:id,
+        })
+          .then(response => {
+            if (response.data.code == '200') {
+              this.validate = response.data.data
+            }
+            if (response.data.code == '1') {
+              this.validate = []
+            }
+          })
+          .catch(function (error) {
+            console.log(error)
+          });
+        axios.post(url + '/contract/querySettleItem', {
+          id:id,
+        })
+          .then(response => {
+            if (response.data.code == '200') {
+              this.settle = response.data.data
+            }
+            if (response.data.code == '1') {
+              this.settle = []
+            }
+          })
+          .catch(function (error) {
+            console.log(error)
           });
       },
     },

@@ -71,7 +71,6 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button v-if="scope.row.financecheck=='已完成'" type="text" size="small" @click="detailSettlement(scope.row.contract_id)">查看</el-button>
             <el-button v-if="scope.row.validatecheck=='未完成'" type="text" size="small" @click="validate(scope.row.id)">验车</el-button>
             <el-button v-if="scope.row.financecheck=='已完成'&&scope.row.state=='结算中'" type="text" size="small" @click="finishcontract(scope.row.contract_id)">合同结束</el-button>
             <el-button v-if="scope.row.financecheck=='未完成'&&scope.row.validatecheck=='已完成'" type="text" size="small" @click="finance(scope.row.contract_id)">财务审核</el-button>
@@ -185,9 +184,6 @@
       },
       handleSizeChange(psize) {
         this.pagesize = psize;
-      },
-      detailSettlement(id){
-        this.$router.push('settlementdetail/'+id)
       },
       validate(id){
         this.$router.push("carvalidate/"+id)

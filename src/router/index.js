@@ -33,7 +33,6 @@ import info from "@/page/system/info"
 import partnerlist from "@/page/system/partnerlist"
 import rolelist from "@/page/system/rolelist"
 import userlist from "@/page/system/userlist"
-import settlementdetail from "@/page/contract/settlementdetail"
 import addinsurance from  "@/page/car/addinsurance"
 import addpartner from "@/page/system/addpartner"
 import addaccident from "@/page/operate/addaccident"
@@ -137,10 +136,6 @@ export default new Router({
         {
           path: 'settlementlist',
           component: settlementlist
-        },
-        {
-          path: 'settlementdetail/:id',
-          component: settlementdetail
         },
       ],
     },
