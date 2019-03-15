@@ -4,41 +4,39 @@ import vuex from 'vuex'
 Vue.use(vuex)
 
 const state = {
-  func:{
     insurance: 2,
     contract: 0,
     violation: 0,
     accident: 0,
-  },
 };
 
 const mutations = {
   updateInsurance(state,n){
-    state.func.insurance=n
+    state.insurance=n
   },
   updateContract(state,n){
-    state.func.contract=n
+    state.contract=n
   },
   updateViolation(state,n){
-    state.func.violation=n
+    state.violation=n
   },
   updateAccident(state,n){
-    state.func.accident=n
+    state.accident=n
   },
 };
 
 const actions={
-  updateInsurance({commit}) {
-    commit('updateInsurance')
+  updateInsurance({commit},n) {
+    commit('updateInsurance',n)
   },
-  updateContract({commit}) {
-    commit('updateContract')
+  updateContract({commit},n) {
+    commit('updateContract',n)
   },
-  updateViolation({commit}) {
-    commit('updateViolation')
+  updateViolation({commit},n) {
+    commit('updateViolation',n)
   },
-  updateAccident({commit}) {
-    commit('updateAccident')
+  updateAccident({commit,n}) {
+    commit('updateAccident',n)
   }
 };
 

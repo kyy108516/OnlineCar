@@ -47,12 +47,21 @@
         data: ''
       }
     },
+    computed:{
+      contract:{
+        get () {
+          return this.$store.state.contract
+        },
+      },
+    },
     mounted() {
       this.getData();
     },
     methods: {
       getData() {
-        axios.post(url + '/contract/queryExpire')
+        axios.post(url + '/contract/queryExpire',{
+          day:this.contract
+        })
           .then(response => {
             if (response.data.code == '200') {
               this.contractData = response.data.data

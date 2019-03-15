@@ -101,6 +101,8 @@
           name:'',
           license: '',
           state:'',
+          vio:'',
+          acc:'',
         },
         tableData:[],
         carData: [],
@@ -110,12 +112,34 @@
         data: ''
       }
     },
+    computed:{
+      violation:{
+        get () {
+          return this.$store.state.violation
+        },
+      },
+      accident:{
+        get () {
+          return this.$store.state.accident
+        },
+      },
+    },
     mounted() {
       this.getData();
     },
     methods: {
       getData() {
-        axios.post(url + '/contract/queryDetain',this.queryData)
+        console.log(this.violation)
+        this.tableData.vio=this.violation
+        console.log(this.tableData.vio)
+        this.tableData.acc=this.accident
+        axios.post(url + '/contract/queryDetain',{
+          name:'',
+          license: '',
+          state:'',
+          vio:this.violation,
+          acc:this.accident,
+        })
           .then(response => {
             if (response.data.code == '200') {
               this.tableData = response.data.data

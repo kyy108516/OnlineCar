@@ -40,7 +40,7 @@
 
 <script>
   import axios from 'axios'
-
+  import {mapState} from 'vuex'
   export default {
     name: "login",
     data() {
@@ -60,7 +60,28 @@
         }
       }
     },
-
+    computed:{
+      insurance:{
+        get () {
+          return this.$store.state.insurance
+        },
+      },
+      contract:{
+        get () {
+          return this.$store.state.contract
+        },
+      },
+      accident:{
+        get () {
+          return this.$store.state.accident
+        },
+      },
+      violation:{
+        get () {
+          return this.$store.state.violation
+        },
+      },
+    },
     methods: {
      /* login() {
         var url = "http://localhost:3000";
@@ -82,6 +103,17 @@
 
       },*/
       jump() {
+        var url = "http://localhost:3000";
+        axios.post(url + '/users/queryFunction')
+          .then(response => {
+            this.$store.commit('updateViolation', response.data.data[0].violation)
+            this.$store.commit('updateAccident', response.data.data[0].accident)
+            this.$store.commit('updateInsurance', response.data.data[0].insurance)
+            this.$store.commit('updateContract', response.data.data[0].contract)
+          })
+          .catch(function (error) {
+            console.log(error)
+          });
         this.$router.push('home')
       }
     }

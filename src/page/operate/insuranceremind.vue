@@ -139,13 +139,22 @@
         },
       }
     },
+    computed:{
+      insurance:{
+        get () {
+          return this.$store.state.insurance
+        },
+      },
+    },
     mounted() {
       this.getData();
     },
     methods: {
       getData() {
         var url = "http://localhost:3000";
-        axios.post(url + '/car/queryInsuranceRemind')
+        axios.post(url + '/car/queryInsuranceRemind',{
+          day:this.insurance
+        })
           .then(response => {
             if (response.data.code == '200') {
               this.tableData = response.data.data

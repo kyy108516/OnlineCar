@@ -13,7 +13,7 @@
             保险到期
           </div>
           <div class="dataReviseText">
-            <el-input placeholder="请输入保险到期天数" v-model="tabledata.insurance" style="display:inline;"></el-input>
+            <el-input placeholder="请输入保险到期天数" v-model="insurance" style="display:inline;"></el-input>
             <span>天</span>
           </div>
         </div>
@@ -22,7 +22,7 @@
             合同到期
           </div>
           <div class="dataReviseText">
-            <el-input placeholder="请输入合同到期天数" v-model="tabledata.contract" style="display:inline;"></el-input>
+            <el-input placeholder="请输入合同到期天数" v-model="contract" style="display:inline;"></el-input>
             <span>天</span>
           </div>
         </div>
@@ -37,7 +37,7 @@
             事故次数
           </div>
           <div class="dataReviseText">
-            <el-input placeholder="请输入事故次数" v-model="tabledata.accident" style="display:inline;"></el-input>
+            <el-input placeholder="请输入事故次数" v-model="accident" style="display:inline;"></el-input>
             <span>次</span>
           </div>
         </div>
@@ -46,7 +46,7 @@
             总违章次数
           </div>
           <div class="dataReviseText">
-            <el-input placeholder="请输入总违章次数" v-model="tabledata.violation" style="display:inline;"></el-input>
+            <el-input placeholder="请输入总违章次数" v-model="violation" style="display:inline;"></el-input>
             <span>次</span>
           </div>
         </div>
@@ -54,7 +54,7 @@
       <div style="clear:both"></div>
       <div class="dataBot">
         <el-button type="success" style="min-width: 120px;margin:0 auto;display: block"
-                   @click="submit('tabledata')">保存
+                   @click="submit()">保存
         </el-button>
       </div>
     </div>
@@ -63,27 +63,59 @@
 
 <script>
   import axios from 'axios'
-  import {mapState} from 'vuex'
   export default {
     name: "functionset",
     data() {
       return {
-        tabledata: {
-          insurance: 0,
-          contract: 0,
-          violation: 0,
-          accident: 0,
-        },
+        // tabledata: {
+        //   insurance: 0,
+        //   contract: 0,
+        //   violation: 0,
+        //   accident: 0,
+        // },
       }
     },
     computed:{
-      ...mapState({
-        insurance:state=>state.func.insurance
-      })
+      insurance:{
+        get () {
+          return this.$store.state.insurance
+        },
+        set (val) {
+          this.$store.commit('updateInsurance', val)
+          console.log(this.$store.state.insurance)
+        }
+      },
+      contract:{
+        get () {
+          return this.$store.state.contract
+        },
+        set (val) {
+          this.$store.commit('updateContract', val)
+          console.log(this.$store.state.contract)
+        }
+      },
+      accident:{
+        get () {
+          return this.$store.state.accident
+        },
+        set (val) {
+          this.$store.commit('updateAccident', val)
+          console.log(this.$store.state.accident)
+        }
+      },
+      violation:{
+        get () {
+          return this.$store.state.violation
+        },
+        set (val) {
+          this.$store.commit('updateViolation', val)
+          console.log(this.$store.state.violation)
+        }
+      },
     },
     created() {
       // this.getData()
-      this.tabledata.insurance=this.func.insurance
+      // this.tabledata.insurance=this.func.insurance
     },
     methods: {
       // getData() {
@@ -101,11 +133,15 @@
       // },
       submit() {
         var url = "http://localhost:3000";
-        if (this.tabledata.insurance==''||this.tabledata.contract==''||this.tabledata.violation==''||this.tabledata.accident==''){
+        if (this.insurance===''||this.contract===''||this.violation===''||this.accident===''){
+          console.log(typeof (this.insurance))
+          console.log(this.contract)
+          console.log(this.violation)
+          console.log(typeof this.accident)
           this.$message.error('请填入正确信息');
           return 0;
         }
-        axios.get(url + '/users/updateFunction?insurance=' + this.tabledata.insurance + '&contract=' + this.tabledata.contract + '&violation=' + this.tabledata.violation+'&accident='+this.tabledata.accident)
+        axios.get(url + '/users/updateFunction?insurance=' + this.insurance + '&contract=' + this.contract+ '&violation=' + this.violation+'&accident='+this.accident)
           .then(response => {
             if (response.data.code == '200') {
               this.$message({
