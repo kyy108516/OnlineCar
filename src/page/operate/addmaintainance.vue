@@ -202,7 +202,7 @@
           if (valid) {
             this.changetime()
             var url = "http://localhost:3000";
-            axios.get(url + '/maintainance/addMaintainance?id=' + this.tabledata.id + '&type=' + this.tabledata.type + '&money=' + this.tabledata.money+ '&send_time=' + this.tabledata.send_time+ '&season=' + this.tabledata.season+ '&partner_id=' + this.tabledata.partner_id+ '&contract_id=' + this.tabledata.contract_id+ '&car_id=' + this.tabledata.car_id+ '&driver_id=' + this.tabledata.driver_id)
+            axios.get(url + '/maintainance/addMaintainance?id=' + this.tabledata.id + '&type=' + this.tabledata.type + '&money=' + this.tabledata.money+ '&send_time=' + this.tabledata.send_time+ '&season=' + this.tabledata.season+ '&partner_id=' + this.tabledata.partner_id+ '&car_id=' + this.tabledata.car_id)
               .then(response => {
                  this.$router.push('/operate/maintainancelist')
               })

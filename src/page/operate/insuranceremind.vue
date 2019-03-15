@@ -188,6 +188,7 @@
           id: '',
           company_name: '',
           type: '保险公司',
+          state:'激活',
         })
           .then(response => {
             if (response.data.code == '200') {

@@ -51,7 +51,7 @@
       return{
         tabledata:{
           company_name:'',
-          type:''
+          type:'',
         },
         rules:{
           company_name:[{required:true,message:'请输入公司名称',trigger:'blur'}],
@@ -87,7 +87,8 @@
         axios.post(url + '/car/Partner',{
           id:id,
           company_name:'',
-          type:''
+          type:'',
+          state:'激活'
         })
           .then(response=>{
             this.tabledata.company_name=response.data.data[0].company_name

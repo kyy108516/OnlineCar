@@ -47,8 +47,16 @@
             <span>{{scope.row.contract_id}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="license" label="车牌号"></el-table-column>
-        <el-table-column prop="model" label="承租人"></el-table-column>
+        <el-table-column prop="license" label="车牌号">
+          <template slot-scope="scope">
+            <span>{{scope.row.license}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="name" label="承租人">
+          <template slot-scope="scope">
+            <span>{{scope.row.name}}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="validatecheck" label="验车审核" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{scope.row.validatecheck}}</span>

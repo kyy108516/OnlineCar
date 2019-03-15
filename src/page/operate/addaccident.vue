@@ -274,7 +274,7 @@
           if (valid) {
             this.changetime()
             let date = new Date();
-            let id = 'SS' + date.getFullYear() + (date.getMonth() + 1) + date.getDate() + date.getHours() + date.getMinutes() + date.getSeconds();
+            let id = 'SG' + date.getFullYear() + (date.getMonth() + 1) + date.getDate() + date.getHours() + date.getMinutes() + date.getSeconds();
             var url = "http://localhost:3000";
             axios.get(url + '/accident/add?id='+id+'&contract_id=' + this.tabledata.contract_id + '&happen_site=' + this.tabledata.happen_site + '&happen_time=' + this.tabledata.happen_time+ '&money=' + this.tabledata.money+ '&car_id=' + this.tabledata.car_id+ '&driver_id=' + this.tabledata.driver_id)
               .then(response => {

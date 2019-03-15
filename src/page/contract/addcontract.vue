@@ -290,7 +290,7 @@
               .catch(function (error) {
                 console.log(error)
               })
-            axios.get(url + '/validate/addValidate?contract_id=' +this.tabledata.id + '&time='+this.tabledata.startTime+"&type='交车'")
+            axios.get(url + '/validate/addValidate?contract_id=' +this.tabledata.id + '&time='+this.tabledata.startTime+"&type=交车")
               .then(response => {
               })
               .catch(function (error) {
