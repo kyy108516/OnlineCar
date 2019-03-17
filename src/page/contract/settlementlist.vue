@@ -57,6 +57,11 @@
             <span>{{scope.row.name}}</span>
           </template>
         </el-table-column>
+        <el-table-column prop="phone" label="联系方式">
+          <template slot-scope="scope">
+            <span>{{scope.row.phone}}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="validatecheck" label="验车审核" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{scope.row.validatecheck}}</span>
@@ -80,7 +85,7 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button v-if="scope.row.validatecheck=='未完成'" type="text" size="small" @click="validate(scope.row.id)">验车</el-button>
-            <el-button v-if="scope.row.financecheck=='已完成'&&scope.row.state=='结算中'" type="text" size="small" @click="finishcontract(scope.row.contract_id)">合同结束</el-button>
+            <el-button v-if="scope.row.financecheck=='已完成'&&scope.row.state=='结算中'" type="text" size="small" @click="finishcontract(scope.row.contract_id,scope.row.license,scope.row.phone)">合同结束</el-button>
             <el-button v-if="scope.row.financecheck=='未完成'&&scope.row.validatecheck=='已完成'" type="text" size="small" @click="finance(scope.row.contract_id)">财务审核</el-button>
           </template>
         </el-table-column>
@@ -199,8 +204,20 @@
       finance(id){
         this.$router.push("financecheck/"+id)
       },
-      finishcontract(id){
+      finishcontract(id,license,phone){
         axios.get(url+"/contract/updateState?state=已完成&id="+id)
+          .then(response => {
+          })
+          .catch(error => {
+            console.log(error);
+          });
+        axios.get(url+"/car/finishContract?license="+license)
+          .then(response => {
+          })
+          .catch(error => {
+            console.log(error);
+          });
+        axios.get(url+"/driver/finishContract?phone="+phone)
           .then(response => {
           })
           .catch(error => {
