@@ -1,7 +1,10 @@
 <template>
   <div class="side-nav" :class="layout">
-    <el-menu router ref="navbar" unique-opened :default-active="onRoutes">
-      <nav-bar-item v-for="(item, index) in navList" :item="item" :navIndex="String(index)" :key="index"></nav-bar-item>
+    <!--<el-menu router ref="navbar" unique-opened :default-active="onRoutes">-->
+      <!--<nav-bar-item v-for="(item, index) in navList" :item="item" :navIndex="String(index)" :key="index"></nav-bar-item>-->
+    <!--</el-menu>-->
+    <el-menu router ref="navbar"  unique-opened>
+      <nav-bar-item></nav-bar-item>
     </el-menu>
   </div>
 </template>
