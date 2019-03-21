@@ -33,9 +33,8 @@
     </el-submenu>
     <el-submenu index="6">
       <template slot="title">用户中心</template>
-      <el-menu-item index="/system/info">用户信息</el-menu-item>
       <el-menu-item index="/system/rolelist">角色管理</el-menu-item>
-      <el-menu-item index="/system/userlist">账户管理</el-menu-item>
+      <el-menu-item index="/system/userlist">用户管理</el-menu-item>
       <el-menu-item index="/system/functionset">功能设置</el-menu-item>
       <el-menu-item index="/system/partnerlist">合作伙伴</el-menu-item>
     </el-submenu>

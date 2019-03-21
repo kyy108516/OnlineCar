@@ -29,11 +29,10 @@ import detaillist from "@/page/account/detaillist"
 import practicallist from "@/page/account/practicallist"
 import receivablelist from "@/page/account/receivablelist"
 import functionset from "@/page/system/functionset"
-import info from "@/page/system/info"
 import partnerlist from "@/page/system/partnerlist"
 import rolelist from "@/page/system/rolelist"
 import userlist from "@/page/system/userlist"
-import addinsurance from  "@/page/car/addinsurance"
+import addinsurance from "@/page/car/addinsurance"
 import addpartner from "@/page/system/addpartner"
 import addaccident from "@/page/operate/addaccident"
 import addviolation from "@/page/operate/addviolation"
@@ -105,7 +104,7 @@ export default new Router({
           path: 'driverdetail/:id',
           component: driverdetail
         }
-        ],
+      ],
     },
     { //合同列表路由
       path: "/contract",
@@ -213,10 +212,6 @@ export default new Router({
         path: 'functionset',
         component: functionset
       },
-        {
-          path: 'info',
-          component: info
-        },
         {
           path: 'partnerlist',
           component: partnerlist
