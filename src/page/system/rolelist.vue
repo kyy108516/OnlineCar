@@ -12,24 +12,11 @@
     </div>
     <div class="query-bar">
       <el-form :inline="true" :label-position="right" label-width="80px">
-        <el-form-item label="姓名">
+        <el-form-item label="角色编号">
+          <el-input v-model="queryData.id"></el-input>
+        </el-form-item>
+        <el-form-item label="角色名称">
           <el-input v-model="queryData.name"></el-input>
-        </el-form-item>
-        <el-form-item label="性别">
-          <el-select v-model="queryData.sex" filterable placeholder="性别">
-            <el-option :label="'全部'" :value="''"></el-option>
-            <el-option
-              :label="'男'"
-              :value="'男'">
-            </el-option>
-            <el-option
-              :label="'女'"
-              :value="'女'">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="联系方式">
-          <el-input v-model="queryData.phone"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="info" plain="" @click="getData">查询</el-button>
@@ -73,9 +60,7 @@
         queryData:{
           id:'',
           name:'',
-          sex:'',
-          phone:'',
-          state:'',
+          state:'激活',
         },
         tableData: [],
         currpage:1,
@@ -89,7 +74,7 @@
     methods: {
       getData() {
         var url = "http://localhost:3000";
-        axios.post(url + '/users/queryRole')
+        axios.post(url + '/users/queryRole',this.queryData)
           .then(response => {
             if (response.data.code == '200') {
               this.tableData = response.data.data

@@ -12,32 +12,28 @@
     </div>
     <div class="query-bar">
       <el-form :inline="true" :label-position="right" label-width="80px">
-        <el-form-item label="姓名">
-          <el-input v-model="queryData.name"></el-input>
+        <el-form-item label="账号">
+          <el-input v-model="queryData.username"></el-input>
         </el-form-item>
-        <el-form-item label="性别">
-          <el-select v-model="queryData.sex" filterable placeholder="性别">
+        <el-form-item label="用户角色">
+          <el-select v-model="queryData.name" filterable placeholder="用户角色">
             <el-option :label="'全部'" :value="''"></el-option>
             <el-option
-              :label="'男'"
-              :value="'男'">
-            </el-option>
-            <el-option
-              :label="'女'"
-              :value="'女'">
+              v-for="item in roleData"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="联系方式">
-          <el-input v-model="queryData.phone"></el-input>
-        </el-form-item>
         <el-form-item>
-          <el-button type="info" plain="" @click="getData">查询</el-button>
+          <el-button type="info" plain="" @click="query">查询</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="view_table">
-      <el-table ref="multipleTable" :data="tableData.slice((currpage - 1) * pagesize, currpage * pagesize)" tooltip-effect="dark" style="width: 100%"
+      <el-table ref="multipleTable" :data="tableData.slice((currpage - 1) * pagesize, currpage * pagesize)"
+                tooltip-effect="dark" style="width: 100%"
                 @selection-change="handleSelectionChange" highlight-current-row>
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="username" label="账号">
@@ -45,7 +41,7 @@
             <span>{{scope.row.username}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="用户角色" ></el-table-column>
+        <el-table-column prop="name" label="用户角色"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <!--<el-button type="text" size="small" @click="detailDriver(scope.row.id)">查看</el-button>-->
@@ -65,21 +61,19 @@
 <script>
   import axios from 'axios'
   export default {
-    inject:['reload'],
+    inject: ['reload'],
     name: "userlist",
     data() {
       return {
-        queryData:{
-          id:'',
-          name:'',
-          sex:'',
-          phone:'',
-          state:'',
+        queryData: {
+          username: '',
+          name: '',
+          type: '激活',
         },
         tableData: [],
-        currpage:1,
-        pagesize:10,
-        data:''
+        roleData: [],
+        currpage: 1,
+        pagesize: 10,
       }
     },
     mounted() {
@@ -88,7 +82,38 @@
     methods: {
       getData() {
         var url = "http://localhost:3000";
-        axios.post(url + '/users/query')
+        axios.post(url + '/users/query', this.queryData)
+          .then(response => {
+            if (response.data.code == '200') {
+              this.tableData = response.data.data
+            }
+            if (response.data.code == '1') {
+              this.tableData = []
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+        axios.post(url + '/users/queryRole', {
+          id: '',
+          name: '',
+          state: '激活',
+        })
+          .then(response => {
+            if (response.data.code == '200') {
+              this.roleData = response.data.data
+            }
+            if (response.data.code == '1') {
+              this.roleData = []
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      },
+      query() {
+        var url = "http://localhost:3000";
+        axios.post(url + '/users/query', this.queryData)
           .then(response => {
             if (response.data.code == '200') {
               this.tableData = response.data.data
@@ -121,11 +146,11 @@
       //       console.log(error)
       //     })
       // },
-      editDriver(id){
-        this.$router.push('adddriver/'+id)
+      editDriver(id) {
+        this.$router.push('adddriver/' + id)
       },
-      detailDriver(id){
-        this.$router.push('driverdetail/'+id)
+      detailDriver(id) {
+        this.$router.push('driverdetail/' + id)
       }
     },
   }
