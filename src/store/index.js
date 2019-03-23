@@ -8,34 +8,26 @@ const state = {
   contract: 0,
   violation: 0,
   accident: 0,
-  data: [
-    {
-      path: '/home',
-      name: '首页'
-    },
-    {
-      name: '系统组件',
-      child: [
-        {
-          name: '介绍',
-          path: '/components'
-        },
-        {
-          name: '功能类',
-          child: [
-            {
-              path: '/components/permission',
-              name: '详细鉴权'
-            },
-            {
-              path: '/components/pageTable',
-              name: '表格分页'
-            }
-          ]
-        }
-      ]
-    }
-  ],
+  array: [{
+    "id": 1,
+    "name": "车辆管理",
+    "parent_id": 0,
+    "url": "",
+    "children": [
+      {"id": 11, "name": "车辆列表", "parent_id": 1, "url": "/car/carlist"},
+      {
+        "id": 12,
+        "name": "车型管理",
+        "parent_id": 1,
+        "url": "/car/cartype"
+      }]
+  }, {
+    "id": 2,
+    "name": "司机管理",
+    "parent_id": 0,
+    "url": "",
+    "children": [{"id": 21, "name": "司机列表", "parent_id": 2, "url": "/driver/driverlist"}]
+  }]
 };
 
 const mutations = {
@@ -51,6 +43,9 @@ const mutations = {
   updateAccident(state, n) {
     state.accident = n
   },
+  updateArray(state,n){
+    state.array=n
+  }
 };
 
 const actions = {
@@ -65,7 +60,10 @@ const actions = {
   },
   updateAccident({commit, n}) {
     commit('updateAccident', n)
-  }
+  },
+  updateArray({commit}, n) {
+    commit('updateArray', n)
+  },
 };
 
 

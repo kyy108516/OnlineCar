@@ -65,6 +65,40 @@
           type: [{required: true, message: '请选择品牌', trigger: 'change'}]
         },
         mode: "transfer", // transfer addressList
+        // fromData:[
+        //   {
+        //     id: "1",
+        //     pid: 0,
+        //     label: "一级 1",
+        //     children: [
+        //       {
+        //         id: "1-1",
+        //         pid: "1",
+        //         label: "二级 1-1",
+        //         children: []
+        //       },
+        //       {
+        //         id: "1-2",
+        //         pid: "1",
+        //         label: "二级 1-2",
+        //         children: [
+        //           {
+        //             id: "1-2-1",
+        //             pid: "1-2",
+        //             children: [],
+        //             label: "二级 1-2-1"
+        //           },
+        //           {
+        //             id: "1-2-2",
+        //             pid: "1-2",
+        //             children: [],
+        //             label: "二级 1-2-2"
+        //           }
+        //         ]
+        //       }
+        //     ]
+        //   },
+        // ],
         fromData: [
           {
             id: "1",
@@ -72,13 +106,13 @@
             label: "车辆管理",
             children: [
               {
-                id: "1-1",
+                id: "11",
                 pid: "1",
                 label: "车辆列表",
                 children: []
               },
               {
-                id: "1-2",
+                id: "12",
                 pid: "1",
                 label: "车型管理",
                 children: []
@@ -91,8 +125,8 @@
             label: "司机管理",
             children: [
               {
-                id: "2-1",
-                pid: "1",
+                id: "21",
+                pid: "2",
                 label: "司机列表",
                 children: []
               },
@@ -104,20 +138,20 @@
             label: "合同管理",
             children: [
               {
-                id: "3-1",
-                pid: "1",
+                id: "31",
+                pid: "3",
                 label: "合同列表",
                 children: []
               },
               {
-                id: "3-2",
-                pid: "1",
+                id: "32",
+                pid: "3",
                 label: "交车管理",
                 children: []
               },
               {
-                id: "3-3",
-                pid: "1",
+                id: "33",
+                pid: "3",
                 label: "合同结算",
                 children: []
               },
@@ -129,32 +163,32 @@
             label: "运营管理",
             children: [
               {
-                id: "4-1",
-                pid: "1",
+                id: "41",
+                pid: "4",
                 label: "维保管理",
                 children: []
               },
               {
-                id: "4-1",
-                pid: "1",
+                id: "42",
+                pid: "4",
                 label: "事故管理",
                 children: []
               },
               {
-                id: "4-1",
-                pid: "1",
+                id: "43",
+                pid: "4",
                 label: "到期提醒",
                 children: []
               },
               {
-                id: "4-1",
-                pid: "1",
+                id: "44",
+                pid: "4",
                 label: "违章管理",
                 children: []
               },
               {
-                id: "4-1",
-                pid: "1",
+                id: "45",
+                pid: "4",
                 label: "扣车管理",
                 children: []
               },
@@ -166,26 +200,26 @@
             label: "财务管理",
             children: [
               {
-                id: "5-1",
-                pid: "1",
+                id: "51",
+                pid: "5",
                 label: "应收账款",
                 children: []
               },
               {
-                id: "5-1",
-                pid: "1",
+                id: "52",
+                pid: "5",
                 label: "实收账款",
                 children: []
               },
               {
-                id: "5-1",
-                pid: "1",
+                id: "53",
+                pid: "5",
                 label: "应付账款",
                 children: []
               },
               {
-                id: "5-1",
-                pid: "1",
+                id: "54",
+                pid: "5",
                 label: "财务明细",
                 children: []
               },
@@ -197,32 +231,26 @@
             label: "用户中心",
             children: [
               {
-                id: "6-1",
-                pid: "1",
-                label: "用户信息",
-                children: []
-              },
-              {
-                id: "6-1",
-                pid: "1",
+                id: "61",
+                pid: "6",
                 label: "角色管理",
                 children: []
               },
               {
-                id: "6-1",
-                pid: "1",
-                label: "账户管理",
+                id: "62",
+                pid: "6",
+                label: "用户管理",
                 children: []
               },
               {
-                id: "6-1",
-                pid: "1",
+                id: "63",
+                pid: "6",
                 label: "功能设置",
                 children: []
               },
               {
-                id: "6-1",
-                pid: "1",
+                id: "64",
+                pid: "6",
                 label: "合作伙伴",
                 children: []
               },
@@ -303,9 +331,23 @@
       remove(fromData, toData, obj) {
         // 树形穿梭框模式transfer时，返回参数为左侧树移动后数据、右侧树移动后数据、移动的{keys,nodes,halfKeys,halfNodes}对象
         // 通讯录模式addressList时，返回参数为右侧收件人列表、右侧抄送人列表、右侧密送人列表
+        this.treeTransArray(toData,'children')
         console.log("fromData:", fromData);
         console.log("toData:", toData);
         console.log("obj:", obj);
+      },
+      treeTransArray(tree,key){
+        return tree.reduce(function (con,item) {
+          var callee=arguments.callee;
+          con.push(item);
+          if (item[key] && item[key].length >0){
+            item[key].reduce(callee, con);
+          }
+          return con
+        },[]).map(function (item) {
+          item[key]=[];
+          return item
+        })
       },
     },
     components: {treeTransfer},

@@ -6,7 +6,7 @@
       </div>
       <div class="topbar-cell">
         <span class="fr">
-          <router-link to="/system/addrole/0" class="actions"><i class="el-icon-plus"></i>新增角色</router-link>
+          <router-link to="/system/addrole" class="actions"><i class="el-icon-plus"></i>新增角色</router-link>
         </span>
       </div>
     </div>
@@ -36,9 +36,7 @@
         <el-table-column prop="description" label="角色描述" show-overflow-tooltip></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="detailDriver(scope.row.id)">查看</el-button>
-            <el-button type="text" size="small" @click="editDriver(scope.row.id)">编辑</el-button>
-            <!--<el-button type="text" size="small" @click="deleteDriver(scope.row.id)">删除</el-button>-->
+           <el-button type="text" size="small" @click="deleteDriver(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>

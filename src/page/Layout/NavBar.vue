@@ -1,56 +1,62 @@
 <template>
   <div class="side-nav" :class="layout">
-    <!--<el-menu router ref="navbar" unique-opened :default-active="onRoutes">-->
-      <!--<nav-bar-item v-for="(item, index) in navList" :item="item" :navIndex="String(index)" :key="index"></nav-bar-item>-->
-    <!--</el-menu>-->
-    <el-menu router ref="navbar"  unique-opened>
-      <nav-bar-item></nav-bar-item>
+    <el-menu router ref="navbar" unique-opened :default-active="onRoutes">
+    <nav-bar-item v-for="(item, index) in array1" :item="item" :navIndex="String(index)" :key="index"></nav-bar-item>
     </el-menu>
+    <!--<el-menu router ref="navbar" unique-opened>-->
+      <!--<nav-bar-item></nav-bar-item>-->
+    <!--</el-menu>-->
   </div>
 </template>
 
 <script>
   import NavBarItem from "@/page/Layout/NavBarItem";
+
   export default {
     name: "NavBar",
     components: {NavBarItem},
     data() {
       return {
-        navList: [
-          {
-            path: '/home',
-            name: '首页'
-          },
-          {
-            name: '系统组件',
-            child: [
-              {
-                name: '介绍',
-                path: '/components'
-              },
-              {
-                name: '功能类',
-                child: [
-                  {
-                    path: '/components/permission',
-                    name: '详细鉴权'
-                  },
-                  {
-                    path: '/components/pageTable',
-                    name: '表格分页'
-                  }
-                ]
-              }
-            ]
-          }
-        ],
+        // navList: [
+        //   {
+        //     path: '/home',
+        //     name: '首页'
+        //   },
+        //   {
+        //     name: '系统组件',
+        //     child: [
+        //       {
+        //         name: '介绍',
+        //         path: '/components'
+        //       },
+        //       {
+        //         name: '功能类',
+        //         child: [
+        //           {
+        //             path: '/components/permission',
+        //             name: '详细鉴权'
+        //           },
+        //           {
+        //             path: '/components/pageTable',
+        //             name: '表格分页'
+        //           }
+        //         ]
+        //       }
+        //     ]
+        //   }
+        // ],
       }
     },
     computed: {
       // 首次进入页面时展开当前页面所属的菜单
-      onRoutes(){
+      onRoutes() {
         return this.$route.path
-      }
+      },
+      array1: {
+        get() {
+          return this.$store.state.array
+        },
+      },
     }
   }
 </script>

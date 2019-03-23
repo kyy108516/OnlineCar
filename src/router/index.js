@@ -39,6 +39,7 @@ import addviolation from "@/page/operate/addviolation"
 import accidentdetail from "@/page/operate/accidentdetail"
 import financecheck from "@/page/contract/financecheck"
 import addrole from "@/page/system/addrole"
+import adduser from "@/page/system/adduser"
 
 Vue.use(Router)
 
@@ -229,8 +230,12 @@ export default new Router({
           component: userlist
         },
         {
-          path: 'addrole/:id',
+          path: 'addrole',
           component: addrole
+        },
+        {
+          path: 'adduser/:id',
+          component: adduser
         },
       ],
     }

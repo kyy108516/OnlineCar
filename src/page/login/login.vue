@@ -30,10 +30,10 @@
   </span>
     </el-dialog>
     <!--<el-dialog :visible.sync="centerDialogVisible" width="30%" center>-->
-      <!--<span>密码错误</span>-->
-      <!--<span slot="footer" class="dialog-footer">-->
+    <!--<span>密码错误</span>-->
+    <!--<span slot="footer" class="dialog-footer">-->
     <!--<el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>-->
-  <!--</span>-->
+    <!--</span>-->
     <!--</el-dialog>-->
   </div>
 </template>
@@ -41,6 +41,7 @@
 <script>
   import axios from 'axios'
   import {mapState} from 'vuex'
+
   export default {
     name: "login",
     data() {
@@ -60,48 +61,48 @@
         }
       }
     },
-    computed:{
-      insurance:{
-        get () {
+    computed: {
+      insurance: {
+        get() {
           return this.$store.state.insurance
         },
       },
-      contract:{
-        get () {
+      contract: {
+        get() {
           return this.$store.state.contract
         },
       },
-      accident:{
-        get () {
+      accident: {
+        get() {
           return this.$store.state.accident
         },
       },
-      violation:{
-        get () {
+      violation: {
+        get() {
           return this.$store.state.violation
         },
       },
     },
     methods: {
-     /* login() {
-        var url = "http://localhost:3000";
-        let data = this.loginForm;
-        axios.get(url + '/users/getUser?username=' + data.username + '&password=' + data.password)
-          .then(function (response) {
-            console.log(response);
-            if (response.data.msg === '用户不存在') {
-              this.centerDialogVisible=true
-            } else if (response.data.msg === '密码错误') {
-              window.alert("密码错误")
-            } else if (response.data.msg === '登录成功') {
-              this.jump()
-            }
-          })
-          .catch(function (error) {
-            console.log(error)
-          })
+      /* login() {
+         var url = "http://localhost:3000";
+         let data = this.loginForm;
+         axios.get(url + '/users/getUser?username=' + data.username + '&password=' + data.password)
+           .then(function (response) {
+             console.log(response);
+             if (response.data.msg === '用户不存在') {
+               this.centerDialogVisible=true
+             } else if (response.data.msg === '密码错误') {
+               window.alert("密码错误")
+             } else if (response.data.msg === '登录成功') {
+               this.jump()
+             }
+           })
+           .catch(function (error) {
+             console.log(error)
+           })
 
-      },*/
+       },*/
       jump() {
         var url = "http://localhost:3000";
         axios.post(url + '/users/queryFunction')
@@ -114,8 +115,37 @@
           .catch(function (error) {
             console.log(error)
           });
+        axios.post(url + '/users/queryRoleMenu',{
+          username:'kyy'
+        })
+          .then(response => {
+            this.$store.commit('updateArray', this.translateDataToTree(response.data.data))
+          })
+          .catch(function (error) {
+            console.log(error)
+          });
         this.$router.push('home')
-      }
+      },
+      translateDataToTree(data) { //权限数组赚树
+        let parents = data.filter(value => value.parent_id == 0 || value.parent_id == null)
+        let children = data.filter(value => value.parent_id !== 'undefined' && value.parent_id != 0)
+        let translator = (parents, children) => {
+          parents.forEach((parent) => {
+              children.forEach((current, index) => {
+                  if (current.parent_id === parent.id) {
+                    let temp = JSON.parse(JSON.stringify(children))
+                    temp.splice(index, 1)
+                    translator([current], temp)
+                    typeof parent.children !== 'undefined' ? parent.children.push(current) : parent.children = [current]
+                  }
+                }
+              )
+            }
+          )
+        }
+        translator(parents, children)
+        return parents
+      },
     }
   }
 </script>
