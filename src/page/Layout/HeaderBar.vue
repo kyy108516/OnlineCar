@@ -9,7 +9,7 @@
           <el-dropdown>
             <span class="user">应么乱<i class="el-icon-caret-bottom el-icon--right"></i></span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="logout"><i class="el-icon-close"></i>退出登录</el-dropdown-item>
+              <el-dropdown-item command="logout" @click.native="logout"><i class="el-icon-close"></i>退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </li>
@@ -20,7 +20,12 @@
 
 <script>
     export default {
-        name: "HeaderBar"
+        name: "HeaderBar",
+      methods:{
+        logout(){
+          this.$router.push("/#/login")
+        }
+      },
     }
 </script>
 

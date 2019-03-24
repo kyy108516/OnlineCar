@@ -2,8 +2,7 @@
   <div>
     <div class="topbar">
       <div class="topbar-cell">
-        <b class="topbar-tit" v-if="this.$route.params.id!=0">编辑角色</b>
-        <b class="topbar-tit" v-else>新增角色</b>
+        <b class="topbar-tit">新增角色</b>
         <el-button class="back-last" @click="$router.go(-1)">
           <span class="icon"><i class="el-icon-back"></i> 返回上一级</span>
         </el-button>
@@ -12,20 +11,20 @@
     <div class="edit">
       <div class="dataAllHead">角色信息</div>
       <el-form class="dataRevise" :model="tabledata" :rules="rules" ref="tabledata">
-        <el-form-item class="dataReviseTd" prop="brand">
+        <el-form-item class="dataReviseTd" prop="name">
           <div class="dataReviseLabel">
             <em>*</em> 角色名称
           </div>
           <div class="dataReviseText">
-            <el-input placeholder="角色名称" v-model="tabledata.brand"></el-input>
+            <el-input placeholder="角色名称" v-model="tabledata.name"></el-input>
           </div>
         </el-form-item>
-        <el-form-item class="dataReviseTd" prop="model">
+        <el-form-item class="dataReviseTd">
           <div class="dataReviseLabel">
             角色描述
           </div>
           <div class="dataReviseText">
-            <el-input placeholder="角色描述" v-model="tabledata.model"></el-input>
+            <el-input placeholder="角色描述" v-model="tabledata.description"></el-input>
           </div>
         </el-form-item>
       </el-form>
@@ -33,14 +32,11 @@
       <tree-transfer :title="['权限列表','角色权限']" :from_data='fromData' :to_data='toData'
                      :defaultProps="{label:'label'}"
                      @addBtn='add' @removeBtn='remove' style="margin-left: calc(10% - 20px)"
-                     :mode='mode' height='540px' width='80%' filter openAll >
+                     :mode='mode' height='540px' width='80%' filter openAll>
       </tree-transfer>
       <div class="dataBot">
         <el-button type="success" style="min-width: 120px;margin:0 auto;display: block"
-                   @click="edit('tabledata')" v-if="this.$route.params.id!=0">编辑
-        </el-button>
-        <el-button type="success" style="min-width: 120px;margin:0 auto;display: block"
-                   @click="submit('tabledata')" v-else>提交
+                   @click="submit('tabledata')">提交
         </el-button>
       </div>
     </div>
@@ -55,15 +51,13 @@
     data() {
       return {
         tabledata: {
-          brand: '',
-          model: '',
-          type: ''
+          name:'',
+          description:'',
         },
         rules: {
-          brand: [{required: true, message: '请输入品牌', trigger: 'blur'}],
-          model: [{required: true, message: '请输入车型', trigger: 'blur'}],
-          type: [{required: true, message: '请选择品牌', trigger: 'change'}]
+          name: [{required: true, message: '请输入角色名称', trigger: 'blur'}],
         },
+        toData:[],
         mode: "transfer", // transfer addressList
         // fromData:[
         //   {
@@ -259,52 +253,28 @@
         ],
       }
     },
-    created() {
-      this.getData()
-    },
     methods: {
       submit(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             var url = "http://localhost:3000";
-            axios.get(url + '/cartype/addCartype?brand=' + this.tabledata.brand + '&model=' + this.tabledata.model + '&type=' + this.tabledata.type)
+            let date = new Date();
+            let id = ''+ date.getDate() + date.getHours() + date.getMinutes() + date.getSeconds();
+            axios.get(url + '/users/addRole?id=' + id + '&name=' + this.tabledata.name + '&description=' + this.tabledata.description)
               .then(response => {
-                this.$router.push('/car/cartype')
               })
               .catch(function (error) {
                 console.log(error)
               })
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
-      },
-      getData() {
-        var url = "http://localhost:3000";
-        var id = this.$route.params.id
-        console.log(id)
-        axios.get(url + '/cartype/selectCartype?id=' + id)
-          .then(response => {
-            this.tabledata.brand = response.data.data[0].brand
-            this.tabledata.model = response.data.data[0].model
-            this.tabledata.type = response.data.data[0].type
-          })
-          .catch(function (error) {
-            console.log(error)
-          })
-      },
-      edit(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            var url = "http://localhost:3000";
-            axios.get(url + '/cartype/updateCartype?brand=' + this.tabledata.brand + '&model=' + this.tabledata.model + '&type=' + this.tabledata.type + '&id=' + this.$route.params.id)
-              .then(response => {
-                this.$router.push('/car/cartype')
-              })
-              .catch(function (error) {
-                console.log(error)
-              })
+            for (let i=0;i<this.toData.length;i++){
+              axios.get(url + '/users/addRoleMenu?role_id=' + id + '&menu_id=' + this.toData[i])
+                .then(response => {
+                })
+                .catch(function (error) {
+                  console.log(error)
+                })
+            }
+            this.$router.push('/system/rolelist')
           } else {
             console.log('error submit!!');
             return false;
@@ -326,28 +296,27 @@
         console.log("fromData:", JSON.stringify(fromData));
         console.log("toData:", JSON.stringify(toData));
         console.log("obj:", obj);
+        this.toData=this.treeTransArray(toData)
       },
       // 监听穿梭框组件移除
       remove(fromData, toData, obj) {
         // 树形穿梭框模式transfer时，返回参数为左侧树移动后数据、右侧树移动后数据、移动的{keys,nodes,halfKeys,halfNodes}对象
         // 通讯录模式addressList时，返回参数为右侧收件人列表、右侧抄送人列表、右侧密送人列表
-        this.treeTransArray(toData,'children')
+        this.treeTransArray(toData)
         console.log("fromData:", fromData);
-        console.log("toData:", toData);
+        console.log("toData:", this.treeTransArray(toData));
         console.log("obj:", obj);
+        this.toData=this.treeTransArray(toData)
       },
-      treeTransArray(tree,key){
-        return tree.reduce(function (con,item) {
-          var callee=arguments.callee;
-          con.push(item);
-          if (item[key] && item[key].length >0){
-            item[key].reduce(callee, con);
+      treeTransArray(tree) {
+        var array = []
+        for (let i = 0; i < tree.length; i++) {
+          array.push(tree[i].id)
+          for (let j = 0; j < tree[i].children.length; j++) {
+            array.push(tree[i].children[j].id)
           }
-          return con
-        },[]).map(function (item) {
-          item[key]=[];
-          return item
-        })
+        }
+        return array
       },
     },
     components: {treeTransfer},
