@@ -91,7 +91,8 @@
       <div style="clear:both"></div>
       <div class="dataBot">
         <el-button type="success" style="min-width: 120px;margin:0 auto;display: block"
-                   @click="submit('tabledata')">提交</el-button>
+                   @click="submit('tabledata')">提交
+        </el-button>
       </div>
     </div>
   </div>
@@ -99,27 +100,28 @@
 
 <script>
   import axios from 'axios'
+
   export default {
     name: "addinsurance",
-    data(){
-      return{
-        tabledata:{
-          id:'',
-          type:'',
-          partner_id:'',
-          start_time:'',
-          end_time:'',
-          car_id:this.$route.params.id,
-          money:''
+    data() {
+      return {
+        tabledata: {
+          id: '',
+          type: '',
+          partner_id: '',
+          start_time: '',
+          end_time: '',
+          car_id: this.$route.params.id,
+          money: ''
         },
-        insuranceData:[],
-        rules:{
-          id:[{required:true,message:'请输入保险单号',trigger:'blur'}],
-          type:[{required:true,message:'请选择保险类型',trigger:'change'}],
-          partner_id:[{required:true,message:'请选择保险公司',trigger:'change'}],
-          start_time:[{required:true,message:'请选择日期',trigger:'change'}],
-          end_time:[{required:true,message:'请选择日期',trigger:'change'}],
-          money:[{required:true,message:'请输入金额',trigger:'blur'}],
+        insuranceData: [],
+        rules: {
+          id: [{required: true, message: '请输入保险单号', trigger: 'blur'}],
+          type: [{required: true, message: '请选择保险类型', trigger: 'change'}],
+          partner_id: [{required: true, message: '请选择保险公司', trigger: 'change'}],
+          start_time: [{required: true, message: '请选择日期', trigger: 'change'}],
+          end_time: [{required: true, message: '请选择日期', trigger: 'change'}],
+          money: [{required: true, message: '请输入金额', trigger: 'blur'}],
         },
         pickerOptions1: { //日期选择器
           shortcuts: [{
@@ -145,12 +147,12 @@
         },
       }
     },
-    created(){
+    created() {
       this.getData()
     },
-    methods:{
-      getData(){
-        var url="http://localhost:3000";
+    methods: {
+      getData() {
+        var url = "http://localhost:3000";
         axios.get(url + '/car/queryPartner?type=保险公司')
           .then(response => {
             this.insuranceData = response.data.data
@@ -162,33 +164,38 @@
       submit(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.changetime()
-            let date = new Date();
-            let bill_id = 'YF' + date.getFullYear() + (date.getMonth() + 1) + date.getDate() + date.getHours() + date.getMinutes() + date.getSeconds();
-            console.log(this.tabledata.end_time)
-            var url = "http://localhost:3000";
-            axios.get(url + '/car/addInsurance?id=' + this.tabledata.id + '&type=' + this.tabledata.type + '&partner_id=' + this.tabledata.partner_id+ '&car_id=' + this.tabledata.car_id+ '&start_time=' + this.tabledata.start_time+ '&end_time=' + this.tabledata.end_time +'&money='+this.tabledata.money)
-              .then(response => {
-                if (response.data.code=='200') {
-                  this.$message({
-                    message:'提交成功',
-                    type:'success'
-                  })
-                  this.$router.go(-1)
-                }
-                if (response.data.code=='1'){
-                  this.$message.error('提交失败')
-                }
-              })
-              .catch(function (error) {
-                console.log(error)
-              })
-            axios.get(url + '/account/addBill?id=' + bill_id + '&type=保险结算&money=' + this.tabledata.money)
-              .then(response => {
-              })
-              .catch(function (error) {
-                console.log(error)
-              })
+            if (this.isTrue(this.tabledata.start_time, this.tabledata.end_time)) {
+              this.changetime()
+              let date = new Date();
+              let bill_id = 'YF' + date.getFullYear() + (date.getMonth() + 1) + date.getDate() + date.getHours() + date.getMinutes() + date.getSeconds();
+              console.log(this.tabledata.end_time)
+              var url = "http://localhost:3000";
+              axios.get(url + '/car/addInsurance?id=' + this.tabledata.id + '&type=' + this.tabledata.type + '&partner_id=' + this.tabledata.partner_id + '&car_id=' + this.tabledata.car_id + '&start_time=' + this.tabledata.start_time + '&end_time=' + this.tabledata.end_time + '&money=' + this.tabledata.money)
+                .then(response => {
+                  if (response.data.code == '200') {
+                    this.$message({
+                      message: '提交成功',
+                      type: 'success'
+                    })
+                    this.$router.go(-1)
+                  }
+                  if (response.data.code == '1') {
+                    this.$message.error('提交失败')
+                  }
+                })
+                .catch(function (error) {
+                  console.log(error)
+                })
+              axios.get(url + '/account/addBill?id=' + bill_id + '&type=保险结算&money=' + this.tabledata.money)
+                .then(response => {
+                })
+                .catch(function (error) {
+                  console.log(error)
+                })
+            }
+            else {
+              this.$message.error('结束时间需要大于起始时间')
+            }
           } else {
             console.log('error submit!!');
             return false;
@@ -202,7 +209,20 @@
         var datetime2 = d2.getFullYear() + '-' + (d2.getMonth() + 1) + '-' + d2.getDate();
         this.tabledata.start_time = datetime1
         this.tabledata.end_time = datetime2
-      }
+      },
+      isTrue(date1, date2) {
+        var d1 = new Date(date1)
+        var d2 = new Date(date2)
+        var datetime1 = '' + d1.getFullYear() + (d1.getMonth() + 1) + d1.getDate();
+        var datetime2 = '' + d2.getFullYear() + (d2.getMonth() + 1) + d2.getDate();
+        console.log(datetime1)
+        console.log(datetime2)
+        if (datetime2 > datetime1) {
+          return 1
+        } else {
+          return 0
+        }
+      },
     }
   }
 </script>

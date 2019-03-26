@@ -115,12 +115,11 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             var url = "http://localhost:3000";
-            axios.post(url + '/car/query', {
-              id:'',
-              license:this.tabledata.license,
-              vin:this.tabledata.vin,
-              model:'',
-              state:''
+            var license = this.tabledata.license
+            var vin = this.tabledata.vin
+            axios.post(url + '/car/carExist', {
+              license: license,
+              vin: vin,
             })
               .then(response => {
                 if (response.data.code == '200') {

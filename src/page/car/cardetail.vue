@@ -192,6 +192,10 @@
           .then(response => {
             if (response.data.code == '200') {
               this.insurance = response.data.data
+              for (let i=0;i<this.insurance.length;i++){
+                this.insurance[i].start_time=this.timeFormat(this.insurance[i].start_time)
+                this.insurance[i].end_time=this.timeFormat(this.insurance[i].end_time)
+              }
             }
             if (response.data.code == '1') {
               this.insurance = []
@@ -208,6 +212,9 @@
           .then(response => {
             if (response.data.code == '200') {
               this.maintenance = response.data.data
+              for (let i=0;i<this.maintenance.length;i++){
+                this.maintenance[i].send_time=this.timeFormat(this.maintenance[i].send_time)
+              }
             }
             if (response.data.code == '1') {
               this.maintenance = []
@@ -226,6 +233,9 @@
           .then(response => {
             if (response.data.code == '200') {
               this.accident = response.data.data
+              for (let i=0;i<this.accident.length;i++){
+                this.accident[i].happen_time=this.timeFormat(this.accident[i].happen_time)
+              }
             }
             if (response.data.code == '1') {
               this.accident = []
@@ -243,6 +253,9 @@
           .then(response => {
             if (response.data.code == '200') {
               this.violation = response.data.data
+              for (let i=0;i<this.violation.length;i++){
+                this.violation[i].happen_time=this.timeFormat(this.violation[i].happen_time)
+              }
             }
             if (response.data.code == '1') {
               this.violation = []
@@ -263,6 +276,11 @@
       },
       addinsurance(id) {
         this.$router.push('addinsurance/' + id)
+      },
+      timeFormat(date){
+        let d1=new Date(date)
+        let datetime1 = d1.getFullYear() + '-' + (d1.getMonth() + 1) + '-' + d1.getDate();
+        return datetime1
       }
     },
   }
