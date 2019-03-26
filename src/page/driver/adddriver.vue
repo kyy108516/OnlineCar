@@ -100,13 +100,34 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             var url = "http://localhost:3000";
-            axios.get(url + '/driver/addDriver?name='+this.tabledata.name+'&sex='+this.tabledata.sex+'&phone='+this.tabledata.phone)
+            axios.post(url + '/driver/query', {
+              id:'',
+              name:'',
+              sex:'',
+              phone:this.tabledata.phone,
+              state:'',
+            })
               .then(response => {
-                this.$router.push('/driver/driverlist')
+                if (response.data.code == '200') {
+                  this.$message.error('已存在改手机号')
+                }
+                if (response.data.code == '1') {
+                  axios.get(url + '/driver/addDriver?name='+this.tabledata.name+'&sex='+this.tabledata.sex+'&phone='+this.tabledata.phone)
+                    .then(response => {
+                      this.$message({
+                        message:'提交成功',
+                        type:'success',
+                      })
+                      this.$router.push('/driver/driverlist')
+                    })
+                    .catch(function (error) {
+                      console.log(error)
+                    })
+                }
               })
-              .catch(function (error) {
-                console.log(error)
-              })
+              .catch(error => {
+                console.log(error);
+              });
           } else {
             console.log('error submit!!');
             return false;
@@ -116,14 +137,33 @@
       edit(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
+            var id=this.$route.params.id
             var url = "http://localhost:3000";
-            axios.get(url + '/driver/updateDriver?name='+this.tabledata.name+'&sex='+this.tabledata.sex+'&phone='+this.tabledata.phone+'&id='+this.$route.params.id)
+            axios.post(url + '/driver/driverExist', {
+              id:id,
+              phone:this.tabledata.phone,
+            })
               .then(response => {
-                this.$router.push('/driver/driverlist')
+                if (response.data.code == '200') {
+                  this.$message.error('已存在该手机号')
+                }
+                if (response.data.code == '1') {
+                  axios.get(url + '/driver/updateDriver?name='+this.tabledata.name+'&sex='+this.tabledata.sex+'&phone='+this.tabledata.phone+'&id='+this.$route.params.id)
+                    .then(response => {
+                      this.$message({
+                        message:'编辑成功',
+                        type:'success'
+                      })
+                      this.$router.push('/driver/driverlist')
+                    })
+                    .catch(function (error) {
+                      console.log(error)
+                    })
+                }
               })
-              .catch(function (error) {
-                console.log(error)
-              })
+              .catch(error => {
+                console.log(error);
+              });
           } else {
             console.log('error submit!!');
             return false;
