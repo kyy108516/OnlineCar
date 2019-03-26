@@ -8,6 +8,7 @@ const state = {
   contract: 0,
   violation: 0,
   accident: 0,
+  username:'管理员',
   array: [{
     "id": 1,
     "name": "车辆管理",
@@ -45,7 +46,10 @@ const mutations = {
   },
   updateArray(state,n){
     state.array=n
-  }
+  },
+  updateUsername(state, n) {
+    state.username = n
+  },
 };
 
 const actions = {
@@ -63,6 +67,9 @@ const actions = {
   },
   updateArray({commit}, n) {
     commit('updateArray', n)
+  },
+  updateUsername({commit}, n) {
+    commit('updateUsername', n)
   },
 };
 

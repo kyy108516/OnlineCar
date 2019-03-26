@@ -12,15 +12,9 @@
     </div>
     <div class="query-bar">
       <el-form :inline="true" :label-position="right" label-width="80px">
-        <!--<el-form-item label="车型编号">-->
-          <!--<el-input v-model="queryData.id"></el-input>-->
-        <!--</el-form-item>-->
         <el-form-item label="品牌">
           <el-input v-model="queryData.brand"></el-input>
         </el-form-item>
-        <!--<el-form-item label="车型">-->
-          <!--<el-input v-model="queryData.model"></el-input>-->
-        <!--</el-form-item>-->
         <el-form-item label="类型">
           <el-select v-model="queryData.type" placeholder="请选择">
             <el-option :key="1" :label="'全部'" :value="''"></el-option>
@@ -34,7 +28,8 @@
       </el-form>
     </div>
     <div class="view_table">
-      <el-table ref="multipleTable" :data="tableData.slice((currpage - 1) * pagesize, currpage * pagesize)" tooltip-effect="dark" style="width: 100%"
+      <el-table ref="multipleTable" :data="tableData.slice((currpage - 1) * pagesize, currpage * pagesize)"
+                tooltip-effect="dark" style="width: 100%"
                 @selection-change="handleSelectionChange" highlight-current-row>
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="id" label="编号">
@@ -42,13 +37,13 @@
             <span>{{scope.row.id}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="brand" label="品牌" ></el-table-column>
-        <el-table-column prop="model" label="车型" ></el-table-column>
-        <el-table-column prop="type" label="类型" ></el-table-column>
+        <el-table-column prop="brand" label="品牌"></el-table-column>
+        <el-table-column prop="model" label="车型"></el-table-column>
+        <el-table-column prop="type" label="类型"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="editCar(scope.row.id)">编辑</el-button>
-            <el-button type="text" size="small" @click="deleteCar(scope.row.id)">删除</el-button>
+            <el-button type="text" size="small" @click="open(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -62,68 +57,82 @@
 
 <script>
   import axios from 'axios'
-  import {mapState,mapMutations} from'vuex'
-    export default {
-      inject:['reload'],
-      name: "cartype",
-      data() {
-        return {
-          queryData:{
-            id:'',
-            brand:'',
-            model:'',
-            type:''
-          },
-          tableData: [],
-          currpage:1,
-          pagesize:5,
-          dialogFormVisible:false
-        }
+  import {mapState, mapMutations} from 'vuex'
+
+  export default {
+    inject: ['reload'],
+    name: "cartype",
+    data() {
+      return {
+        queryData: {
+          id: '',
+          brand: '',
+          model: '',
+          type: ''
+        },
+        tableData: [],
+        currpage: 1,
+        pagesize: 5,
+        dialogFormVisible: false
+      }
+    },
+    created() {
+      this.getData();
+    },
+    methods: {
+      getData() {
+        var url = "http://localhost:3000";
+        axios.post(url + '/cartype/query', this.queryData)
+          .then(response => {
+            if (response.data.code == '200') {
+              this.tableData = response.data.data
+            }
+            if (response.data.code == '1') {
+              this.tableData = []
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          })
       },
-      created() {
-        this.getData();
+      handleSelectionChange(val) {
+        this.multipleSelection = val;
       },
-      methods: {
-        getData(){
-          var url = "http://localhost:3000";
-          axios.post(url+'/cartype/query',this.queryData)
-            .then(response=>{
-              if (response.data.code=='200') {
-                this.tableData = response.data.data
-              }
-              if (response.data.code=='1'){
-                this.tableData=[]
-              }
-            })
-            .catch(error=>{
-              console.log(error);
-            })
-        },
-        handleSelectionChange(val) {
-          this.multipleSelection = val;
-        },
-        handleCurrentChange(cpage){
-          this.currpage=cpage
-        },
-        handleSizeChange(psize) {
-          this.pagesize = psize;
-        },
-        deleteCar(id) {
-          var url = "http://localhost:3000";
-          axios.get(url + "/cartype/deleteCartype?id=" + id)
-            .then(response => {
-              console.log(response)
-              this.reload()
-            })
-            .catch(function (error) {
-              console.log(error)
-            })
-        },
-        editCar(id){
-          this.$router.push('addcartype/'+id)
-        }
+      handleCurrentChange(cpage) {
+        this.currpage = cpage
+      },
+      handleSizeChange(psize) {
+        this.pagesize = psize;
+      },
+      deleteCar(id) {
+        var url = "http://localhost:3000";
+        axios.get(url + "/cartype/deleteCartype?id=" + id)
+          .then(response => {
+            console.log(response)
+            this.reload()
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+      },
+      open(id) {
+        this.$confirm('此操作将永久删除该车型, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.deleteCar(id)
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {});
+      },
+      editCar(id) {
+        this.$router.push('addcartype/' + id)
       }
     }
+  }
 </script>
 
 <style scoped>

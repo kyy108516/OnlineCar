@@ -169,7 +169,16 @@
             var url = "http://localhost:3000";
             axios.get(url + '/car/addInsurance?id=' + this.tabledata.id + '&type=' + this.tabledata.type + '&partner_id=' + this.tabledata.partner_id+ '&car_id=' + this.tabledata.car_id+ '&start_time=' + this.tabledata.start_time+ '&end_time=' + this.tabledata.end_time +'&money='+this.tabledata.money)
               .then(response => {
-                this.$router.go(-1)
+                if (response.data.code=='200') {
+                  this.$message({
+                    message:'提交成功',
+                    type:'success'
+                  })
+                  this.$router.go(-1)
+                }
+                if (response.data.code=='1'){
+                  this.$message.error('提交失败')
+                }
               })
               .catch(function (error) {
                 console.log(error)

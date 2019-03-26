@@ -19,22 +19,10 @@
           <el-form-item class="login_item" style="margin-top: 30px" prop="password">
             <el-input type="password" auto-complete="off" v-model="loginForm.password" placeholder="请输入您的密码"></el-input>
           </el-form-item>
-          <el-button type="primary" @click="jump" class="form_login">登录</el-button>
+          <el-button type="primary" @click="login('loginForm')" class="form_login">登录</el-button>
         </div>
       </div>
     </el-form>
-    <el-dialog :visible.sync="centerDialogVisible" width="30%" center title="提示">
-      <span>用户不存在</span>
-      <span slot="footer" class="dialog-footer">
-    <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
-  </span>
-    </el-dialog>
-    <!--<el-dialog :visible.sync="centerDialogVisible" width="30%" center>-->
-    <!--<span>密码错误</span>-->
-    <!--<span slot="footer" class="dialog-footer">-->
-    <!--<el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>-->
-    <!--</span>-->
-    <!--</el-dialog>-->
   </div>
 </template>
 
@@ -84,48 +72,82 @@
       },
     },
     methods: {
-      /* login() {
-         var url = "http://localhost:3000";
-         let data = this.loginForm;
-         axios.get(url + '/users/getUser?username=' + data.username + '&password=' + data.password)
-           .then(function (response) {
-             console.log(response);
-             if (response.data.msg === '用户不存在') {
-               this.centerDialogVisible=true
-             } else if (response.data.msg === '密码错误') {
-               window.alert("密码错误")
-             } else if (response.data.msg === '登录成功') {
-               this.jump()
-             }
-           })
-           .catch(function (error) {
-             console.log(error)
-           })
-
-       },*/
-      jump() {
-        var url = "http://localhost:3000";
-        axios.post(url + '/users/queryFunction')
-          .then(response => {
-            this.$store.commit('updateViolation', response.data.data[0].violation)
-            this.$store.commit('updateAccident', response.data.data[0].accident)
-            this.$store.commit('updateInsurance', response.data.data[0].insurance)
-            this.$store.commit('updateContract', response.data.data[0].contract)
-          })
-          .catch(function (error) {
-            console.log(error)
-          });
-        axios.post(url + '/users/queryRoleMenu',{
-          username:'kyy'
-        })
-          .then(response => {
-            this.$store.commit('updateArray', this.translateDataToTree(response.data.data))
-          })
-          .catch(function (error) {
-            console.log(error)
-          });
-        this.$router.push('home')
+      login(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            var url = "http://localhost:3000";
+            var data = this.loginForm
+            axios.post(url + '/users/query', {
+              username: data.username,
+              name: '',
+              type: '激活',
+            })
+              .then(response => {
+                if (response.data.code == '200') {
+                  if (response.data.data[0].password != data.password) {
+                    this.$message.error('密码错误')
+                    return 0
+                  } else {
+                    this.$store.commit('updateUsername', response.data.data[0].username)
+                    this.$router.push('home')
+                  }
+                }
+                if (response.data.code == '1') {
+                  this.$message.error('用户名不存在')
+                  return 0
+                }
+              })
+              .catch(function (error) {
+                console.log(error)
+              });
+            axios.post(url + '/users/queryFunction')
+              .then(response => {
+                this.$store.commit('updateViolation', response.data.data[0].violation)
+                this.$store.commit('updateAccident', response.data.data[0].accident)
+                this.$store.commit('updateInsurance', response.data.data[0].insurance)
+                this.$store.commit('updateContract', response.data.data[0].contract)
+              })
+              .catch(function (error) {
+                console.log(error)
+              });
+            axios.post(url + '/users/queryRoleMenu', {
+              username: 'kyy'
+            })
+              .then(response => {
+                this.$store.commit('updateArray', this.translateDataToTree(response.data.data))
+              })
+              .catch(function (error) {
+                console.log(error)
+              });
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
       },
+      // jump() {
+      //   var url = "http://localhost:3000";
+      //   axios.post(url + '/users/queryFunction')
+      //     .then(response => {
+      //       this.$store.commit('updateViolation', response.data.data[0].violation)
+      //       this.$store.commit('updateAccident', response.data.data[0].accident)
+      //       this.$store.commit('updateInsurance', response.data.data[0].insurance)
+      //       this.$store.commit('updateContract', response.data.data[0].contract)
+      //     })
+      //     .catch(function (error) {
+      //       console.log(error)
+      //     });
+      //   axios.post(url + '/users/queryRoleMenu',{
+      //     username:'kyy'
+      //   })
+      //     .then(response => {
+      //       this.$store.commit('updateArray', this.translateDataToTree(response.data.data))
+      //     })
+      //     .catch(function (error) {
+      //       console.log(error)
+      //     });
+      //   this.$router.push('home')
+      // },
       translateDataToTree(data) { //权限数组赚树
         let parents = data.filter(value => value.parent_id == 0 || value.parent_id == null)
         let children = data.filter(value => value.parent_id !== 'undefined' && value.parent_id != 0)

@@ -43,9 +43,11 @@
       <div style="clear:both"></div>
       <div class="dataBot">
         <el-button type="success" style="min-width: 120px;margin:0 auto;display: block"
-                   @click="edit('tabledata')" v-if="this.$route.params.id!=0">编辑</el-button>
+                   @click="edit('tabledata')" v-if="this.$route.params.id!=0">编辑
+        </el-button>
         <el-button type="success" style="min-width: 120px;margin:0 auto;display: block"
-                   @click="submit('tabledata')" v-else>提交</el-button>
+                   @click="submit('tabledata')" v-else>提交
+        </el-button>
       </div>
     </div>
   </div>
@@ -53,76 +55,95 @@
 
 <script>
   import axios from 'axios'
-    export default {
-        name: "addcartype",
-      data(){
-          return{
-            tabledata:{
-              brand:'',
-              model:'',
-              type:''
-            },
-            rules:{
-              brand:[{required:true,message:'请输入品牌',trigger:'blur'}],
-              model:[{required:true,message:'请输入车型',trigger:'blur'}],
-              type:[{required:true,message:'请选择品牌',trigger:'change'}]
-            },
-          }
-      },
-      created(){
-        this.getData()
-      },
-      methods:{
-        submit(formName) {
-          this.$refs[formName].validate((valid) => {
-            if (valid) {
-              var url = "http://localhost:3000";
-              axios.get(url + '/cartype/addCartype?brand='+this.tabledata.brand+'&model='+this.tabledata.model+'&type='+this.tabledata.type)
-                .then(response => {
-                  this.$router.push('/car/cartype')
-                })
-                .catch(function (error) {
-                  console.log(error)
-                })
-            } else {
-              console.log('error submit!!');
-              return false;
-            }
-          });
+
+  export default {
+    name: "addcartype",
+    data() {
+      return {
+        tabledata: {
+          brand: '',
+          model: '',
+          type: ''
         },
-        getData(){
-          var url="http://localhost:3000";
-          var id=this.$route.params.id
-          console.log(id)
-          axios.get(url + '/cartype/selectCartype?id='+ id)
-            .then(response=>{
-              this.tabledata.brand=response.data.data[0].brand
-              this.tabledata.model=response.data.data[0].model
-              this.tabledata.type=response.data.data[0].type
-            })
-            .catch(function (error) {
-              console.log(error)
-            })
-        },
-        edit(formName) {
-          this.$refs[formName].validate((valid) => {
-            if (valid) {
-              var url = "http://localhost:3000";
-              axios.get(url + '/cartype/updateCartype?brand='+this.tabledata.brand+'&model='+this.tabledata.model+'&type='+this.tabledata.type+'&id='+this.$route.params.id)
-                .then(response => {
-                  this.$router.push('/car/cartype')
-                })
-                .catch(function (error) {
-                  console.log(error)
-                })
-            } else {
-              console.log('error submit!!');
-              return false;
-            }
-          });
+        rules: {
+          brand: [{required: true, message: '请输入品牌', trigger: 'blur'}],
+          model: [{required: true, message: '请输入车型', trigger: 'blur'}],
+          type: [{required: true, message: '请选择品牌', trigger: 'change'}]
         },
       }
+    },
+    created() {
+      this.getData()
+    },
+    methods: {
+      submit(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            var url = "http://localhost:3000";
+            axios.get(url + '/cartype/addCartype?brand=' + this.tabledata.brand + '&model=' + this.tabledata.model + '&type=' + this.tabledata.type)
+              .then(response => {
+                if (response.data.code='200') {
+                  this.$message({
+                    message:'提交成功',
+                    type:'success'
+                  })
+                  this.$router.push('/car/cartype')
+                }
+                if (response.data.code=''){
+                  this.$message.error('提交失败')
+                }
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
+      getData() {
+        var url = "http://localhost:3000";
+        var id = this.$route.params.id
+        console.log(id)
+        axios.get(url + '/cartype/selectCartype?id=' + id)
+          .then(response => {
+            this.tabledata.brand = response.data.data[0].brand
+            this.tabledata.model = response.data.data[0].model
+            this.tabledata.type = response.data.data[0].type
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+      },
+      edit(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            var url = "http://localhost:3000";
+            axios.get(url + '/cartype/updateCartype?brand=' + this.tabledata.brand + '&model=' + this.tabledata.model + '&type=' + this.tabledata.type + '&id=' + this.$route.params.id)
+              .then(response => {
+                if (response.data.code=='200') {
+                  this.$message({
+                    message:'提交成功',
+                    type:'success'
+                  })
+                  this.$router.push('/car/cartype')
+                }
+                if (response.data.code=='1'){
+                  this.$message.error('提交失败')
+                }
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
     }
+  }
 </script>
 
 <style scoped>

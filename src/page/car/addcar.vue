@@ -47,9 +47,11 @@
       <div style="clear:both"></div>
       <div class="dataBot">
         <el-button type="success" style="min-width: 120px;margin:0 auto;display: block"
-                   @click="edit('tabledata')" v-if="this.$route.params.id!=0">编辑</el-button>
+                   @click="edit('tabledata')" v-if="this.$route.params.id!=0">编辑
+        </el-button>
         <el-button type="success" style="min-width: 120px;margin:0 auto;display: block"
-                   @click="submit('tabledata')" v-else>提交</el-button>
+                   @click="submit('tabledata')" v-else>提交
+        </el-button>
       </div>
     </div>
   </div>
@@ -57,31 +59,32 @@
 
 <script>
   import axios from 'axios'
+
   export default {
     name: "addcar",
-    data(){
-      return{
-        tabledata:{
-          license:'',
-          cartype:'',
-          vin:'',
-          model:'',
-          cartype1:''
+    data() {
+      return {
+        tabledata: {
+          license: '',
+          cartype: '',
+          vin: '',
+          model: '',
+          cartype1: ''
         },
-        cartypeData:[],
-        rules:{
-          license:[{required:true,message:'请输入车牌',trigger:'blur'}],
-          vin:[{required:true,message:'请输入车架号',trigger:'blur'}],
-          cartype:[{required:true,message:'请选择车型',trigger:'change'}]
+        cartypeData: [],
+        rules: {
+          license: [{required: true, message: '请输入车牌', trigger: 'blur'}],
+          vin: [{required: true, message: '请输入车架号', trigger: 'blur'}],
+          cartype: [{required: true, message: '请选择车型', trigger: 'change'}]
         },
       }
     },
-    created(){
+    created() {
       this.getData()
     },
-    methods:{
-      getData(){
-        var url="http://localhost:3000";
+    methods: {
+      getData() {
+        var url = "http://localhost:3000";
         axios.get(url + '/cartype/queryAll')
           .then(response => {
             this.cartypeData = response.data.data
@@ -89,20 +92,20 @@
           .catch(error => {
             console.log(error);
           })
-        var id=this.$route.params.id
-        axios.post(url + '/car/query',{
-          id:id,
-          license:'',
-          vin:'',
-          model:'',
-          state:''
+        var id = this.$route.params.id
+        axios.post(url + '/car/query', {
+          id: id,
+          license: '',
+          vin: '',
+          model: '',
+          state: ''
         })
-          .then(response=>{
-            this.tabledata.license=response.data.data[0].license
-            this.tabledata.vin=response.data.data[0].vin
-            this.tabledata.model=response.data.data[0].model
-            this.tabledata.cartype=response.data.data[0].model
-            this.tabledata.cartype1=response.data.data[0].cartype
+          .then(response => {
+            this.tabledata.license = response.data.data[0].license
+            this.tabledata.vin = response.data.data[0].vin
+            this.tabledata.model = response.data.data[0].model
+            this.tabledata.cartype = response.data.data[0].model
+            this.tabledata.cartype1 = response.data.data[0].cartype
           })
           .catch(function (error) {
             console.log(error)
@@ -112,13 +115,39 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             var url = "http://localhost:3000";
-            axios.get(url + '/car/addCar?license='+this.tabledata.license+'&vin='+this.tabledata.vin+'&cartype='+this.tabledata.cartype)
+            axios.post(url + '/car/query', {
+              id:'',
+              license:this.tabledata.license,
+              vin:this.tabledata.vin,
+              model:'',
+              state:''
+            })
               .then(response => {
-                this.$router.push('/car/carlist')
+                if (response.data.code == '200') {
+                  this.$message.error('该车牌号或车架号已存在')
+                }
+                if (response.data.code == '1') {
+                  axios.get(url + '/car/addCar?license=' + this.tabledata.license + '&vin=' + this.tabledata.vin + '&cartype=' + this.tabledata.cartype)
+                    .then(response => {
+                      if (response.data.code == '200') {
+                        this.$message({
+                          message: '提交成功',
+                          type: 'success'
+                        })
+                        this.$router.push('/car/carlist')
+                      }
+                      if (response.data.code == '1') {
+                        this.$message.error('提交失败')
+                      }
+                    })
+                    .catch(function (error) {
+                      console.log(error)
+                    })
+                }
               })
-              .catch(function (error) {
-                console.log(error)
-              })
+              .catch(error => {
+                console.log(error);
+              });
           } else {
             console.log('error submit!!');
             return false;
@@ -128,11 +157,11 @@
       edit(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            if (isNaN(this.tabledata.cartype)){
-              this.tabledata.cartype=this.tabledata.cartype1
+            if (isNaN(this.tabledata.cartype)) {
+              this.tabledata.cartype = this.tabledata.cartype1
             }
             var url = "http://localhost:3000";
-            axios.get(url + '/car/updateCar?license='+this.tabledata.license+'&vin='+this.tabledata.vin+'&cartype='+this.tabledata.cartype+'&id='+this.$route.params.id)
+            axios.get(url + '/car/updateCar?license=' + this.tabledata.license + '&vin=' + this.tabledata.vin + '&cartype=' + this.tabledata.cartype + '&id=' + this.$route.params.id)
               .then(response => {
                 this.$router.push('/car/carlist')
               })
