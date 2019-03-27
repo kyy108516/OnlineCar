@@ -39,8 +39,11 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="getitem(scope.row.id,scope.row.contract_id)" v-if="scope.row.state=='已验车'">交车</el-button>
-            <el-button type="text" size="small" @click="validate(scope.row.id)" v-if="scope.row.state=='未验车'">验车</el-button>
+            <el-button type="text" size="small" @click="getitem(scope.row.id,scope.row.contract_id)"
+                       v-if="scope.row.state=='已验车'">交车
+            </el-button>
+            <el-button type="text" size="small" @click="validate(scope.row.id)" v-if="scope.row.state=='未验车'">验车
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -65,6 +68,7 @@
 
 <script>
   import axios from 'axios'
+
   var url = "http://localhost:3000";
   export default {
     inject: ['reload'],
@@ -73,21 +77,21 @@
       return {
         dialogVisible: false,
         queryData: {
-          id:'',
-          contract_id:'',
-          state:'',
-          type:'交车',
+          id: '',
+          contract_id: '',
+          state: '',
+          type: '交车',
         },
-        itemData:[],
-        tableData:[],
+        itemData: [],
+        tableData: [],
         carData: [],
         driverData: [],
         contractData: [],
         currpage: 1,
         pagesize: 10,
         data: '',
-        id:'',
-        contract_id:'',
+        id: '',
+        contract_id: '',
       }
     },
     mounted() {
@@ -95,10 +99,13 @@
     },
     methods: {
       getData() {
-        axios.post(url + '/validate/query',this.queryData)
+        axios.post(url + '/validate/query', this.queryData)
           .then(response => {
             if (response.data.code == '200') {
               this.tableData = response.data.data
+              for (let i = 0; i < this.tableData.length; i++) {
+                this.tableData[i].time = this.timeFormat(this.tableData[i].time)
+              }
             }
             if (response.data.code == '1') {
               this.tableData = []
@@ -149,6 +156,9 @@
           .then(response => {
             if (response.data.code == '200') {
               this.tableData = response.data.data
+              for (let i=0;i<this.tableData.length;i++){
+                this.tableData[i].time=this.timeFormat(this.tableData[i].time)
+              }
             }
             if (response.data.code == '1') {
               this.tableData = []
@@ -158,12 +168,18 @@
             console.log(error);
           });
       },
-      submit(id,contract_id){
-        let date=new Date()
-        let receivable_id='YS'+date.getFullYear()+(date.getMonth()+1)+date.getDate()+date.getHours()+date.getMinutes()+date.getSeconds();
+      submit(id, contract_id) {
+        let date = new Date()
+        let receivable_id = 'YS' + date.getFullYear() + (date.getMonth() + 1) + date.getDate() + date.getHours() + date.getMinutes() + date.getSeconds();
         axios.get(url + '/validate/updateState?state=已完成&id=' + id)
           .then(response => {
-            this.reload()
+            if (response.data.code == '200') {
+              this.$message({
+                message:'交车成功',
+                type:'success'
+              })
+              this.reload()
+            }
           })
           .catch(function (error) {
             console.log(error)
@@ -180,16 +196,16 @@
           .catch(function (error) {
             console.log(error)
           })
-        for (let i=0;i<this.itemData.length;i++){
-          for (let j=0;j<this.itemData[i].period;j++){
+        for (let i = 0; i < this.itemData.length; i++) {
+          for (let j = 0; j < this.itemData[i].period; j++) {
             let d1 = new Date(this.itemData[i].time);
-            let month=d1.getMonth()+1+j;
-            if (month>12){
-              month=month-12
+            let month = d1.getMonth() + 1 + j;
+            if (month > 12) {
+              month = month - 12
             }
             let datetime1 = d1.getFullYear() + '-' + month + '-' + d1.getDate();
             this.itemData[i].time = datetime1
-            axios.get(url + '/account/addReceivable?id='+(receivable_id+i+j)+'&contract_id=' + contract_id+'&money='+this.itemData[i].money+'&time='+this.itemData[i].time+'&type='+this.itemData[i].type)
+            axios.get(url + '/account/addReceivable?id=' + (receivable_id + i + j) + '&contract_id=' + contract_id + '&money=' + this.itemData[i].money + '&time=' + this.itemData[i].time + '&type=' + this.itemData[i].type)
               .then(response => {
               })
               .catch(function (error) {
@@ -198,11 +214,11 @@
           }
         }
       },
-      getitem(id,contract_id){
-        this.id=id
-        this.contract_id=contract_id
+      getitem(id, contract_id) {
+        this.id = id
+        this.contract_id = contract_id
         axios.post(url + '/contract/queryItem', {
-          id:contract_id
+          id: contract_id
         })
           .then(response => {
             if (response.data.code == '200') {
@@ -215,10 +231,15 @@
           .catch(error => {
             console.log(error);
           });
-        this.dialogVisible=true
+        this.dialogVisible = true
       },
-      validate(id){
-        this.$router.push('carvalidate/'+id)
+      validate(id) {
+        this.$router.push('carvalidate/' + id)
+      },
+      timeFormat(date) {
+        let d1 = new Date(date)
+        let datetime1 = d1.getFullYear() + '-' + (d1.getMonth() + 1) + '-' + d1.getDate();
+        return datetime1
       }
     },
   }

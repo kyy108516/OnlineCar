@@ -61,7 +61,7 @@
           <div class="dataReviseLabel">
             <em>*</em> 罚款
           </div>
-          <div class="dataReviseText" >
+          <div class="dataReviseText">
             <el-input placeholder="罚款" v-model="tabledata.money"></el-input>
           </div>
         </el-form-item>
@@ -78,18 +78,19 @@
 
 <script>
   import axios from 'axios'
+
   export default {
     name: "addviolation",
     data() {
       return {
         tabledata: {
-          contract_id:'',
-          happen_site:'',
-          happen_time:'',
-          money:'',
-          score:'',
-          contract_id:'',
-          driver_id:'',
+          contract_id: '',
+          happen_site: '',
+          happen_time: '',
+          money: '',
+          score: '',
+          contract_id: '',
+          driver_id: '',
         },
         carData: [],
         rules: {
@@ -148,14 +149,14 @@
             console.log(error);
           });
       },
-      selectinfo(id){
+      selectinfo(id) {
         var url = "http://localhost:3000";
-        axios.post(url + '/contract/query',{
+        axios.post(url + '/contract/query', {
           id: '',
           type: '',
           license: id,
           name: '',
-          state:'执行中',
+          state: '执行中',
         })
           .then(response => {
             if (response.data.code == '200') {
@@ -182,9 +183,15 @@
               .catch(function (error) {
                 console.log(error)
               })
-            axios.get(url + '/car/addViolation?car_id=' + this.tabledata.car_id + '&happen_site=' + this.tabledata.happen_site + '&happen_time=' + this.tabledata.happen_time+ '&money=' + this.tabledata.money+ '&score=' + this.tabledata.score+ '&driver_id=' + this.tabledata.driver_id+ '&contract_id=' + this.tabledata.contract_id)
+            axios.get(url + '/car/addViolation?car_id=' + this.tabledata.car_id + '&happen_site=' + this.tabledata.happen_site + '&happen_time=' + this.tabledata.happen_time + '&money=' + this.tabledata.money + '&score=' + this.tabledata.score + '&driver_id=' + this.tabledata.driver_id + '&contract_id=' + this.tabledata.contract_id)
               .then(response => {
-                this.$router.push('/operate/violationlist')
+                if (response.data.code == '200') {
+                  this.$message({
+                    message:'提交成功',
+                    type:'success'
+                  })
+                  this.$router.push('/operate/violationlist')
+                }
               })
               .catch(function (error) {
                 console.log(error)

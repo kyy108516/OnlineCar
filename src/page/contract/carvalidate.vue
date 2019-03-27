@@ -168,6 +168,12 @@
             }
             axios.get(url + '/validate/updateState?state=已验车&money='+this.tabledata.money+'&id=' + this.tabledata.id)
               .then(response => {
+                if (response.data.code='200'){
+                  this.$message({
+                    message:'提交成功',
+                    type:'success'
+                  })
+                }
               })
               .catch(function (error) {
                 console.log(error)

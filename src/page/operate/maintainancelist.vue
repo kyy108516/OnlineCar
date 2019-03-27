@@ -112,6 +112,9 @@
           .then(response => {
             if (response.data.code == '200') {
               this.tableData = response.data.data
+              for (let i=0;i<this.tableData.length;i++){
+                this.tableData[i].send_time=this.timeFormat(this.tableData[i].send_time)
+              }
             }
             if (response.data.code == '1') {
               this.tableData = []
@@ -144,6 +147,9 @@
           .then(response => {
             if (response.data.code == '200') {
               this.tableData = response.data.data
+              for (let i=0;i<this.tableData.length;i++){
+                this.tableData[i].send_time=this.timeFormat(this.tableData[i].send_time)
+              }
             }
             if (response.data.code == '1') {
               this.tableData = []
@@ -167,6 +173,12 @@
         let bill_id = 'YF' + date.getFullYear() + (date.getMonth() + 1) + date.getDate() + date.getHours() + date.getMinutes() + date.getSeconds();
         axios.get(url + '/maintainance/update?id='+id)
           .then(response => {
+            if (response.data.code=='200'){
+              this.$message({
+                message:'提交成功',
+                type:'success'
+              })
+            }
           })
           .catch(error => {
             console.log(error);
@@ -179,6 +191,11 @@
           })
         this.reload()
       },
+      timeFormat(date) {
+        let d1 = new Date(date)
+        let datetime1 = d1.getFullYear() + '-' + (d1.getMonth() + 1) + '-' + d1.getDate();
+        return datetime1
+      }
     },
   }
 </script>

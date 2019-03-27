@@ -213,13 +213,9 @@
       isTrue(date1, date2) {
         var d1 = new Date(date1)
         var d2 = new Date(date2)
-        var datetime1 = '' + d1.getFullYear() + (d1.getMonth() + 1) + d1.getDate();
-        var datetime2 = '' + d2.getFullYear() + (d2.getMonth() + 1) + d2.getDate();
-        console.log(datetime1)
-        console.log(datetime2)
-        if (datetime2 > datetime1) {
+        if (d1.getTime()<d2.getTime()){
           return 1
-        } else {
+        }else {
           return 0
         }
       },

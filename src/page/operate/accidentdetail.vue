@@ -178,6 +178,7 @@
           .then(response => {
             if (response.data.code == '200') {
               this.accident = response.data.data[0]
+              this.accident.happen_time=this.timeFormat(this.accident.happen_time)
             }
             if (response.data.code == '1') {
               this.accident = []
@@ -204,6 +205,9 @@
           .then(response => {
             if (response.data.code == '200') {
               this.reparation = response.data.data
+              for (let i=0;i<this.reparation.length;i++){
+                this.reparation[i].time=this.timeFormat(this.reparation[i].time)
+              }
             }
             if (response.data.code == '1') {
               this.reparation = []
@@ -233,6 +237,12 @@
             let practical_id = 'SS' + date.getFullYear() + (date.getMonth() + 1) + date.getDate() + date.getHours() + date.getMinutes() + date.getSeconds();
             axios.get(url + '/accident/addReparation?id=' + id  + '&money=' + this.reparationData.money+ '&time=' + this.reparationData.time)
               .then(response => {
+                if (response.data.code=='200'){
+                  this.$message({
+                    message:'提交成功',
+                    type:'success'
+                  })
+                }
               })
               .catch(function (error) {
                 console.log(error)
@@ -250,6 +260,11 @@
           }
         });
       },
+      timeFormat(date) {
+        let d1 = new Date(date)
+        let datetime1 = d1.getFullYear() + '-' + (d1.getMonth() + 1) + '-' + d1.getDate();
+        return datetime1
+      }
     },
   }
 </script>

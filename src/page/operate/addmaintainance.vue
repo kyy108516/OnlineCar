@@ -110,20 +110,21 @@
 
 <script>
   import axios from 'axios'
+
   export default {
     name: "addmiantainance",
     data() {
       return {
         tabledata: {
           type: '',
-          money:'',
+          money: '',
           car_id: '',
           id: '',
           send_time: '',
-          season:'',
-          partner_id:'',
-          driver_id:'',
-          contract_id:'',
+          season: '',
+          partner_id: '',
+          driver_id: '',
+          contract_id: '',
         },
         carData: [],
         partnerData: [],
@@ -202,9 +203,15 @@
           if (valid) {
             this.changetime()
             var url = "http://localhost:3000";
-            axios.get(url + '/maintainance/addMaintainance?id=' + this.tabledata.id + '&type=' + this.tabledata.type + '&money=' + this.tabledata.money+ '&send_time=' + this.tabledata.send_time+ '&season=' + this.tabledata.season+ '&partner_id=' + this.tabledata.partner_id+ '&car_id=' + this.tabledata.car_id)
+            axios.get(url + '/maintainance/addMaintainance?id=' + this.tabledata.id + '&type=' + this.tabledata.type + '&money=' + this.tabledata.money + '&send_time=' + this.tabledata.send_time + '&season=' + this.tabledata.season + '&partner_id=' + this.tabledata.partner_id + '&car_id=' + this.tabledata.car_id)
               .then(response => {
-                 this.$router.push('/operate/maintainancelist')
+                if (response.data.code == '200') {
+                  this.$message({
+                    message:'提交成功',
+                    type:'success'
+                  })
+                  this.$router.push('/operate/maintainancelist')
+                }
               })
               .catch(function (error) {
                 console.log(error)

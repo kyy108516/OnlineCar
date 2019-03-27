@@ -160,6 +160,7 @@
 
 <script>
   import axios from 'axios'
+  var url = "http://localhost:3000";
   export default {
     name: "addcontract",
     data() {
@@ -242,7 +243,7 @@
           name: '',
           sex: '',
           phone: '',
-          state:'否',
+          state: '否',
         })
           .then(response => {
             if (response.data.code == '200') {
@@ -259,44 +260,69 @@
       submit(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.changetime()
-            var url = "http://localhost:3000";
-            axios.get(url + '/contract/addContract?id=' + this.tabledata.id + '&type=' + this.tabledata.type + '&car_id=' + this.tabledata.car_id+ '&driver_id=' + this.tabledata.driver_id+ '&start_time=' + this.tabledata.startTime+ '&end_time=' + this.tabledata.endTime)
+            axios.post(url + '/contract/query', {
+              id: this.tabledata.id,
+              type: '',
+              license: '',
+              name: '',
+              state:'',
+            })
               .then(response => {
-                // this.$router.push('/contract/contractlist')
+                if (response.data.code == '200') {
+                  this.$message.error('已存在该合同号')
+                }
+                if (response.data.code == '1') {
+                  if (this.isTrue(this.tabledata.startTime, this.tabledata.endTime)) {
+                    this.changetime()
+                    axios.get(url + '/contract/addContract?id=' + this.tabledata.id + '&type=' + this.tabledata.type + '&car_id=' + this.tabledata.car_id + '&driver_id=' + this.tabledata.driver_id + '&start_time=' + this.tabledata.startTime + '&end_time=' + this.tabledata.endTime)
+                      .then(response => {
+                        if (response.data.code=='200'){
+                          this.$message({
+                            message:'提交成功',
+                            type:'success'
+                          })
+                        }
+                      })
+                      .catch(function (error) {
+                        console.log(error)
+                      })
+                    for (let i = 0; i < this.itemdata.length; i++) {
+                      var d = new Date(this.itemdata[i].time)
+                      this.itemdata[i].time = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+                      axios.get(url + '/contract/addContractItem?id=' + this.tabledata.id + '&type=' + this.itemdata[i].type + '&period=' + this.itemdata[i].period + '&money=' + this.itemdata[i].money + '&time=' + this.itemdata[i].time)
+                        .then(response => {
+                        })
+                        .catch(function (error) {
+                          console.log(error)
+                        })
+                    }
+                    axios.get(url + '/car/updateState?state=运营中&id=' + this.tabledata.car_id)
+                      .then(response => {
+                      })
+                      .catch(function (error) {
+                        console.log(error)
+                      })
+                    axios.get(url + '/driver/updateState?state=是&id=' + this.tabledata.driver_id)
+                      .then(response => {
+                      })
+                      .catch(function (error) {
+                        console.log(error)
+                      })
+                    axios.get(url + '/validate/addValidate?contract_id=' + this.tabledata.id + '&time=' + this.tabledata.startTime + "&type=交车")
+                      .then(response => {
+                      })
+                      .catch(function (error) {
+                        console.log(error)
+                      })
+                    this.$router.push('/contract/contractlist')
+                  }else {
+                    this.$message.error('结束时间需要大于起始时间')
+                  }
+                }
               })
-              .catch(function (error) {
-                console.log(error)
-              })
-            for (let i=0;i<this.itemdata.length;i++) {
-              var d = new Date(this.itemdata[i].time)
-              this.itemdata[i].time = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
-              axios.get(url + '/contract/addContractItem?id=' + this.tabledata.id + '&type=' + this.itemdata[i].type + '&period=' + this.itemdata[i].period + '&money=' + this.itemdata[i].money + '&time=' + this.itemdata[i].time)
-                .then(response => {
-                })
-                .catch(function (error) {
-                  console.log(error)
-                })
-            }
-            axios.get(url + '/car/updateState?state=运营中&id=' +this.tabledata.car_id)
-              .then(response => {
-              })
-              .catch(function (error) {
-                console.log(error)
-              })
-            axios.get(url + '/driver/updateState?state=是&id=' +this.tabledata.driver_id)
-              .then(response => {
-              })
-              .catch(function (error) {
-                console.log(error)
-              })
-            axios.get(url + '/validate/addValidate?contract_id=' +this.tabledata.id + '&time='+this.tabledata.startTime+"&type=交车")
-              .then(response => {
-              })
-              .catch(function (error) {
-                console.log(error)
-              })
-            this.$router.push('/contract/contractlist')
+              .catch(error => {
+                console.log(error);
+              });
           } else {
             console.log('error submit!!');
             return false;
@@ -330,7 +356,16 @@
         var datetime2 = d2.getFullYear() + '-' + (d2.getMonth() + 1) + '-' + d2.getDate();
         this.tabledata.startTime = datetime1
         this.tabledata.endTime = datetime2
-      }
+      },
+      isTrue(date1, date2) {
+        var d1 = new Date(date1)
+        var d2 = new Date(date2)
+        if (d1.getTime()<d2.getTime()){
+          return 1
+        }else {
+          return 0
+        }
+      },
     }
   }
 </script>

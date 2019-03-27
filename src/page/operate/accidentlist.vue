@@ -123,6 +123,9 @@
           .then(response => {
             if (response.data.code == '200') {
               this.tableData = response.data.data
+              for (let i=0;i<this.tableData.length;i++){
+                this.tableData[i].happen_time=this.timeFormat(this.tableData[i].happen_time)
+              }
             }
             if (response.data.code == '1') {
               this.tableData = []
@@ -173,6 +176,9 @@
           .then(response => {
             if (response.data.code == '200') {
               this.tableData = response.data.data
+              for (let i=0;i<this.tableData.length;i++){
+                this.tableData[i].happen_time=this.timeFormat(this.tableData[i].happen_time)
+              }
             }
             if (response.data.code == '1') {
               this.tableData = []
@@ -211,6 +217,9 @@
           .then(response => {
             if (response.data.code == '200') {
               this.tableData = response.data.data
+              for (let i=0;i<this.tableData.length;i++){
+                this.tableData[i].happen_time=this.timeFormat(this.tableData[i].happen_time)
+              }
             }
             if (response.data.code == '1') {
               this.tableData = []
@@ -236,6 +245,12 @@
         }
         axios.get(url + '/accident/update?state=待理赔&id=' + id)
           .then(response => {
+            if (response.data.code=='200'){
+              this.$message({
+                message:'编辑成功',
+                type:'success'
+              })
+            }
           })
           .catch(function (error) {
             console.log(error)
@@ -245,12 +260,23 @@
       submit2(id){
         axios.get(url + '/accident/update?state=理赔完毕&id=' + id)
           .then(response => {
+            if (response.data.code=='200'){
+              this.$message({
+                message:'编辑成功',
+                type:'success'
+              })
+            }
           })
           .catch(function (error) {
             console.log(error)
           })
         this.reload()
       },
+      timeFormat(date) {
+        let d1 = new Date(date)
+        let datetime1 = d1.getFullYear() + '-' + (d1.getMonth() + 1) + '-' + d1.getDate();
+        return datetime1
+      }
     },
   }
 </script>

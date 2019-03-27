@@ -12,14 +12,15 @@
       </el-tabs>
     </div>
     <div class="view_table">
-      <el-table ref="multipleTable" :data="tableData.slice((currpage - 1) * pagesize, currpage * pagesize)" tooltip-effect="dark" style="width: 100%"
+      <el-table ref="multipleTable" :data="tableData.slice((currpage - 1) * pagesize, currpage * pagesize)"
+                tooltip-effect="dark" style="width: 100%"
                 @selection-change="handleSelectionChange" highlight-current-row>
         <el-table-column prop="id" label="保单号">
           <template slot-scope="scope">
             <span>{{scope.row.id}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="license" label="车牌号" ></el-table-column>
+        <el-table-column prop="license" label="车牌号"></el-table-column>
         <el-table-column prop="type" label="保险类型" show-overflow-tooltip></el-table-column>
         <el-table-column prop="company_name" label="保险公司" show-overflow-tooltip></el-table-column>
         <el-table-column prop="end_time" label="到期时间" show-overflow-tooltip></el-table-column>
@@ -81,30 +82,31 @@
 
 <script>
   import axios from 'axios'
+
   export default {
-    inject:['reload'],
+    inject: ['reload'],
     name: "insuranceremind",
     data() {
       return {
         dialogFormVisible: false,
-        queryData:{
-          id:'',
-          license:'',
-          vin:'',
-          model:'',
-          state:''
+        queryData: {
+          id: '',
+          license: '',
+          vin: '',
+          model: '',
+          state: ''
         },
-        insuranceData:{
-          id:'',
-          partner_id:'',
-          start_time:'',
-          end_time:'',
-          money:'',
-          original_id:'',
+        insuranceData: {
+          id: '',
+          partner_id: '',
+          start_time: '',
+          end_time: '',
+          money: '',
+          original_id: '',
         },
         carData: [],
-        tableData:[],
-        partnerData:[],
+        tableData: [],
+        partnerData: [],
         pickerOptions1: { //日期选择器
           shortcuts: [{
             text: '今天',
@@ -127,9 +129,9 @@
             }
           }]
         },
-        currpage:1,
-        pagesize:10,
-        data:'',
+        currpage: 1,
+        pagesize: 10,
+        data: '',
         rules: {
           start_time: [{required: true, message: '请选择时间', trigger: 'change'}],
           end_time: [{required: true, message: '请选择时间', trigger: 'change'}],
@@ -139,9 +141,9 @@
         },
       }
     },
-    computed:{
-      insurance:{
-        get () {
+    computed: {
+      insurance: {
+        get() {
           return this.$store.state.insurance
         },
       },
@@ -152,12 +154,15 @@
     methods: {
       getData() {
         var url = "http://localhost:3000";
-        axios.post(url + '/car/queryInsuranceRemind',{
-          day:this.insurance
+        axios.post(url + '/car/queryInsuranceRemind', {
+          day: this.insurance
         })
           .then(response => {
             if (response.data.code == '200') {
               this.tableData = response.data.data
+              for (let i = 0; i < this.tableData.length; i++) {
+                this.tableData[i].end_time = this.timeFormat(this.tableData[i].end_time)
+              }
             }
             if (response.data.code == '1') {
               this.tableData = []
@@ -188,7 +193,7 @@
           id: '',
           company_name: '',
           type: '保险公司',
-          state:'激活',
+          state: '激活',
         })
           .then(response => {
             if (response.data.code == '200') {
@@ -240,28 +245,40 @@
             console.log(error)
           })
       },
-      editCar(id){
-        this.$router.push('addcar/'+id)
-      },
-      detailCar(id){
-        this.$router.push('cardetail/'+id)
-      },
-      collect(id){
-        this.dialogFormVisible=true
-        this.insuranceData.original_id=id
+      collect(id) {
+        this.dialogFormVisible = true
+        this.insuranceData.original_id = id
       },
       submit(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.changetime()
-            var url = "http://localhost:3000";
-            axios.get(url + '/car/updateInsurance?id=' + this.insuranceData.id + '&partner_id=' + this.insuranceData.partner_id + '&start_time=' + this.insuranceData.start_time+ '&end_time=' + this.insuranceData.end_time+ '&money=' + this.insuranceData.money+ '&original_id=' + this.insuranceData.original_id)
-              .then(response => {
-              })
-              .catch(function (error) {
-                console.log(error)
-              })
-            this.reload()
+            if (this.isTrue(this.insuranceData.start_time, this.insuranceData.end_time)) {
+              this.changetime()
+              let date = new Date();
+              let bill_id = 'YF' + date.getFullYear() + (date.getMonth() + 1) + date.getDate() + date.getHours() + date.getMinutes() + date.getSeconds();
+              var url = "http://localhost:3000";
+              axios.get(url + '/car/updateInsurance?id=' + this.insuranceData.id + '&partner_id=' + this.insuranceData.partner_id + '&start_time=' + this.insuranceData.start_time + '&end_time=' + this.insuranceData.end_time + '&money=' + this.insuranceData.money + '&original_id=' + this.insuranceData.original_id)
+                .then(response => {
+                  if (response.data.code == '200') {
+                    this.$message({
+                      message: '更新成功',
+                      type: 'success'
+                    })
+                  }
+                })
+                .catch(function (error) {
+                  console.log(error)
+                })
+              axios.get(url + '/account/addBill?id=' + bill_id + '&type=保险结算&money=' + this.insuranceData.money)
+                .then(response => {
+                })
+                .catch(function (error) {
+                  console.log(error)
+                })
+              this.reload()
+            } else {
+              this.$message.error('结束日期需大于起始日期')
+            }
           } else {
             console.log('error submit!!');
             return false;
@@ -275,8 +292,22 @@
         var datetime2 = d2.getFullYear() + '-' + (d2.getMonth() + 1) + '-' + d2.getDate();
         this.insuranceData.start_time = datetime1
         this.insuranceData.end_time = datetime2
-      }
-    },
+      },
+      timeFormat(date) {
+        let d1 = new Date(date)
+        let datetime1 = d1.getFullYear() + '-' + (d1.getMonth() + 1) + '-' + d1.getDate();
+        return datetime1
+      },
+      isTrue(date1, date2) {
+        var d1 = new Date(date1)
+        var d2 = new Date(date2)
+        if (d1.getTime() < d2.getTime()) {
+          return 1
+        } else {
+          return 0
+        }
+      },
+    }
   }
 </script>
 

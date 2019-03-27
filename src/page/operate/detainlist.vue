@@ -214,6 +214,12 @@
       detain(id){
         axios.get(url + '/contract/updateDetain?state=已扣车&id='+id)
           .then(response => {
+            if (response.data.code=='200'){
+              this.$message({
+                message:'编辑成功',
+                type:'success'
+              })
+            }
           })
           .catch(error => {
             console.log(error);
@@ -223,6 +229,12 @@
       removedetain(id){
         axios.get(url + '/contract/updateDetain?state=已完成&id='+id)
           .then(response => {
+            if (response.data.code=='200'){
+              this.$message({
+                message:'编辑成功',
+                type:'success'
+              })
+            }
           })
           .catch(error => {
             console.log(error);

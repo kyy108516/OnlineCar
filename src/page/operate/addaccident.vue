@@ -278,6 +278,12 @@
             var url = "http://localhost:3000";
             axios.get(url + '/accident/add?id='+id+'&contract_id=' + this.tabledata.contract_id + '&happen_site=' + this.tabledata.happen_site + '&happen_time=' + this.tabledata.happen_time+ '&money=' + this.tabledata.money+ '&car_id=' + this.tabledata.car_id+ '&driver_id=' + this.tabledata.driver_id)
               .then(response => {
+                if (response.data.code=='200'){
+                  this.$message({
+                    message:'提交成功',
+                    type:'success'
+                  })
+                }
               })
               .catch(function (error) {
                 console.log(error)

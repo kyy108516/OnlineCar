@@ -181,6 +181,10 @@
           .then(response => {
             if (response.data.code == '200') {
               this.contractData = response.data.data
+              for (let i=0;i<this.contractData.length;i++){
+                this.contractData[i].start_time=this.timeFormat(this.contractData[i].start_time)
+                this.contractData[i].end_time=this.timeFormat(this.contractData[i].end_time)
+              }
             }
             if (response.data.code == '1') {
               this.contractData = []
@@ -195,6 +199,10 @@
           .then(response => {
             if (response.data.code == '200') {
               this.contractData = response.data.data
+              for (let i=0;i<this.contractData.length;i++){
+                this.contractData[i].start_time=this.timeFormat(this.contractData[i].start_time)
+                this.contractData[i].end_time=this.timeFormat(this.contractData[i].end_time)
+              }
             }
             if (response.data.code == '1') {
               this.contractData = []
@@ -213,20 +221,6 @@
       handleSizeChange(psize) {
         this.pagesize = psize;
       },
-      // deleteDriver(id) {
-      //   var url = "http://localhost:3000";
-      //   axios.get(url + "/driver/deleteDriver?id=" + id)
-      //     .then(response => {
-      //       console.log(response)
-      //       this.reload()
-      //     })
-      //     .catch(function (error) {
-      //       console.log(error)
-      //     })
-      // },
-      // editDriver(id){
-      //   this.$router.push('adddriver/'+id)
-      // },
       detailContract(id){
         this.$router.push('contractdetail/'+id)
       },
@@ -247,6 +241,11 @@
             console.log(error)
           })
         this.reload()
+      },
+      timeFormat(date){
+        let d1=new Date(date)
+        let datetime1 = d1.getFullYear() + '-' + (d1.getMonth() + 1) + '-' + d1.getDate();
+        return datetime1
       }
     },
   }

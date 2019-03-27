@@ -196,6 +196,7 @@
 
 <script>
   import axios from 'axios'
+
   export default {
     name: "contractdetail",
     data() {
@@ -205,8 +206,8 @@
         accident: [],
         item: [],
         receivable: [],
-        validate:[],
-        settle:[],
+        validate: [],
+        settle: [],
         tabPosition: 'left',
         currpage: 1,
         pagesize: 10,
@@ -224,10 +225,12 @@
           license: '',
           type: '',
           name: '',
-          state:'',
+          state: '',
         })
           .then(response => {
             this.contract = response.data.data[0]
+            this.contract.start_time = this.timeFormat(this.contract.start_time)
+            this.contract.end_time = this.timeFormat(this.contract.end_time)
           })
           .catch(function (error) {
             console.log(error)
@@ -242,6 +245,9 @@
           .then(response => {
             if (response.data.code == '200') {
               this.accident = response.data.data
+              for (let i=0;i<this.accident.length;i++){
+                this.accident[i].happen_time=this.timeFormat(this.accident[i].happen_time)
+              }
             }
             if (response.data.code == '1') {
               this.accident = []
@@ -259,6 +265,9 @@
           .then(response => {
             if (response.data.code == '200') {
               this.violation = response.data.data
+              for (let i=0;i<this.violation.length;i++){
+                this.violation[i].happen_time=this.timeFormat(this.violation[i].happen_time)
+              }
             }
             if (response.data.code == '1') {
               this.violation = []
@@ -273,6 +282,9 @@
           .then(response => {
             if (response.data.code == '200') {
               this.item = response.data.data
+              for (let i=0;i<this.item.length;i++){
+                this.item[i].time=this.timeFormat(this.item[i].time)
+              }
             }
             if (response.data.code == '1') {
               this.item = []
@@ -287,6 +299,9 @@
           .then(response => {
             if (response.data.code == '200') {
               this.receivable = response.data.data
+              for (let i=0;i<this.receivable.length;i++){
+                this.receivable[i].time=this.timeFormat(this.receivable[i].time)
+              }
             }
             if (response.data.code == '1') {
               this.receivable = []
@@ -296,7 +311,7 @@
             console.log(error);
           });
         axios.post(url + '/validate/queryItem', {
-          contract_id:id,
+          contract_id: id,
         })
           .then(response => {
             if (response.data.code == '200') {
@@ -310,7 +325,7 @@
             console.log(error)
           });
         axios.post(url + '/contract/querySettleItem', {
-          id:id,
+          id: id,
         })
           .then(response => {
             if (response.data.code == '200') {
@@ -324,6 +339,11 @@
             console.log(error)
           });
       },
+      timeFormat(date) {
+        let d1 = new Date(date)
+        let datetime1 = d1.getFullYear() + '-' + (d1.getMonth() + 1) + '-' + d1.getDate();
+        return datetime1
+      }
     },
   }
 </script>

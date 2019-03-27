@@ -65,6 +65,9 @@
           .then(response => {
             if (response.data.code == '200') {
               this.contractData = response.data.data
+              for (let i=0;i<this.contractData.length;i++){
+                this.contractData[i].end_time=this.timeFormat(this.contractData[i].end_time)
+              }
             }
             if (response.data.code == '1') {
               this.contractData = []
@@ -88,6 +91,11 @@
           this.$router.push('insuranceremind')
         }
       },
+      timeFormat(date) {
+        let d1 = new Date(date)
+        let datetime1 = d1.getFullYear() + '-' + (d1.getMonth() + 1) + '-' + d1.getDate();
+        return datetime1
+      }
     },
   }
 </script>
