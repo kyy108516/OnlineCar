@@ -70,6 +70,13 @@
           .then(response => {
             if (response.data.code == '200') {
               this.tableData = response.data.data
+              for (let i=0;i<this.tableData.length;i++){
+                if(this.tableData[i].time==null){
+                  this.tableData[i].time='--'
+                }else {
+                  this.tableData[i].time = this.timeFormat(this.tableData[i].time)
+                }
+              }
             }
             if (response.data.code == '1') {
               this.tableData = []
@@ -104,6 +111,11 @@
       },
       detailSettlement(id){
         this.$router.push('settlementdetail/'+id)
+      },
+      timeFormat(date) {
+        let d1 = new Date(date)
+        let datetime1 = d1.getFullYear() + '-' + (d1.getMonth() + 1) + '-' + d1.getDate();
+        return datetime1
       }
     },
   }

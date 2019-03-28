@@ -94,23 +94,6 @@
       handleSizeChange(psize) {
         this.pagesize = psize;
       },
-      // deleteDriver(id) {
-      //   var url = "http://localhost:3000";
-      //   axios.get(url + "/driver/deleteDriver?id=" + id)
-      //     .then(response => {
-      //       console.log(response)
-      //       this.reload()
-      //     })
-      //     .catch(function (error) {
-      //       console.log(error)
-      //     })
-      // },
-      editDriver(id){
-        this.$router.push('adddriver/'+id)
-      },
-      detailDriver(id){
-        this.$router.push('driverdetail/'+id)
-      }
     },
   }
 </script>

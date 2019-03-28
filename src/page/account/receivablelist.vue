@@ -152,6 +152,9 @@
           .then(response => {
             if (response.data.code == '200') {
               this.tableData = response.data.data
+              for (let i=0;i<this.tableData.length;i++){
+                this.tableData[i].time=this.timeFormat(this.tableData[i].time)
+              }
             }
             if (response.data.code == '1') {
               this.tableData = []
@@ -166,6 +169,9 @@
           .then(response => {
             if (response.data.code == '200') {
               this.tableData = response.data.data
+              for (let i=0;i<this.tableData.length;i++){
+                this.tableData[i].time=this.timeFormat(this.tableData[i].time)
+              }
             }
             if (response.data.code == '1') {
               this.tableData = []
@@ -207,6 +213,10 @@
             if (this.practicalData.money == (this.rowData.money - this.rowData.already_money)) {
               axios.get(url + '/account/updateReceivable?money=' + this.practicalData.money + '&state=已完成&id=' + this.rowData.receivable_id)
                 .then(response => {
+                  this.$message({
+                    message:'提交成功',
+                    type:'success'
+                  })
                 })
                 .catch(error => {
                   console.log(error);
@@ -228,6 +238,10 @@
             if (this.practicalData.money < (this.rowData.money - this.rowData.already_money)) {
               axios.get(url + '/account/updateReceivable?money=' + this.practicalData.money + '&state=未完成&id=' + this.rowData.receivable_id)
                 .then(response => {
+                  this.$message({
+                    message:'提交成功',
+                    type:'success'
+                  })
                 })
                 .catch(error => {
                   console.log(error);
@@ -252,6 +266,11 @@
           }
         });
       },
+      timeFormat(date) {
+        let d1 = new Date(date)
+        let datetime1 = d1.getFullYear() + '-' + (d1.getMonth() + 1) + '-' + d1.getDate();
+        return datetime1
+      }
     },
   }
 </script>

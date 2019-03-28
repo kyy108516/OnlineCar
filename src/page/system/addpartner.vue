@@ -35,9 +35,11 @@
       <div style="clear:both"></div>
       <div class="dataBot">
         <el-button type="success" style="min-width: 120px;margin:0 auto;display: block"
-                   @click="edit('tabledata')" v-if="this.$route.params.id!=0">编辑</el-button>
+                   @click="edit('tabledata')" v-if="this.$route.params.id!=0">编辑
+        </el-button>
         <el-button type="success" style="min-width: 120px;margin:0 auto;display: block"
-                   @click="submit('tabledata')" v-else>提交</el-button>
+                   @click="submit('tabledata')" v-else>提交
+        </el-button>
       </div>
     </div>
   </div>
@@ -45,31 +47,38 @@
 
 <script>
   import axios from 'axios'
+
   export default {
     name: "addpartner",
-    data(){
-      return{
-        tabledata:{
-          company_name:'',
-          type:'',
+    data() {
+      return {
+        tabledata: {
+          company_name: '',
+          type: '',
         },
-        rules:{
-          company_name:[{required:true,message:'请输入公司名称',trigger:'blur'}],
-          type:[{required:true,message:'请选择类型',trigger:'change'}]
+        rules: {
+          company_name: [{required: true, message: '请输入公司名称', trigger: 'blur'}],
+          type: [{required: true, message: '请选择类型', trigger: 'change'}]
         },
       }
     },
-    created(){
+    created() {
       this.getData()
     },
-    methods:{
+    methods: {
       submit(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             var url = "http://localhost:3000";
-            axios.get(url + '/car/addPartner?company_name='+this.tabledata.company_name+'&type='+this.tabledata.type)
+            axios.get(url + '/car/addPartner?company_name=' + this.tabledata.company_name + '&type=' + this.tabledata.type)
               .then(response => {
-                this.$router.push('/system/partnerlist')
+                if (response.data.code == '200') {
+                  this.$message({
+                    message:'提交成功',
+                    type:'success'
+                  })
+                  this.$router.push('/system/partnerlist')
+                }
               })
               .catch(function (error) {
                 console.log(error)
@@ -80,19 +89,19 @@
           }
         });
       },
-      getData(){
-        var url="http://localhost:3000";
-        var id=this.$route.params.id
+      getData() {
+        var url = "http://localhost:3000";
+        var id = this.$route.params.id
         console.log(id)
-        axios.post(url + '/car/Partner',{
-          id:id,
-          company_name:'',
-          type:'',
-          state:'激活'
+        axios.post(url + '/car/Partner', {
+          id: id,
+          company_name: '',
+          type: '',
+          state: '激活'
         })
-          .then(response=>{
-            this.tabledata.company_name=response.data.data[0].company_name
-            this.tabledata.type=response.data.data[0].type
+          .then(response => {
+            this.tabledata.company_name = response.data.data[0].company_name
+            this.tabledata.type = response.data.data[0].type
           })
           .catch(function (error) {
             console.log(error)
@@ -102,9 +111,15 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             var url = "http://localhost:3000";
-            axios.get(url + '/car/updatePartner?company_name='+this.tabledata.company_name+'&type='+this.tabledata.type+'&id='+this.$route.params.id)
+            axios.get(url + '/car/updatePartner?company_name=' + this.tabledata.company_name + '&type=' + this.tabledata.type + '&id=' + this.$route.params.id)
               .then(response => {
-                this.$router.push('/system/partnerlist')
+                if (response.data.code=='200') {
+                  this.$message({
+                    message:'编辑成功',
+                    type:'success'
+                  })
+                  this.$router.push('/system/partnerlist')
+                }
               })
               .catch(function (error) {
                 console.log(error)

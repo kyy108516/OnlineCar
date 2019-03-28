@@ -104,8 +104,13 @@
         var url = "http://localhost:3000";
         axios.get(url + "/car/deletePartner?id=" + id)
           .then(response => {
-            console.log(response)
-            this.reload()
+            if (response.data.code=='200') {
+              this.$message({
+                message:'删除成功',
+                type:'success'
+              })
+              this.reload()
+            }
           })
           .catch(function (error) {
             console.log(error)

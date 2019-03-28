@@ -119,7 +119,13 @@
             var url = "http://localhost:3000";
             axios.get(url + '/users/addUser?username='+this.tabledata.username+'&password='+this.tabledata.password+'&role_id='+this.tabledata.role_id)
               .then(response => {
-                this.$router.push('/system/userlist')
+                if (response.data.code=='200') {
+                  this.$message({
+                    message:'提交成功',
+                    type:'success'
+                  })
+                  this.$router.push('/system/userlist')
+                }
               })
               .catch(function (error) {
                 console.log(error)
@@ -139,7 +145,13 @@
             var url = "http://localhost:3000";
             axios.get(url + '/users/updateUser?password='+this.tabledata.password+'&role_id='+this.tabledata.role_id+'&username='+this.tabledata.username)
               .then(response => {
-                this.$router.push('/system/userlist')
+                if (response.data.code=='200') {
+                  this.$message({
+                    message:'编辑成功',
+                    type:'success'
+                  })
+                  this.$router.push('/system/userlist')
+                }
               })
               .catch(function (error) {
                 console.log(error)

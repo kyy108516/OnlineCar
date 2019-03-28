@@ -262,6 +262,12 @@
             let id = ''+ date.getDate() + date.getHours() + date.getMinutes() + date.getSeconds();
             axios.get(url + '/users/addRole?id=' + id + '&name=' + this.tabledata.name + '&description=' + this.tabledata.description)
               .then(response => {
+                if (response.data.code=='200'){
+                  this.$message({
+                    message:'提交成功',
+                    type:'success'
+                  })
+                }
               })
               .catch(function (error) {
                 console.log(error)
