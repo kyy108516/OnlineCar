@@ -33,47 +33,47 @@
             <div class="grid-a-contentWidth1">
               <div style="padding: 8px">
                 <p class="box-tit">全部车辆</p>
-                <span class="box-num">5</span>
+                <span class="box-num">{{allcar}}</span>
               </div>
             </div>
           </el-col>
           <el-col :span="4">
             <div class="grid-a-contentWidth1">
               <div style="padding: 8px">
-                <p class="box-tit">全部车辆</p>
-                <span class="box-num">5</span>
+                <p class="box-tit">运营车辆</p>
+                <span class="box-num">{{yunyingcar}}</span>
               </div>
             </div>
           </el-col>
           <el-col :span="4">
             <div class="grid-a-contentWidth1">
               <div style="padding: 8px">
-                <p class="box-tit">全部车辆</p>
-                <span class="box-num">5</span>
+                <p class="box-tit">库存车辆</p>
+                <span class="box-num">{{kucuncar}}</span>
               </div>
             </div>
           </el-col>
           <el-col :span="4">
             <div class="grid-a-contentWidth1">
               <div style="padding: 8px">
-                <p class="box-tit">全部车辆</p>
-                <span class="box-num">5</span>
+                <p class="box-tit">全部司机</p>
+                <span class="box-num">{{alldriver}}</span>
               </div>
             </div>
           </el-col>
           <el-col :span="4">
             <div class="grid-a-contentWidth1">
               <div style="padding: 8px">
-                <p class="box-tit">全部车辆</p>
-                <span class="box-num">5</span>
+                <p class="box-tit">签约司机</p>
+                <span class="box-num">{{qianyuedriver}}</span>
               </div>
             </div>
           </el-col>
           <el-col :span="4">
             <div class="grid-a-contentWidth1">
               <div style="padding: 8px">
-                <p class="box-tit">全部车辆</p>
-                <span class="box-num">5</span>
+                <p class="box-tit">逾期司机</p>
+                <span class="box-num">{{yuqidriver}}</span>
               </div>
             </div>
           </el-col>
@@ -142,6 +142,7 @@
 </template>
 
 <script>
+  import axios from 'axios'
   // 引入基本模板
   let echarts = require('echarts/lib/echarts')
   // 引入柱状图组件
@@ -154,7 +155,13 @@
     name: "home",
     data() {
       return {
-        time: ''
+        time: '',
+        allcar:'',
+        kucuncar:'',
+        yunyingcar:'',
+        alldriver:'',
+        qianyuedriver:'',
+        yuqidriver:'',
       }
     },
     computed: {
@@ -169,9 +176,55 @@
       this.time = date.getFullYear() + '年' + date.getMonth() + '月' + date.getDate() + '日'
     },
     mounted() {
-      this.drawLine()
+      this.drawLine();
+      this.getData();
     },
     methods: {
+      getData(){
+        var url = "http://localhost:3000";
+        axios.post(url + '/home/allCar')
+          .then(response => {
+            this.allcar=response.data.data[0].num
+          })
+          .catch(function (error) {
+            console.log(error)
+          });
+        axios.post(url + '/home/kucunCar')
+          .then(response => {
+            this.kucuncar=response.data.data[0].num
+          })
+          .catch(function (error) {
+            console.log(error)
+          });
+        axios.post(url + '/home/yunyingCar')
+          .then(response => {
+            this.yunyingcar=response.data.data[0].num
+          })
+          .catch(function (error) {
+            console.log(error)
+          });
+        axios.post(url + '/home/allDriver')
+          .then(response => {
+            this.alldriver=response.data.data[0].num
+          })
+          .catch(function (error) {
+            console.log(error)
+          });
+        axios.post(url + '/home/qianyueDriver')
+          .then(response => {
+            this.qianyuedriver=response.data.data[0].num
+          })
+          .catch(function (error) {
+            console.log(error)
+          });
+        axios.post(url + '/home/yuqiDriver')
+          .then(response => {
+            this.yuqidriver=response.data.data[0].num
+          })
+          .catch(function (error) {
+            console.log(error)
+          });
+      },
       drawLine() {
         // 基于准备好的dom，初始化echarts实例
         let myChart1 = echarts.init(document.getElementById('myChart1'))
