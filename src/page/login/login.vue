@@ -111,7 +111,7 @@
                 console.log(error)
               });
             axios.post(url + '/users/queryRoleMenu', {
-              username: 'kyy'
+              username: this.loginForm.username
             })
               .then(response => {
                 this.$store.commit('updateArray', this.translateDataToTree(response.data.data))
@@ -148,7 +148,7 @@
       //     });
       //   this.$router.push('home')
       // },
-      translateDataToTree(data) { //权限数组赚树
+      translateDataToTree(data) { //权限数组转树
         let parents = data.filter(value => value.parent_id == 0 || value.parent_id == null)
         let children = data.filter(value => value.parent_id !== 'undefined' && value.parent_id != 0)
         let translator = (parents, children) => {

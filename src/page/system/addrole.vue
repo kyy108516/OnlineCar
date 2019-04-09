@@ -34,6 +34,8 @@
                      @addBtn='add' @removeBtn='remove' style="margin-left: calc(10% - 20px)"
                      :mode='mode' height='540px' width='80%' filter openAll>
       </tree-transfer>
+<!--      <tree-transfer :title="title" :from_data='fromData' :to_data='toData' :defaultProps="{label:'label'}" @addBtn='add' @removeBtn='remove' :mode='mode' height='540px' filter openAll>-->
+<!--      </tree-transfer>-->
       <div class="dataBot">
         <el-button type="success" style="min-width: 120px;margin:0 auto;display: block"
                    @click="submit('tabledata')">提交
@@ -57,7 +59,9 @@
         rules: {
           name: [{required: true, message: '请输入角色名称', trigger: 'blur'}],
         },
+        title: "Transfer Tree",
         toData:[],
+        roleData:[],
         mode: "transfer", // transfer addressList
         // fromData:[
         //   {
@@ -69,6 +73,7 @@
         //         id: "1-1",
         //         pid: "1",
         //         label: "二级 1-1",
+        //         disabled: true,
         //         children: []
         //       },
         //       {
@@ -101,13 +106,13 @@
             children: [
               {
                 id: "11",
-                pid: "1",
+                pid: 1,
                 label: "车辆列表",
                 children: []
               },
               {
                 id: "12",
-                pid: "1",
+                pid: 1,
                 label: "车型管理",
                 children: []
               }
@@ -272,8 +277,8 @@
               .catch(function (error) {
                 console.log(error)
               })
-            for (let i=0;i<this.toData.length;i++){
-              axios.get(url + '/users/addRoleMenu?role_id=' + id + '&menu_id=' + this.toData[i])
+            for (let i=0;i<this.roleData.length;i++){
+              axios.get(url + '/users/addRoleMenu?role_id=' + id + '&menu_id=' + this.roleData[i])
                 .then(response => {
                 })
                 .catch(function (error) {
@@ -296,23 +301,22 @@
         }
       },
       // 监听穿梭框组件添加
-      add(fromData, toData, obj) {
-        // 树形穿梭框模式transfer时，返回参数为左侧树移动后数据、右侧树移动后数据、移动的        {keys,nodes,halfKeys,halfNodes}对象
-        // 通讯录模式addressList时，返回参数为右侧收件人列表、右侧抄送人列表、右侧密送人列表
-        console.log("fromData:", JSON.stringify(fromData));
-        console.log("toData:", JSON.stringify(toData));
-        console.log("obj:", obj);
-        this.toData=this.treeTransArray(toData)
-      },
-      // 监听穿梭框组件移除
-      remove(fromData, toData, obj) {
+      add(fromData,toData,obj){
         // 树形穿梭框模式transfer时，返回参数为左侧树移动后数据、右侧树移动后数据、移动的{keys,nodes,halfKeys,halfNodes}对象
         // 通讯录模式addressList时，返回参数为右侧收件人列表、右侧抄送人列表、右侧密送人列表
-        this.treeTransArray(toData)
         console.log("fromData:", fromData);
-        console.log("toData:", this.treeTransArray(toData));
+        console.log("toData:", toData);
         console.log("obj:", obj);
-        this.toData=this.treeTransArray(toData)
+        this.roleData=this.treeTransArray(toData)
+      },
+      // 监听穿梭框组件移除
+      remove(fromData,toData,obj){
+        // 树形穿梭框模式transfer时，返回参数为左侧树移动后数据、右侧树移动后数据、移动的{keys,nodes,halfKeys,halfNodes}对象
+        // 通讯录模式addressList时，返回参数为右侧收件人列表、右侧抄送人列表、右侧密送人列表
+        console.log("fromData:", fromData);
+        console.log("toData:", toData);
+        console.log("obj:", obj);
+        this.roleData=this.treeTransArray(toData)
       },
       treeTransArray(tree) {
         var array = []

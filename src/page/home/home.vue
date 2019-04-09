@@ -81,61 +81,130 @@
       </el-col>
     </el-row>
     <br>
-    <el-row :gutter="10" type="flex" class="row-bg" justify="start">
-      <el-col :span="16" class="grid-a-content-a-Width">
-        <el-row :gutter="10" type="flex" justify="center">
-          <el-col :span="24" class="grid-a-contentWidth2">
-            <el-carousel indicator-position="outside" autoplay="false" interval="7000">
-              <el-carousel-item :key="1">
-                <div style="display: table;width: 100%;">
-                  <div style="display: table-cell;margin-top: 30px">
-                    <div id="myChart1" style="width: 500px; height: 300px ;margin: auto"></div>
-                  </div>
+    <!--    <el-row :gutter="10" type="flex" class="row-bg" justify="start">-->
+    <!--      <el-col :span="16">-->
+    <!--        <el-row :gutter="10" type="flex" justify="center">-->
+    <!--          <el-col :span="24" class="grid-a-contentWidth2">-->
+    <!--            <el-carousel indicator-position="outside" autoplay="false" interval="7000">-->
+    <!--              <el-carousel-item :key="1">-->
+    <!--                <div style="display: table;width: 100%;">-->
+    <!--                  <div style="display: table-cell;margin-top: 30px">-->
+    <!--                    <div id="myChart1" style="width: 500px; height: 300px ;margin: auto"></div>-->
+    <!--                  </div>-->
+    <!--                </div>-->
+    <!--              </el-carousel-item>-->
+    <!--              <el-carousel-item :key="2">-->
+    <!--                <div style="display: table;width: 100%;">-->
+    <!--                  <div style="display: table-cell;margin-top: 30px">-->
+    <!--                    <div id="myChart2" style="width: 500px; height: 300px ;margin: auto"></div>-->
+    <!--                  </div>-->
+    <!--                </div>-->
+    <!--              </el-carousel-item>-->
+    <!--            </el-carousel>-->
+    <!--          </el-col>-->
+    <!--        </el-row>-->
+    <!--      </el-col>-->
+    <!--      <el-col :span="8">-->
+    <!--        <el-row>-->
+    <!--          <div class="head2" style="border-left: 5px solid #2bac84">运营状况</div>-->
+    <!--        </el-row>-->
+    <!--        <el-row style="margin-top: 15px;padding: 0 15px" :gutter="10">-->
+    <!--          <el-col :span="4">-->
+    <!--            <div class="grid-a-contentWidth1">-->
+    <!--              <div style="padding: 8px">-->
+    <!--                <p class="box-tit">全部车辆</p>-->
+    <!--                <span class="box-num">{{allcar}}</span>-->
+    <!--              </div>-->
+    <!--            </div>-->
+    <!--          </el-col>-->
+    <!--          <el-col :span="4">-->
+    <!--            <div class="grid-a-contentWidth1">-->
+    <!--              <div style="padding: 8px">-->
+    <!--                <p class="box-tit">运营车辆</p>-->
+    <!--                <span class="box-num">{{yunyingcar}}</span>-->
+    <!--              </div>-->
+    <!--            </div>-->
+    <!--          </el-col>-->
+    <!--          <el-col :span="4">-->
+    <!--            <div class="grid-a-contentWidth1">-->
+    <!--              <div style="padding: 8px">-->
+    <!--                <p class="box-tit">库存车辆</p>-->
+    <!--                <span class="box-num">{{kucuncar}}</span>-->
+    <!--              </div>-->
+    <!--            </div>-->
+    <!--          </el-col>-->
+    <!--          <el-col :span="4">-->
+    <!--            <div class="grid-a-contentWidth1">-->
+    <!--              <div style="padding: 8px">-->
+    <!--                <p class="box-tit">全部司机</p>-->
+    <!--                <span class="box-num">{{alldriver}}</span>-->
+    <!--              </div>-->
+    <!--            </div>-->
+    <!--          </el-col>-->
+    <!--        </el-row>-->
+    <!--      </el-col>-->
+    <!--    </el-row>-->
+    <el-row :gutter="10">
+      <el-col :span="16">
+        <div class="home1">
+          <el-carousel indicator-position="outside" autoplay="false" interval="7000">
+            <el-carousel-item :key="1">
+              <div style="display: table;width: 100%;">
+                <div style="display: table-cell;margin-top: 30px">
+                  <div id="myChart1" style="width: 500px; height: 300px ;margin: auto"></div>
                 </div>
-              </el-carousel-item>
-              <el-carousel-item :key="2">
-                <div style="display: table;width: 100%;">
-                  <div style="display: table-cell;margin-top: 30px">
-                    <div id="myChart2" style="width: 500px; height: 300px ;margin: auto"></div>
-                  </div>
+              </div>
+            </el-carousel-item>
+            <el-carousel-item :key="2">
+              <div style="display: table;width: 100%;">
+                <div style="display: table-cell;margin-top: 30px">
+                  <div id="myChart2" style="width: 500px; height: 300px ;margin: auto"></div>
                 </div>
-              </el-carousel-item>
-            </el-carousel>
-
-          </el-col>
-        </el-row>
+              </div>
+            </el-carousel-item>
+          </el-carousel>
+        </div>
       </el-col>
       <el-col :span="8">
-        <el-row class="grid-a-contentWidth">
-          <div class="head2" style="border-left: 5px solid #2bac84">快捷按钮</div>
-        </el-row>
-        <el-row style="margin-top: 15px;padding: 0 15px" :gutter="10" class="grid-a-contentWidth">
-          <el-col :span="4">
-            <div class="grid-a-contentWidth1">
-              <div style="padding: 8px">
-                <p class="box-tit">全部车辆</p>
-                <span class="box-num">5</span>
+        <div class="home2">
+          <el-row>
+            <div class="head2" style="border-left: 5px solid #2bac84">快捷按钮</div>
+          </el-row>
+          <el-row style="margin-top: 15px;padding: 0 15px" :gutter="10">
+            <el-col :span="6">
+              <div class="grid-a-contentWidth1">
+                <div style="padding: 8px">
+                  <p class="box-tit">全部车辆</p>
+                  <span class="box-num">{{allcar}}</span>
+                </div>
               </div>
-            </div>
-          </el-col>
-          <el-col :span="4">
-            <div class="grid-a-contentWidth1">
-              <div style="padding: 8px">
-                <p class="box-tit">全部车辆</p>
-                <span class="box-num">5</span>
+            </el-col>
+            <el-col :span="6">
+              <div class="grid-a-contentWidth1">
+                <div style="padding: 8px">
+                  <p class="box-tit">运营车辆</p>
+                  <span class="box-num">{{yunyingcar}}</span>
+                </div>
               </div>
-            </div>
-          </el-col>
-          <el-col :span="4">
-            <div class="grid-a-contentWidth1">
-              <div style="padding: 8px">
-                <img src="../../assets/login/square-car-light.png">
-                <br>
-                <span class="box-tit">全部车辆</span>
+            </el-col>
+            <el-col :span="6">
+              <div class="grid-a-contentWidth1">
+                <div style="padding: 8px">
+                  <p class="box-tit">库存车辆</p>
+                  <span class="box-num">{{kucuncar}}</span>
+                </div>
               </div>
-            </div>
-          </el-col>
-        </el-row>
+            </el-col>
+            <el-col :span="6">
+              <div class="grid-a-contentWidth1">
+                <div style="padding: 8px">
+                  <p class="box-tit">全部司机</p>
+                  <span class="box-num">{{alldriver}}</span>
+                </div>
+              </div>
+            </el-col>
+          </el-row>
+        </div>
       </el-col>
     </el-row>
   </div>
@@ -156,12 +225,12 @@
     data() {
       return {
         time: '',
-        allcar:'',
-        kucuncar:'',
-        yunyingcar:'',
-        alldriver:'',
-        qianyuedriver:'',
-        yuqidriver:'',
+        allcar: '',
+        kucuncar: '',
+        yunyingcar: '',
+        alldriver: '',
+        qianyuedriver: '',
+        yuqidriver: '',
       }
     },
     computed: {
@@ -180,46 +249,46 @@
       this.getData();
     },
     methods: {
-      getData(){
+      getData() {
         var url = "http://localhost:3000";
         axios.post(url + '/home/allCar')
           .then(response => {
-            this.allcar=response.data.data[0].num
+            this.allcar = response.data.data[0].num
           })
           .catch(function (error) {
             console.log(error)
           });
         axios.post(url + '/home/kucunCar')
           .then(response => {
-            this.kucuncar=response.data.data[0].num
+            this.kucuncar = response.data.data[0].num
           })
           .catch(function (error) {
             console.log(error)
           });
         axios.post(url + '/home/yunyingCar')
           .then(response => {
-            this.yunyingcar=response.data.data[0].num
+            this.yunyingcar = response.data.data[0].num
           })
           .catch(function (error) {
             console.log(error)
           });
         axios.post(url + '/home/allDriver')
           .then(response => {
-            this.alldriver=response.data.data[0].num
+            this.alldriver = response.data.data[0].num
           })
           .catch(function (error) {
             console.log(error)
           });
         axios.post(url + '/home/qianyueDriver')
           .then(response => {
-            this.qianyuedriver=response.data.data[0].num
+            this.qianyuedriver = response.data.data[0].num
           })
           .catch(function (error) {
             console.log(error)
           });
         axios.post(url + '/home/yuqiDriver')
           .then(response => {
-            this.yuqidriver=response.data.data[0].num
+            this.yuqidriver = response.data.data[0].num
           })
           .catch(function (error) {
             console.log(error)
@@ -318,32 +387,32 @@
           //     }
           //   }
           // ]
-          title : {
+          title: {
             text: '某站点用户访问来源',
             subtext: '纯属虚构',
-            x:'center'
+            x: 'center'
           },
-          tooltip : {
+          tooltip: {
             trigger: 'item',
             formatter: "{a} <br/>{b} : {c} ({d}%)"
           },
           legend: {
             orient: 'vertical',
             left: 'left',
-            data: ['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']
+            data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
           },
-          series : [
+          series: [
             {
               name: '访问来源',
               type: 'pie',
-              radius : '55%',
+              radius: '55%',
               center: ['50%', '60%'],
-              data:[
-                {value:335, name:'直接访问'},
-                {value:310, name:'邮件营销'},
-                {value:234, name:'联盟广告'},
-                {value:135, name:'视频广告'},
-                {value:1548, name:'搜索引擎'}
+              data: [
+                {value: 335, name: '直接访问'},
+                {value: 310, name: '邮件营销'},
+                {value: 234, name: '联盟广告'},
+                {value: 135, name: '视频广告'},
+                {value: 1548, name: '搜索引擎'}
               ],
               itemStyle: {
                 emphasis: {
@@ -384,7 +453,7 @@
             }
           },
 
-          tooltip : {
+          tooltip: {
             trigger: 'item',
             formatter: "{a} <br/>{b} : {c} ({d}%)"
           },
@@ -397,19 +466,21 @@
               colorLightness: [0, 1]
             }
           },
-          series : [
+          series: [
             {
-              name:'访问来源',
-              type:'pie',
-              radius : '55%',
+              name: '访问来源',
+              type: 'pie',
+              radius: '55%',
               center: ['50%', '50%'],
-              data:[
-                {value:335, name:'直接访问'},
-                {value:310, name:'邮件营销'},
-                {value:274, name:'联盟广告'},
-                {value:235, name:'视频广告'},
-                {value:400, name:'搜索引擎'}
-              ].sort(function (a, b) { return a.value - b.value; }),
+              data: [
+                {value: 335, name: '直接访问'},
+                {value: 310, name: '邮件营销'},
+                {value: 274, name: '联盟广告'},
+                {value: 235, name: '视频广告'},
+                {value: 400, name: '搜索引擎'}
+              ].sort(function (a, b) {
+                return a.value - b.value;
+              }),
               roseType: 'radius',
               label: {
                 normal: {
@@ -537,5 +608,17 @@
   .grid-a-contentWidth2 {
     background-color: white;
     min-height: 380px;
+  }
+
+  .home1 {
+    min-height: 380px;
+    background: white;
+    border-radius: 4px;
+  }
+
+  .home2 {
+    min-height: 115px;
+    background: white;
+    border-radius: 4px;
   }
 </style>

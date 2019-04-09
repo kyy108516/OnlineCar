@@ -41,14 +41,10 @@
   <!--</div>-->
    <!--如果当前item中有子节点-->
   <el-submenu v-if="item.children && item.children.length" :index="navIndex">
-    <!-- 创建菜单分组 -->
     <template slot="title">{{ item.name }}</template>
-    <!-- 递归调用自身，直到subItem不含有子节点 -->
     <nav-bar-item v-for="(subItem,i) in item.children" :key="navIndex+'-'+i" :navIndex="navIndex+'-'+i" :item="subItem" >
     </nav-bar-item>
   </el-submenu>
-
-  <!--如果当前item不含有子节点-->
   <el-menu-item v-else :index="item.url">{{ item.name }}</el-menu-item>
 </template>
 
