@@ -48,7 +48,6 @@
       <el-table ref="multipleTable" :data="tableData.slice((currpage - 1) * pagesize, currpage * pagesize)"
                 tooltip-effect="dark" style="width: 100%"
                 @selection-change="handleSelectionChange" highlight-current-row>
-        <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="id" label="维修单号">
           <template slot-scope="scope">
             <span>{{scope.row.id}}</span>
@@ -175,7 +174,7 @@
           .then(response => {
             if (response.data.code=='200'){
               this.$message({
-                message:'提交成功',
+                message:'操作成功',
                 type:'success'
               })
             }

@@ -53,7 +53,6 @@
       <el-table ref="multipleTable" :data="tableData.slice((currpage - 1) * pagesize, currpage * pagesize)"
                 tooltip-effect="dark" style="width: 100%"
                 @selection-change="handleSelectionChange" highlight-current-row>
-        <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="id" label="应付单号">
           <template slot-scope="scope">
             <span>{{scope.row.id}}</span>
@@ -119,7 +118,12 @@
             if (response.data.code == '200') {
               this.tableData = response.data.data
               for (let i=0;i<this.tableData.length;i++){
-                this.tableData[i].time=this.timeFormat(this.tableData[i].time)
+                if (this.tableData[i].time!=null) {
+                  this.tableData[i].time = this.timeFormat(this.tableData[i].time)
+                }
+                else{
+                  this.tableData[i].time = '--'
+                }
               }
             }
             if (response.data.code == '1') {
@@ -135,6 +139,14 @@
           .then(response => {
             if (response.data.code == '200') {
               this.tableData = response.data.data
+              for (let i=0;i<this.tableData.length;i++){
+                if (this.tableData[i].time!=null) {
+                  this.tableData[i].time = this.timeFormat(this.tableData[i].time)
+                }
+                else{
+                  this.tableData[i].time = '--'
+                }
+              }
             }
             if (response.data.code == '1') {
               this.tableData = []
@@ -159,6 +171,10 @@
         console.log(time)
         axios.get(url + '/account/updateBill?time=' + time + '&state=已完成&id=' + id)
           .then(response => {
+            this.$message({
+              message:'结算成功',
+              type:'success'
+            })
           })
           .catch(function (error) {
             console.log(error)

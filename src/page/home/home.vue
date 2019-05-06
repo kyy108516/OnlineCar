@@ -199,9 +199,9 @@
     created() {
       let date = new Date()
       this.time = date.getFullYear() + '年' + (date.getMonth() + 1) + '月' + date.getDate() + '日'
-      this.getData();
     },
     mounted() {
+      this.getData();
       this.drawLine();
     },
     methods: {

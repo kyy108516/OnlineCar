@@ -214,7 +214,7 @@
               axios.get(url + '/account/updateReceivable?money=' + this.practicalData.money + '&state=已完成&id=' + this.rowData.receivable_id)
                 .then(response => {
                   this.$message({
-                    message:'提交成功',
+                    message:'收款成功',
                     type:'success'
                   })
                 })
@@ -239,7 +239,7 @@
               axios.get(url + '/account/updateReceivable?money=' + this.practicalData.money + '&state=未完成&id=' + this.rowData.receivable_id)
                 .then(response => {
                   this.$message({
-                    message:'提交成功',
+                    message:'收款成功',
                     type:'success'
                   })
                 })
