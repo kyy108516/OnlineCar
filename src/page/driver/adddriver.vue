@@ -69,9 +69,10 @@
           phone:'',
         },
         rules:{
-          name:[{required:true,message:'请输入车牌',trigger:'blur'}],
+          name:[{required:true,message:'请输入姓名',trigger:'blur'}],
           sex:[{required:true,message:'请选择性别',trigger:'change'}],
-          phone:[{required:true,message:'请输入联系方式',trigger:'blur'}]
+          phone:[{required:true,message:'请输入联系方式',trigger:'blur'},
+            {pattern:/^1[34578]\d{9}$/,message:"联系方式格式错误",trigger:'blur'}]
         },
       }
     },
@@ -109,7 +110,7 @@
             })
               .then(response => {
                 if (response.data.code == '200') {
-                  this.$message.error('已存在改手机号')
+                  this.$message.error('已存在该手机号')
                 }
                 if (response.data.code == '1') {
                   axios.get(url + '/driver/addDriver?name='+this.tabledata.name+'&sex='+this.tabledata.sex+'&phone='+this.tabledata.phone)

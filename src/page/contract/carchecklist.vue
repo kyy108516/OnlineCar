@@ -17,14 +17,13 @@
       <el-table ref="multipleTable" :data="tableData.slice((currpage - 1) * pagesize, currpage * pagesize)"
                 tooltip-effect="dark" style="width: 100%"
                 @selection-change="handleSelectionChange" highlight-current-row>
-        <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column prop="id" label="验车号">
+        <el-table-column prop="id" label="验车号" width="80">
           <template slot-scope="scope">
             <span>{{scope.row.id}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="license" label="车牌号"></el-table-column>
-        <el-table-column prop="vin" label="车架号"></el-table-column>
+        <el-table-column prop="license" label="车牌号" width="120"></el-table-column>
+        <el-table-column prop="vin" label="车架号" width="250"></el-table-column>
         <el-table-column prop="model" label="车型"></el-table-column>
         <el-table-column prop="time" label="验车时间" show-overflow-tooltip></el-table-column>
         <el-table-column prop="state" label="处理状态" show-overflow-tooltip>
@@ -197,15 +196,14 @@
             console.log(error)
           })
         for (let i = 0; i < this.itemData.length; i++) {
+          let d1 = new Date(this.itemData[i].time);
           for (let j = 0; j < this.itemData[i].period; j++) {
-            let d1 = new Date(this.itemData[i].time);
-            let month = d1.getMonth() + 1 + j;
-            if (month > 12) {
-              month = month - 12
+            // let d1 = new Date(this.itemData[i].time);
+            if (j!=0) {
+              d1.setMonth(d1.getMonth() + 1)
             }
-            let datetime1 = d1.getFullYear() + '-' + month + '-' + d1.getDate();
-            this.itemData[i].time = datetime1
-            axios.get(url + '/account/addReceivable?id=' + (receivable_id + i + j) + '&contract_id=' + contract_id + '&money=' + this.itemData[i].money + '&time=' + this.itemData[i].time + '&type=' + this.itemData[i].type)
+            let datetime1=d1.getFullYear() + '-' + (d1.getMonth()+1) + '-' + d1.getDate()
+            axios.get(url + '/account/addReceivable?id=' + (receivable_id + i + j) + '&contract_id=' + contract_id + '&money=' + this.itemData[i].money + '&time=' + datetime1 + '&type=' + this.itemData[i].type)
               .then(response => {
               })
               .catch(function (error) {

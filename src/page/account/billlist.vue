@@ -25,6 +25,10 @@
               :label="'退款结算'"
               :value="'退款结算'">
             </el-option>
+            <el-option
+              :label="'保险结算'"
+              :value="'保险结算'">
+            </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="是否结算">

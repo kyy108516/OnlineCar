@@ -194,7 +194,7 @@
                 })
             }
             else {
-              this.$message.error('结束时间需要大于起始时间')
+              this.$message.error('保险到期日需要晚于起始日')
             }
           } else {
             console.log('error submit!!');

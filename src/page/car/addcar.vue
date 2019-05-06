@@ -73,8 +73,10 @@
         },
         cartypeData: [],
         rules: {
-          license: [{required: true, message: '请输入车牌', trigger: 'blur'}],
-          vin: [{required: true, message: '请输入车架号', trigger: 'blur'}],
+          license: [{required: true, message: '请输入车牌', trigger: 'blur'},
+            {pattern:/^(([\u4e00-\u9fa5]{1}[A-Z]{1})[-]?|([wW][Jj][\u4e00-\u9fa5]{1}[-]?)|([a-zA-Z]{2}))([A-Za-z0-9]{5}|[DdFf][A-HJ-NP-Za-hj-np-z0-9][0-9]{4}|[0-9]{5}[DdFf])$/,message:'请输入正确格式'}],
+          vin: [{required: true, message: '请输入车架号', trigger: 'blur'},
+            {min:17,max:17,trigger:'change',message:"请输入17位标准车架号"}],
           cartype: [{required: true, message: '请选择车型', trigger: 'change'}]
         },
       }

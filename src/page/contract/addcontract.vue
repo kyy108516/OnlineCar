@@ -316,7 +316,7 @@
                       })
                     this.$router.push('/contract/contractlist')
                   }else {
-                    this.$message.error('结束时间需要大于起始时间')
+                    this.$message.error('合同到期日需要大于起始日')
                   }
                 }
               })

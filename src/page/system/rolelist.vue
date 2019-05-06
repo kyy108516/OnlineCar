@@ -26,7 +26,6 @@
     <div class="view_table">
       <el-table ref="multipleTable" :data="tableData.slice((currpage - 1) * pagesize, currpage * pagesize)" tooltip-effect="dark" style="width: 100%"
                 @selection-change="handleSelectionChange" highlight-current-row>
-        <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="id" label="角色编号">
           <template slot-scope="scope">
             <span>{{scope.row.id}}</span>

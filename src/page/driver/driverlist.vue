@@ -39,7 +39,6 @@
     <div class="view_table">
       <el-table ref="multipleTable" :data="driverData.slice((currpage - 1) * pagesize, currpage * pagesize)" tooltip-effect="dark" style="width: 100%"
                 @selection-change="handleSelectionChange" highlight-current-row>
-        <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="id" label="编号">
           <template slot-scope="scope">
             <span>{{scope.row.id}}</span>
