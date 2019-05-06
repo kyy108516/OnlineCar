@@ -28,7 +28,11 @@ const state = {
     "parent_id": 0,
     "url": "",
     "children": [{"id": 21, "name": "司机列表", "parent_id": 2, "url": "/driver/driverlist"}]
-  }]
+  }],
+  zsr:0,
+  zzc:0,
+  sr:[],
+  zc:[],
 };
 
 const mutations = {
@@ -50,6 +54,18 @@ const mutations = {
   updateUsername(state, n) {
     state.username = n
   },
+  updateZsr(state, n) {
+    state.zsr = n
+  },
+  updateZzc(state, n) {
+    state.zzc = n
+  },
+  updateSr(state, n) {
+    state.sr = n
+  },
+  updateZc(state, n) {
+    state.zc = n
+  },
 };
 
 const actions = {
@@ -70,6 +86,18 @@ const actions = {
   },
   updateUsername({commit}, n) {
     commit('updateUsername', n)
+  },
+  updateZsr({commit}, n) {
+    commit('updateZsr', n)
+  },
+  updateZzc({commit}, n) {
+    commit('updateZzc', n)
+  },
+  updateSr({commit}, n) {
+    commit('updateSr', n)
+  },
+  updateZc({commit}, n) {
+    commit('updateZc', n)
   },
 };
 
