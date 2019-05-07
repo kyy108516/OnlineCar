@@ -76,8 +76,8 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button v-if="scope.row.state=='未扣车'" type="text" size="small" @click="detain(scope.row.id)">扣车</el-button>
-            <el-button v-if="scope.row.state=='已扣车'" type="text" size="small" @click="removedetain(scope.row.id)">解冻</el-button>
+            <el-button v-if="scope.row.state=='未扣车'" type="text" size="small" @click="open(scope.row.id)">扣车</el-button>
+            <el-button v-if="scope.row.state=='已扣车'" type="text" size="small" @click="close(scope.row.id)">解冻</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -211,6 +211,19 @@
       handleSizeChange(psize) {
         this.pagesize = psize;
       },
+      open(id) {
+        this.$confirm('是否确认扣车?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.detain(id)
+          this.$message({
+            type: 'success',
+            message: '操作成功!'
+          });
+        }).catch(() => {});
+      },
       detain(id){
         axios.get(url + '/contract/updateDetain?state=已扣车&id='+id)
           .then(response => {
@@ -225,6 +238,19 @@
             console.log(error);
           });
         this.reload()
+      },
+      close(id) {
+        this.$confirm('是否确认解除扣车?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.removedetain(id)
+          this.$message({
+            type: 'success',
+            message: '操作成功!'
+          });
+        }).catch(() => {});
       },
       removedetain(id){
         axios.get(url + '/contract/updateDetain?state=已完成&id='+id)

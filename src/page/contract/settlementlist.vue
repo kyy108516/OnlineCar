@@ -41,7 +41,6 @@
       <el-table ref="multipleTable" :data="contractData.slice((currpage - 1) * pagesize, currpage * pagesize)"
                 tooltip-effect="dark" style="width: 100%"
                 @selection-change="handleSelectionChange" highlight-current-row>
-        <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="contract_id" label="合同编号">
           <template slot-scope="scope">
             <span>{{scope.row.contract_id}}</span>
@@ -85,7 +84,7 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button v-if="scope.row.validatecheck=='未完成'" type="text" size="small" @click="validate(scope.row.id)">验车</el-button>
-            <el-button v-if="scope.row.financecheck=='已完成'&&scope.row.state=='结算中'" type="text" size="small" @click="finishcontract(scope.row.contract_id,scope.row.license,scope.row.phone)">合同结束</el-button>
+            <el-button v-if="scope.row.financecheck=='已完成'&&scope.row.state=='结算中'" type="text" size="small" @click="open(scope.row.contract_id,scope.row.license,scope.row.phone)">合同结束</el-button>
             <el-button v-if="scope.row.financecheck=='未完成'&&scope.row.validatecheck=='已完成'" type="text" size="small" @click="finance(scope.row.contract_id)">财务审核</el-button>
           </template>
         </el-table-column>
@@ -203,6 +202,19 @@
       },
       finance(id){
         this.$router.push("financecheck/"+id)
+      },
+      open(id,license,phone) {
+        this.$confirm('结束合同后将不能再进行任何财务操作，是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.finishcontract(id,license,phone)
+          this.$message({
+            type: 'success',
+            message: '操作成功!'
+          });
+        }).catch(() => {});
       },
       finishcontract(id,license,phone){
         axios.get(url+"/contract/updateState?state=已完成&id="+id)

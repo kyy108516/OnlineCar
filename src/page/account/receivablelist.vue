@@ -95,6 +95,7 @@
         dialogFormVisible: false,
         queryData: {
           contract_id: '',
+          state:'已完成',
         },
         practicalData: {
           money: '',

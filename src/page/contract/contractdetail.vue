@@ -295,6 +295,7 @@
           });
         axios.post(url + '/account/queryReceivable', {
           contract_id: id,
+          state:'',
         })
           .then(response => {
             if (response.data.code == '200') {

@@ -100,7 +100,7 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="detailContract(scope.row.id)">查看</el-button>
-            <el-button type="text" size="small" @click="settle(scope.row.id)" v-if="scope.row.state=='执行中'">结算</el-button>
+            <el-button type="text" size="small" @click="open(scope.row.id)" v-if="scope.row.state=='执行中'">结算</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -222,6 +222,19 @@
       },
       detailContract(id){
         this.$router.push('contractdetail/'+id)
+      },
+      open(id) {
+        this.$confirm('是否确认结算该合同?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.settle(id)
+          this.$message({
+            type: 'success',
+            message: '操作成功!'
+          });
+        }).catch(() => {});
       },
       settle(id){
         let date = new Date();

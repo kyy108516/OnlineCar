@@ -56,6 +56,8 @@
           <div class="dataReviseText">
             <el-input placeholder="0" v-model="tabledata.finance_money" disabled="true"></el-input>
           </div>
+          <p v-if="this.tabledata.finance_money>0" style="margin: 0;color: red;">注：将会生成一笔{{tabledata.finance_money}}的应收账单</p>
+          <p v-if="this.tabledata.finance_money<0" style="margin: 0;color: red;">注：将会生成一笔{{tabledata.finance_money}}的应付账单</p>
         </el-form-item>
       </el-form>
       <div style="clear:both"></div>
