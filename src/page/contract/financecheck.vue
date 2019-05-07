@@ -56,8 +56,8 @@
           <div class="dataReviseText">
             <el-input placeholder="0" v-model="tabledata.finance_money" disabled="true"></el-input>
           </div>
-          <p v-if="this.tabledata.finance_money>0" style="margin: 0;color: red;">注：将会生成一笔{{tabledata.finance_money}}的应收账单</p>
-          <p v-if="this.tabledata.finance_money<0" style="margin: 0;color: red;">注：将会生成一笔{{tabledata.finance_money}}的应付账单</p>
+          <p v-if="this.tabledata.finance_money>0" style="margin: 0;color: red;">注：将会生成一笔{{tabledata.finance_money}}元的应收账单</p>
+          <p v-if="this.tabledata.finance_money<0" style="margin: 0;color: red;">注：将会生成一笔{{finance_money_fu}}元的应付账单</p>
         </el-form-item>
       </el-form>
       <div style="clear:both"></div>
@@ -119,6 +119,7 @@
           time:'',
           finance_money:0,
         },
+        finance_money_fu:0,
         itemdata: [{
           type: '验车审核',//财务类型
           money: 0,
@@ -189,6 +190,7 @@
             if (response.data.code == '200') {
               this.itemdata[0].money = response.data.data[1].money-response.data.data[0].money
               this.tabledata.finance_money = response.data.data[1].money-response.data.data[0].money
+              this.finance_money_fu=-this.tabledata.finance_money
             }
             if (response.data.code == '1') {
               this.itemdata[0].money = 0
@@ -319,7 +321,8 @@
           return 0
         }
         else {
-          this.tabledata.finance_money += parseInt(x)
+          this.tabledata.finance_money += parseFloat(x)
+          this.finance_money_fu=-this.tabledata.finance_money
         }
       },
       jian(x){
@@ -327,7 +330,8 @@
           return 0
         }
         else {
-          this.tabledata.finance_money -= parseInt(x)
+          this.tabledata.finance_money -= parseFloat(x)
+          this.finance_money_fu=-this.tabledata.finance_money
         }
       },
     }

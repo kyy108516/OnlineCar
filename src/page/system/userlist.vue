@@ -35,7 +35,6 @@
       <el-table ref="multipleTable" :data="tableData.slice((currpage - 1) * pagesize, currpage * pagesize)"
                 tooltip-effect="dark" style="width: 100%"
                 @selection-change="handleSelectionChange" highlight-current-row>
-        <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="username" label="账号">
           <template slot-scope="scope">
             <span>{{scope.row.username}}</span>

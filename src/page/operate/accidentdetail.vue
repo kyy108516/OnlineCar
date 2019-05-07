@@ -187,7 +187,9 @@
           .catch(error => {
             console.log(error);
           });
-        axios.post(url + '/accident/queryItem')
+        axios.post(url + '/accident/queryItem',{
+          id:id
+        })
           .then(response => {
             if (response.data.code == '200') {
               this.item = response.data.data

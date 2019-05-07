@@ -331,7 +331,7 @@
           return 0
         }
         else {
-          this.tabledata.money += parseInt(x)
+          this.tabledata.money += parseFloat(x)
         }
       },
       jian(x){
@@ -341,7 +341,7 @@
           return 0
         }
         else {
-          this.tabledata.money -= parseInt(x)
+          this.tabledata.money -= parseFloat(x)
         }
       },
     }

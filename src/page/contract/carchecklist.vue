@@ -170,7 +170,7 @@
       submit(id, contract_id) {
         let date = new Date()
         let receivable_id = 'YS' + date.getFullYear() + (date.getMonth() + 1) + date.getDate() + date.getHours() + date.getMinutes() + date.getSeconds();
-        axios.get(url + '/validate/updateState?state=已完成&id=' + id)
+        axios.get(url + '/validate/update?state=已完成&id=' + id)
           .then(response => {
             if (response.data.code == '200') {
               this.$message({
